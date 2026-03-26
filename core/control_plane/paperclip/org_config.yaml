@@ -1,0 +1,93 @@
+# SheldonOS — Paperclip Org Configuration
+# This file defines the master organization structure for the autonomous entity.
+# Paperclip reads this at startup and instantiates the full agent hierarchy.
+
+org:
+  name: SheldonOS
+  version: "1.0.0"
+  description: >
+    A fully autonomous, self-sustaining AI entity that seeks, adapts, and scales
+    profit-generating operations indefinitely. No hardcoded task list. No end date.
+
+# ─── Global Budget Policy ────────────────────────────────────────────────────
+budget:
+  monthly_token_limit: 50_000_000        # 50M tokens/month across all agents
+  daily_spend_cap_usd: 200               # Hard stop on API spend per day
+  emergency_reserve_pct: 15             # 15% of budget always held in reserve
+  rebalance_interval: "24h"             # Paperclip rebalances budgets daily
+
+# ─── Heartbeat Configuration ─────────────────────────────────────────────────
+heartbeat:
+  endpoint: "http://localhost:3100/api/heartbeat"
+  interval_seconds: 30
+  timeout_seconds: 10
+  max_retries: 3
+  backoff_multiplier: 2.0
+
+# ─── Companies (Isolated Business Units) ─────────────────────────────────────
+companies:
+  - id: alpha
+    name: "Alpha — Prediction Markets"
+    goal: "Generate alpha signals and execute profitable trades on Polymarket and Kalshi"
+    monthly_budget_tokens: 12_000_000
+    teams:
+      - id: alpha-sim
+        name: "Simulation Team"
+        agents: [data_scientist, simulation_architect, quant_analyst]
+      - id: alpha-exec
+        name: "Execution Team"
+        agents: [execution_trader]
+
+  - id: beta
+    name: "Beta — Micro-SaaS Factory"
+    goal: "Identify, build, deploy, and monetize zero-human micro-SaaS products"
+    monthly_budget_tokens: 15_000_000
+    teams:
+      - id: beta-build
+        name: "Build Team"
+        agents: [product_manager, lead_engineer, frontend_wizard, qa_tester]
+      - id: beta-growth
+        name: "Growth Team"
+        agents: [growth_marketer, content_writer]
+
+  - id: gamma
+    name: "Gamma — Bug Bounty & Security Research"
+    goal: "Autonomously discover and responsibly disclose security vulnerabilities for bounty rewards"
+    monthly_budget_tokens: 8_000_000
+    teams:
+      - id: gamma-recon
+        name: "Reconnaissance Team"
+        agents: [recon_specialist, osint_analyst]
+      - id: gamma-exploit
+        name: "Exploitation Team"
+        agents: [lead_pentester, vuln_researcher, technical_writer]
+
+  - id: delta
+    name: "Delta — Scientific Research & IP"
+    goal: "Conduct autonomous scientific research, file provisional patents, and license discoveries"
+    monthly_budget_tokens: 10_000_000
+    teams:
+      - id: delta-research
+        name: "Research Team"
+        agents: [research_director, data_scientist, theorist]
+      - id: delta-ip
+        name: "IP Team"
+        agents: [patent_analyst, technical_writer]
+
+  - id: epsilon
+    name: "Epsilon — Opportunity Scout"
+    goal: "Continuously monitor all data streams and surface new revenue opportunities"
+    monthly_budget_tokens: 5_000_000
+    teams:
+      - id: epsilon-scout
+        name: "Scout Team"
+        agents: [market_monitor, trend_analyst, opportunity_scorer]
+
+# ─── Escalation Policy ───────────────────────────────────────────────────────
+escalation:
+  # If a company's ROI drops below threshold for 3 consecutive cycles, decommission it
+  roi_threshold_pct: -20
+  consecutive_cycles_before_decommission: 3
+  # Notify via OpenClaw Telegram channel
+  notify_channel: "telegram"
+  notify_on: [budget_exceeded, agent_failure, new_opportunity, trade_executed]

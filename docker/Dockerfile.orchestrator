@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git curl build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install source-only dependencies
+RUN pip install --no-cache-dir \
+    git+https://github.com/volcengine/OpenViking.git || true \
+    && pip install --no-cache-dir \
+    git+https://github.com/bytedance/deer-flow.git || true \
+    && pip install --no-cache-dir \
+    git+https://github.com/ruvnet/ruflo.git || true
+
+# Copy application code
+COPY . .
+
+# Create memory directory
+RUN mkdir -p /tmp/sheldon_memory
+
+CMD ["python3", "orchestrator/sheldon_orchestrator.py"]

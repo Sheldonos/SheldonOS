@@ -1,0 +1,43 @@
+[Unit]
+Description=SheldonOS — Autonomous Economic Entity
+Documentation=https://github.com/YOUR_USERNAME/SheldonOS
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/SheldonOS
+EnvironmentFile=/home/ubuntu/SheldonOS/.env
+
+# Start all Docker services first, then the orchestrator
+ExecStartPre=/usr/bin/docker-compose up -d --wait
+ExecStart=/usr/bin/python3 /home/ubuntu/SheldonOS/orchestrator/sheldon_orchestrator.py
+ExecStop=/usr/bin/docker-compose stop sheldon_orchestrator
+ExecStopPost=/usr/bin/docker-compose down
+
+# Restart policy — SheldonOS never stops
+Restart=always
+RestartSec=30s
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sheldon
+
+# Security
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/ubuntu/SheldonOS/data /tmp/sheldon_memory
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
