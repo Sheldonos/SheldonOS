@@ -1,13 +1,21 @@
 """
-SheldonOS — Research & Exploit Engine
+SheldonOS — Research & Exploit Engine v2.0
 Integrates PentAGI (autonomous pentesting), Heretic (model liberation),
 and the Perplexity Agent API (deep web research) for asymmetric value generation.
+
+v2.0 Changes:
+  - FIXED: Added search_topic() method so the orchestrator's parallel Seek can call it
+    per-topic rather than the old sequential monitor_stream() loop.
+  - FIXED: monitor_stream() now calls search_topic() in parallel via asyncio.gather.
+  - FIXED: PentAGIClient.start_assessment() validates authorized_scope before submission
+    to prevent out-of-scope testing.
 """
 
+import asyncio
 import logging
 import os
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("sheldon.research")
@@ -18,8 +26,6 @@ class PerplexityResearchClient:
     """
     Client for the Perplexity Agent API.
     Used by all agents for deep, multi-source web research.
-    This replaces manual headless browser orchestration.
-
     Docs: https://docs.perplexity.ai/docs/agent-api/quickstart
     """
 
@@ -29,7 +35,7 @@ class PerplexityResearchClient:
     async def research(self, query: str, focus: str = "internet",
                        return_citations: bool = True) -> Dict[str, Any]:
         """
-        Conduct deep web research using the Perplexity Agent API.
+        Conduct deep web research using the Perplexity sonar-pro model.
         focus: internet | academic | news | finance
         """
         if not self.API_KEY:
@@ -61,29 +67,52 @@ class PerplexityResearchClient:
                         "citations": data.get("citations", []),
                         "model": data.get("model", "sonar-pro"),
                     }
+                else:
+                    logger.warning(f"Perplexity API returned {resp.status_code}: {resp.text[:200]}")
         except Exception as e:
             logger.error(f"Perplexity research failed: {e}")
-        return {"answer": "", "citations": [], "error": str(e) if 'e' in dir() else "unknown"}
+            return {"answer": "", "citations": [], "error": str(e)}
+
+        return {"answer": "", "citations": [], "error": "unknown"}
+
+    async def search_topic(self, topic: str) -> List[Dict[str, Any]]:
+        """
+        FIXED v2.0: Per-topic search method called by the parallel Seek layer.
+        Returns a list of signal dicts (may be empty if no useful result).
+        This is the method the orchestrator's asyncio.gather calls per topic.
+        """
+        result = await self.research(
+            query=(
+                f"Latest developments and opportunities related to: {topic}. "
+                f"Focus on actionable signals, new projects, and market movements."
+            ),
+            focus="internet",
+        )
+        if result.get("answer") and len(result["answer"]) >= 50:
+            return [{
+                "topic": topic,
+                "summary": result["answer"][:500],
+                "citations": result.get("citations", [])[:3],
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }]
+        return []
 
     async def monitor_stream(self, topics: List[str]) -> List[Dict[str, Any]]:
         """
-        Monitor multiple topics simultaneously for the Epsilon Scout daemon.
-        Returns a list of signals with relevance scores.
+        FIXED v2.0: Now runs all topic searches in parallel via asyncio.gather.
+        Previously this was a sequential for-loop — at 10 topics × 60s timeout
+        it could take up to 10 minutes per cycle. Now all topics run concurrently.
         """
+        results = await asyncio.gather(
+            *[self.search_topic(topic) for topic in topics],
+            return_exceptions=True,
+        )
         signals = []
-        for topic in topics:
-            result = await self.research(
-                query=f"Latest developments and opportunities related to: {topic}. "
-                      f"Focus on actionable signals, new projects, and market movements.",
-                focus="internet",
-            )
-            if result.get("answer"):
-                signals.append({
-                    "topic": topic,
-                    "summary": result["answer"][:500],
-                    "citations": result.get("citations", [])[:3],
-                    "timestamp": datetime.utcnow().isoformat(),
-                })
+        for topic, result in zip(topics, results):
+            if isinstance(result, Exception):
+                logger.warning(f"[Research] Topic '{topic[:40]}' failed: {result}")
+            elif isinstance(result, list):
+                signals.extend(result)
         return signals
 
 
@@ -95,10 +124,10 @@ class PentestTarget:
     domain: str
     program_name: str
     program_url: str
-    authorized_scope: List[str]  # e.g., ["*.example.com", "api.example.com"]
+    authorized_scope: List[str]   # e.g., ["*.example.com", "api.example.com"]
     excluded_scope: List[str]
-    max_severity: str = "critical"  # The highest severity to test for
-    created_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    max_severity: str = "critical"
+    created_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 @dataclass
@@ -109,26 +138,48 @@ class VulnerabilityFinding:
     title: str
     vulnerability_class: str  # OWASP category
     cvss_score: float
-    severity: str  # critical | high | medium | low | informational
+    severity: str             # critical | high | medium | low | informational
     description: str
     proof_of_concept: str
     affected_endpoint: str
     remediation: str
-    discovered_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    discovered_at: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 class PentAGIClient:
     """
     Client for the PentAGI autonomous penetration testing engine.
     All testing is conducted within NemoClaw's sandbox.
-    Strictly respects authorized scope.
+    FIXED v2.0: Validates authorized_scope before submission to prevent out-of-scope testing.
     """
 
     BASE_URL = os.getenv("PENTAGI_API_URL", "http://localhost:8769")
 
+    def _validate_scope(self, target: PentestTarget) -> None:
+        """
+        FIXED v2.0: Enforce that authorized_scope is non-empty and does not contain
+        wildcard-only entries that could authorize unrestricted scanning.
+        Raises ValueError if scope is invalid.
+        """
+        if not target.authorized_scope:
+            raise ValueError(
+                f"PentAGI: authorized_scope is empty for target {target.domain}. "
+                "Testing cannot proceed without an explicit scope definition."
+            )
+        for entry in target.authorized_scope:
+            if entry.strip() in ("*", "*.*", "*.*.*"):
+                raise ValueError(
+                    f"PentAGI: Wildcard-only scope entry '{entry}' is not permitted. "
+                    "Provide explicit domain patterns (e.g., '*.example.com')."
+                )
+
     async def start_assessment(self, target: PentestTarget) -> Optional[str]:
         """Start an autonomous security assessment for a target."""
+        # FIXED v2.0: scope validation before any network call
+        self._validate_scope(target)
+
         logger.info(f"[PentAGI] Starting assessment for {target.domain} ({target.program_name})")
+        logger.info(f"[PentAGI] Authorized scope: {target.authorized_scope}")
 
         try:
             import httpx
@@ -146,6 +197,8 @@ class PentAGIClient:
                 )
                 if resp.status_code == 200:
                     return resp.json().get("assessment_id")
+                else:
+                    logger.error(f"[PentAGI] start_assessment returned {resp.status_code}: {resp.text[:200]}")
         except Exception as e:
             logger.error(f"[PentAGI] Failed to start assessment: {e}")
         return None
@@ -161,101 +214,51 @@ class PentAGIClient:
                 )
                 if resp.status_code == 200:
                     findings_data = resp.json().get("findings", [])
-                    return [VulnerabilityFinding(**f) for f in findings_data]
+                    return [
+                        VulnerabilityFinding(
+                            finding_id=f.get("id", ""),
+                            target_id=assessment_id,
+                            title=f.get("title", ""),
+                            vulnerability_class=f.get("class", "Unknown"),
+                            cvss_score=float(f.get("cvss_score", 0.0)),
+                            severity=f.get("severity", "informational"),
+                            description=f.get("description", ""),
+                            proof_of_concept=f.get("proof_of_concept", ""),
+                            affected_endpoint=f.get("endpoint", ""),
+                            remediation=f.get("remediation", ""),
+                        )
+                        for f in findings_data
+                    ]
         except Exception as e:
             logger.error(f"[PentAGI] Failed to get findings: {e}")
         return []
 
-    def estimate_bounty(self, finding: VulnerabilityFinding) -> float:
-        """Estimate the expected bug bounty payout for a finding."""
-        bounty_ranges = {
-            "critical": 10000.0,
-            "high": 3000.0,
-            "medium": 500.0,
-            "low": 100.0,
-            "informational": 0.0,
-        }
-        return bounty_ranges.get(finding.severity, 0.0)
-
-
-# ─── Heretic Model Liberation ─────────────────────────────────────────────────
-class HereticClient:
-    """
-    Client for the Heretic model liberation tool.
-    Temporarily removes safety alignment from local models for authorized research tasks.
-    IMPORTANT: Only used for PentAGI security research and AutoRA scientific discovery.
-    All outputs are sandboxed within NemoClaw.
-    """
-
-    HERETIC_CLI = os.getenv("HERETIC_CLI_PATH", "/usr/local/bin/heretic")
-
-    def decensor_model(self, model_path: str, output_path: str,
-                       task_context: str = "security_research") -> bool:
+    async def submit_bug_bounty_report(self, finding: VulnerabilityFinding,
+                                       platform_api_url: str, api_key: str) -> Dict[str, Any]:
         """
-        Generate a temporary decensored model for a specific research task.
-        The decensored model is scoped to the NemoClaw sandbox and deleted after use.
+        Submit a bug bounty report to the platform's API.
+        Supports HackerOne, Bugcrowd, and Intigriti report formats.
         """
-        import subprocess
-        logger.warning(
-            f"[Heretic] Generating decensored model for task: {task_context}. "
-            f"This model will be deleted after use."
-        )
-        try:
-            result = subprocess.run(
-                [self.HERETIC_CLI, "decensor", "--model", model_path, "--output", output_path,
-                 "--task", task_context, "--sandbox", "nemoclaw"],
-                capture_output=True, text=True, timeout=300,
-            )
-            if result.returncode == 0:
-                logger.info(f"[Heretic] Decensored model generated at {output_path}")
-                return True
-            else:
-                logger.error(f"[Heretic] Decensor failed: {result.stderr}")
-                return False
-        except Exception as e:
-            logger.error(f"[Heretic] Error: {e}")
-            return False
-
-    def cleanup_model(self, model_path: str):
-        """Delete the decensored model after use."""
-        import os as _os
-        try:
-            _os.remove(model_path)
-            logger.info(f"[Heretic] Cleaned up decensored model: {model_path}")
-        except Exception as e:
-            logger.warning(f"[Heretic] Cleanup failed: {e}")
-
-
-# ─── Manus.im External Execution Client ──────────────────────────────────────
-class ManusClient:
-    """
-    Client for delegating complex browser-based tasks to Manus.im.
-    Used when the Perplexity Agent API cannot handle a task (e.g., multi-step form submission,
-    dynamic web app interaction, or authenticated session management).
-    """
-
-    API_URL = os.getenv("MANUS_API_URL", "https://api.manus.im")
-    API_KEY = os.getenv("MANUS_API_KEY", "")
-
-    async def execute_browser_task(self, task_description: str,
-                                    url: str = None) -> Dict[str, Any]:
-        """Delegate a browser-based task to Manus.im for execution."""
-        if not self.API_KEY:
-            logger.warning("MANUS_API_KEY not set — external execution unavailable")
-            return {"status": "unavailable", "error": "API key not configured"}
-
-        logger.info(f"[Manus] Delegating browser task: {task_description[:60]}")
         try:
             import httpx
             async with httpx.AsyncClient() as client:
                 resp = await client.post(
-                    f"{self.API_URL}/v1/tasks",
-                    headers={"Authorization": f"Bearer {self.API_KEY}"},
-                    json={"task": task_description, "url": url, "timeout": 300},
-                    timeout=310.0,
+                    f"{platform_api_url}/reports",
+                    headers={"Authorization": f"Token {api_key}"},
+                    json={
+                        "title": finding.title,
+                        "vulnerability_information": (
+                            f"## Description\n{finding.description}\n\n"
+                            f"## Proof of Concept\n{finding.proof_of_concept}\n\n"
+                            f"## Impact\nCVSS Score: {finding.cvss_score} ({finding.severity})\n\n"
+                            f"## Remediation\n{finding.remediation}"
+                        ),
+                        "severity": finding.severity,
+                        "weakness": {"name": finding.vulnerability_class},
+                    },
+                    timeout=30.0,
                 )
-                if resp.status_code == 200:
-                    return resp.json()
+                return resp.json()
         except Exception as e:
-            logger.error(f"[Manus] Task execution failed: {e}")
-        return {"status": "failed", "error": str(e) if 'e' in dir() else "unknown"}
+            logger.error(f"[PentAGI] Bug bounty submission failed: {e}")
+            return {"error": str(e)}

@@ -1,0 +1,19 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir fastapi uvicorn httpx pydantic python-dotenv asyncpg redis
+
+COPY core/control_plane/paperclip/ ./core/control_plane/paperclip/
+COPY core/control_plane/paperclip/org_config.yaml ./config/org_config.yaml
+
+EXPOSE 3100
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3100/api/health || exit 1
+
+CMD ["uvicorn", "core.control_plane.paperclip.heartbeat_server:app", "--host", "0.0.0.0", "--port", "3100", "--log-level", "info"]

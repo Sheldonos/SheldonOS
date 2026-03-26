@@ -1,8 +1,10 @@
 version: "3.9"
 
-# SheldonOS — Docker Compose
-# Starts all required infrastructure services for SheldonOS.
-# Run: docker-compose up -d
+# SheldonOS — Docker Compose v2.0
+# FIXED: Replaced unavailable Docker Hub images (paperclipai/paperclip,
+#        volcengine/openviking, mirofish/mirofish, percepta/percepta) with
+#        local builds. Added Prometheus + Grafana for observability.
+#        Aligned env var names between compose and Python runtime.
 
 networks:
   sheldon_internal:
@@ -18,10 +20,12 @@ volumes:
   openviking_data:
   mirofish_data:
   percepta_data:
+  prometheus_data:
+  grafana_data:
 
 services:
 
-  # ── Databases ───────────────────────────────────────────────────────────────
+  # ── Databases ─────────────────────────────────────────────────────────────────
   postgres:
     image: postgres:16-alpine
     container_name: sheldon_postgres
@@ -80,9 +84,12 @@ services:
       timeout: 10s
       retries: 5
 
-  # ── Layer 0: Control Plane ──────────────────────────────────────────────────
+  # ── Layer 0: Control Plane ────────────────────────────────────────────────────
+  # FIXED: paperclipai/paperclip (404 on Docker Hub) → local build
   paperclip:
-    image: paperclipai/paperclip:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.paperclip
     container_name: sheldon_paperclip
     restart: unless-stopped
     environment:
@@ -100,6 +107,11 @@ services:
         condition: service_healthy
     networks:
       - sheldon_internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100/api/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
 
   openclaw_gateway:
     build:
@@ -112,14 +124,17 @@ services:
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
       SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
       PAPERCLIP_URL: http://paperclip:3100
+      POSTGRES_DSN: postgresql://${POSTGRES_USER:-sheldon}:${POSTGRES_PASSWORD}@postgres:5432/sheldon
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/1
     ports:
       - "3101:3101"
     depends_on:
-      - paperclip
+      paperclip:
+        condition: service_healthy
     networks:
       - sheldon_internal
 
-  # ── Layer 2: Cognitive Backbone ─────────────────────────────────────────────
+  # ── Layer 2: Cognitive Backbone ───────────────────────────────────────────────
   cognee:
     image: cognee/cognee:latest
     container_name: sheldon_cognee
@@ -140,13 +155,16 @@ services:
     networks:
       - sheldon_internal
 
+  # FIXED: volcengine/openviking (404 on Docker Hub) → local build
   openviking:
-    image: volcengine/openviking:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.openviking
     container_name: sheldon_openviking
     restart: unless-stopped
     environment:
       OPENVIKING_DB_URL: postgresql://${POSTGRES_USER:-sheldon}:${POSTGRES_PASSWORD}@postgres:5432/sheldon
-      OPENVIKING_REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/1
+      OPENVIKING_REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/2
       OPENVIKING_EMBEDDING_MODEL: ${OPENVIKING_EMBEDDING_MODEL:-text-embedding-3-small}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
     volumes:
@@ -161,14 +179,17 @@ services:
     networks:
       - sheldon_internal
 
-  # ── Layer 3: Simulation Engine ──────────────────────────────────────────────
+  # ── Layer 3: Simulation Engine ────────────────────────────────────────────────
+  # FIXED: mirofish/mirofish (404 on Docker Hub) → local build
   mirofish:
-    image: mirofish/mirofish:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.mirofish
     container_name: sheldon_mirofish
     restart: unless-stopped
     environment:
       MIROFISH_DB_URL: postgresql://${POSTGRES_USER:-sheldon}:${POSTGRES_PASSWORD}@postgres:5432/sheldon
-      MIROFISH_REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/2
+      MIROFISH_REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/3
       LLM_API_KEY: ${ANTHROPIC_API_KEY}
     volumes:
       - mirofish_data:/app/data
@@ -180,8 +201,11 @@ services:
     networks:
       - sheldon_internal
 
+  # FIXED: percepta/percepta (404 on Docker Hub) → local build
   percepta:
-    image: percepta/percepta:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.percepta
     container_name: sheldon_percepta
     restart: unless-stopped
     environment:
@@ -196,7 +220,7 @@ services:
     networks:
       - sheldon_internal
 
-  # ── Layer 4: Research & Exploit ─────────────────────────────────────────────
+  # ── Layer 4: Research & Exploit ───────────────────────────────────────────────
   pentagi:
     image: vxcontrol/pentagi:latest
     container_name: sheldon_pentagi
@@ -212,12 +236,10 @@ services:
         condition: service_healthy
     networks:
       - sheldon_internal
-    # PentAGI runs in a privileged container for network scanning
-    # NemoClaw policy is enforced at the application layer
     security_opt:
       - no-new-privileges:true
 
-  # ── SheldonOS Orchestrator ──────────────────────────────────────────────────
+  # ── SheldonOS Orchestrator ────────────────────────────────────────────────────
   sheldon_orchestrator:
     build:
       context: .
@@ -241,23 +263,37 @@ services:
       PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY:?required}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       MANUS_API_KEY: ${MANUS_API_KEY:-}
-      # Financial
-      CRYPTO_WALLET_PRIVATE_KEY: ${CRYPTO_WALLET_PRIVATE_KEY:?required}
-      MAX_POSITION_SIZE_USD: ${MAX_POSITION_SIZE_USD:-100}
-      DAILY_LOSS_LIMIT_USD: ${DAILY_LOSS_LIMIT_USD:-500}
+      # Financial — FIXED: aligned with Python runtime variable names
+      AUTOMATON_WALLET_ADDRESS: ${AUTOMATON_WALLET_ADDRESS:-}
+      CRYPTO_WALLET_PRIVATE_KEY: ${CRYPTO_WALLET_PRIVATE_KEY:-}
+      AUTOMATON_CHAIN_ID: ${AUTOMATON_CHAIN_ID:-137}
+      AUTOMATON_MAX_POSITION_USD: ${AUTOMATON_MAX_POSITION_USD:-100}
+      AUTOMATON_DAILY_LOSS_LIMIT_USD: ${AUTOMATON_DAILY_LOSS_LIMIT_USD:-500}
+      AUTOMATON_CONFIDENCE_THRESHOLD: ${AUTOMATON_CONFIDENCE_THRESHOLD:-0.65}
       # Behavior
       SEEK_INTERVAL_SECONDS: ${SEEK_INTERVAL_SECONDS:-1800}
       OPPORTUNITY_SCORE_THRESHOLD: ${OPPORTUNITY_SCORE_THRESHOLD:-65.0}
+      # Persistence
+      POSTGRES_DSN: postgresql://${POSTGRES_USER:-sheldon}:${POSTGRES_PASSWORD}@postgres:5432/sheldon
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379/4
+      # Observability
+      PROMETHEUS_PORT: 9091
     volumes:
-      - ./:/app
-      - /tmp/sheldon_memory:/tmp/sheldon_memory
+      - ./data:/app/data
+      - /tmp/sheldon_workspace:/tmp/sheldon_workspace
+    ports:
+      - "9091:9091"
     depends_on:
-      - paperclip
-      - openclaw_gateway
-      - cognee
-      - openviking
-      - mirofish
-      - percepta
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      paperclip:
+        condition: service_healthy
+      openclaw_gateway:
+        condition: service_started
+      cognee:
+        condition: service_started
     networks:
       - sheldon_internal
     logging:
@@ -265,3 +301,38 @@ services:
       options:
         max-size: "100m"
         max-file: "10"
+
+  # ── Observability Stack (NEW in v2.0) ─────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: sheldon_prometheus
+    restart: unless-stopped
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+    ports:
+      - "9090:9090"
+    networks:
+      - sheldon_internal
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: sheldon_grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-sheldon_grafana}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./config/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./config/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - sheldon_internal

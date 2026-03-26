@@ -1,5 +1,61 @@
--- SheldonOS — Database Initialization
--- Creates all required tables for SheldonOS operation.
+-- SheldonOS — Database Schema v2.0
+-- FIXED v2.0: Added orchestrator_cycles, budget_ledger, agent_registry tables
+--             so the Python runtime persists state instead of in-memory dicts.
+--             Added rejection_reason column to opportunities.
+--             Added uuid-ossp extension for compatibility.
+
+-- ─── Opportunities ────────────────────────────────────────────────────────────
+-- ─── Extensions ──────────────────────────────────────────────────────────────
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- ─── Orchestrator Cycles (NEW v2.0) ──────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS orchestrator_cycles (
+    cycle_id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    cycle_number           INTEGER NOT NULL,
+    started_at             TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    duration_seconds       FLOAT NOT NULL DEFAULT 0,
+    opportunities_detected INTEGER NOT NULL DEFAULT 0,
+    opportunities_approved INTEGER NOT NULL DEFAULT 0,
+    revenue_usd            FLOAT NOT NULL DEFAULT 0,
+    score_threshold        FLOAT NOT NULL DEFAULT 65.0,
+    win_rate_pct           FLOAT NOT NULL DEFAULT 0,
+    created_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_cycles_started_at ON orchestrator_cycles (started_at DESC);
+
+-- ─── Budget Ledger (NEW v2.0 — replaces in-memory _budget_ledger dict) ────────
+CREATE TABLE IF NOT EXISTS budget_ledger (
+    company_id             VARCHAR(32) PRIMARY KEY,
+    monthly_limit_tokens   BIGINT NOT NULL DEFAULT 0,
+    tokens_used_month      BIGINT NOT NULL DEFAULT 0,
+    tokens_used_today      BIGINT NOT NULL DEFAULT 0,
+    last_reset_daily       DATE NOT NULL DEFAULT CURRENT_DATE,
+    last_reset_monthly     DATE NOT NULL DEFAULT DATE_TRUNC('month', CURRENT_DATE)::DATE,
+    updated_at             TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO budget_ledger (company_id, monthly_limit_tokens) VALUES
+    ('alpha',   12000000),
+    ('beta',    15000000),
+    ('gamma',    8000000),
+    ('delta',   10000000),
+    ('epsilon',  5000000)
+ON CONFLICT (company_id) DO NOTHING;
+
+-- ─── Agent Registry (NEW v2.0 — replaces in-memory _agent_registry dict) ──────
+CREATE TABLE IF NOT EXISTS agent_registry (
+    agent_id               VARCHAR(64) PRIMARY KEY,
+    company_id             VARCHAR(32) NOT NULL,
+    team_id                VARCHAR(64) NOT NULL DEFAULT '',
+    model                  VARCHAR(128) NOT NULL DEFAULT '',
+    token_budget           INTEGER NOT NULL DEFAULT 0,
+    status                 VARCHAR(32) NOT NULL DEFAULT 'idle',
+    last_heartbeat         TIMESTAMPTZ,
+    registered_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_agents_company ON agent_registry (company_id);
+CREATE INDEX IF NOT EXISTS idx_agents_status  ON agent_registry (status);
 
 -- ─── Opportunities ────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS opportunities (
@@ -15,6 +71,7 @@ CREATE TABLE IF NOT EXISTS opportunities (
     confidence_pct    FLOAT DEFAULT 0.0,
     recommended_company VARCHAR(32),
     status            VARCHAR(32) DEFAULT 'pending',
+    rejection_reason  TEXT DEFAULT '',
     detected_at       TIMESTAMPTZ DEFAULT NOW(),
     updated_at        TIMESTAMPTZ DEFAULT NOW()
 );

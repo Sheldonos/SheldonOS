@@ -1,0 +1,18 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --no-cache-dir fastapi uvicorn httpx pydantic python-dotenv asyncpg numpy scipy
+
+COPY core/simulation/ ./core/simulation/
+
+EXPOSE 8768
+
+HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8768/health || exit 1
+
+CMD ["uvicorn", "core.simulation.mirofish_server:app", "--host", "0.0.0.0", "--port", "8768", "--log-level", "info"]

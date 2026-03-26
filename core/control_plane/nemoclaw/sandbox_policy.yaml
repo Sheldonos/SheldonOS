@@ -1,10 +1,11 @@
-# SheldonOS — NemoClaw Sandbox Policy
+# SheldonOS — NemoClaw Sandbox Policy v2.0
 # Enforces hardware-level security for all agent execution.
 # Based on NVIDIA NemoClaw's Landlock + seccomp reference implementation.
+# FIXED v2.0: Removed ptrace contradiction; tightened syscall allowlist.
 
 policy:
   name: "SheldonOS-Default"
-  version: "1.0.0"
+  version: "2.0.0"
   enforcement_level: strict   # strict | moderate | permissive
 
 # ─── Filesystem Isolation (Linux Landlock) ────────────────────────────────────
@@ -30,56 +31,33 @@ filesystem:
     - /home/ubuntu/.gnupg/
 
 # ─── Syscall Filtering (seccomp) ─────────────────────────────────────────────
+# Principle of least privilege: only the syscalls required for normal
+# Python/Node compute and network I/O are allowed. All others are denied
+# by default (seccomp default action: SCMP_ACT_ERRNO).
 syscalls:
-  # Allow standard compute operations
   allowed:
+    # File I/O
     - read
     - write
     - open
+    - openat
     - close
     - stat
     - fstat
-    - mmap
-    - mprotect
-    - munmap
-    - brk
-    - rt_sigaction
-    - rt_sigprocmask
-    - ioctl
+    - newfstatat
+    - lstat
+    - access
+    - faccessat
     - pread64
     - pwrite64
     - readv
     - writev
-    - access
-    - pipe
-    - select
-    - sched_yield
-    - mremap
-    - msync
-    - mincore
-    - madvise
+    - preadv
+    - pwritev
+    - lseek
     - dup
     - dup2
-    - nanosleep
-    - getpid
-    - socket
-    - connect
-    - accept
-    - sendto
-    - recvfrom
-    - sendmsg
-    - recvmsg
-    - bind
-    - listen
-    - getsockname
-    - getpeername
-    - clone
-    - fork
-    - execve
-    - exit
-    - wait4
-    - kill
-    - uname
+    - dup3
     - fcntl
     - flock
     - fsync
@@ -89,264 +67,229 @@ syscalls:
     - getcwd
     - chdir
     - rename
+    - renameat
+    - renameat2
     - mkdir
+    - mkdirat
     - rmdir
     - creat
     - link
+    - linkat
     - unlink
+    - unlinkat
     - symlink
+    - symlinkat
     - readlink
+    - readlinkat
     - chmod
     - fchmod
+    - fchmodat
     - chown
     - fchown
+    - fchownat
     - umask
-    - gettimeofday
-    - getrlimit
-    - getrusage
-    - sysinfo
-    - times
-    - ptrace
-    - getuid
-    - syslog
-    - getgid
-    - setuid
-    - setgid
-    - geteuid
-    - getegid
-    - setpgid
-    - getppid
-    - getpgrp
-    - setsid
-    - setreuid
-    - setregid
-    - getgroups
-    - setgroups
-    - setresuid
-    - getresuid
-    - setresgid
-    - getresgid
-    - getpgid
-    - setfsuid
-    - setfsgid
-    - getsid
-    - capget
-    - capset
-    - rt_sigpending
-    - rt_sigtimedwait
-    - rt_sigqueueinfo
-    - rt_sigsuspend
-    - sigaltstack
-    - utime
-    - mknod
-    - personality
-    - ustat
+    - getdents64
     - statfs
     - fstatfs
-    - sysfs
-    - getpriority
-    - setpriority
-    - sched_setparam
-    - sched_getparam
-    - sched_setscheduler
-    - sched_getscheduler
-    - sched_get_priority_max
-    - sched_get_priority_min
-    - sched_rr_get_interval
+    - fallocate
+    - copy_file_range
+    - sendfile
+    # Memory management
+    - mmap
+    - mprotect
+    - munmap
+    - brk
+    - mremap
+    - msync
+    - mincore
+    - madvise
     - mlock
     - munlock
     - mlockall
     - munlockall
-    - vhangup
-    - pivot_root
+    - mlock2
+    # Process / thread
+    - clone
+    - fork
+    - vfork
+    - execve
+    - execveat
+    - exit
+    - exit_group
+    - wait4
+    - waitid
+    - getpid
+    - getppid
+    - getpgrp
+    - getpgid
+    - setpgid
+    - getsid
+    - setsid
+    - gettid
+    - getuid
+    - getgid
+    - geteuid
+    - getegid
+    - getgroups
+    - uname
     - prctl
     - arch_prctl
-    - adjtimex
-    - setrlimit
-    - sync
-    - acct
-    - settimeofday
-    - mount
-    - umount2
-    - swapon
-    - swapoff
-    - reboot
-    - sethostname
-    - setdomainname
-    - iopl
-    - ioperm
-    - create_module
-    - init_module
-    - delete_module
-    - get_kernel_syms
-    - query_module
-    - quotactl
-    - nfsservctl
-    - getpmsg
-    - putpmsg
-    - afs_syscall
-    - tuxcall
-    - security
-    - gettid
-    - readahead
-    - setxattr
-    - lsetxattr
-    - fsetxattr
+    - set_tid_address
+    - set_robust_list
+    - get_robust_list
+    - sched_yield
+    - sched_getaffinity
+    - sched_setaffinity
+    - sched_getparam
+    - sched_setparam
+    - sched_getscheduler
+    - sched_setscheduler
+    - sched_get_priority_max
+    - sched_get_priority_min
+    - sched_rr_get_interval
+    - nanosleep
+    - clock_nanosleep
+    - clock_gettime
+    - clock_getres
+    - gettimeofday
+    - times
+    - getrusage
+    - getrlimit
+    - prlimit64
+    - sysinfo
+    # Signals
+    - rt_sigaction
+    - rt_sigprocmask
+    - rt_sigpending
+    - rt_sigtimedwait
+    - rt_sigsuspend
+    - rt_sigreturn
+    - rt_tgsigqueueinfo
+    - sigaltstack
+    - tgkill
+    - tkill
+    - kill
+    # Networking (outbound only — enforced at network policy layer)
+    - socket
+    - connect
+    - bind
+    - listen
+    - accept
+    - accept4
+    - sendto
+    - recvfrom
+    - sendmsg
+    - recvmsg
+    - sendmmsg
+    - recvmmsg
+    - getsockname
+    - getpeername
+    - getsockopt
+    - setsockopt
+    - shutdown
+    # Pipes / IPC
+    - pipe
+    - pipe2
+    - select
+    - pselect6
+    - poll
+    - ppoll
+    - epoll_create
+    - epoll_create1
+    - epoll_ctl
+    - epoll_wait
+    - epoll_pwait
+    - eventfd
+    - eventfd2
+    - signalfd
+    - signalfd4
+    - timerfd_create
+    - timerfd_settime
+    - timerfd_gettime
+    - inotify_init
+    - inotify_init1
+    - inotify_add_watch
+    - inotify_rm_watch
+    - splice
+    - tee
+    - vmsplice
+    # Misc
+    - ioctl
+    - getrandom
+    - memfd_create
+    - futex
+    - io_setup
+    - io_destroy
+    - io_getevents
+    - io_submit
+    - io_cancel
+    - io_pgetevents
+    - rseq
+    - seccomp
+    - capget
     - getxattr
     - lgetxattr
     - fgetxattr
     - listxattr
     - llistxattr
     - flistxattr
+    - setxattr
+    - lsetxattr
+    - fsetxattr
     - removexattr
     - lremovexattr
     - fremovexattr
-    - tkill
-    - time
-    - futex
-    - sched_setaffinity
-    - sched_getaffinity
-    - set_thread_area
-    - io_setup
-    - io_destroy
-    - io_getevents
-    - io_submit
-    - io_cancel
-    - get_thread_area
-    - lookup_dcookie
-    - epoll_create
-    - epoll_ctl_old
-    - epoll_wait_old
-    - remap_file_pages
-    - getdents64
-    - set_tid_address
-    - restart_syscall
-    - semtimedop
-    - fadvise64
-    - timer_create
-    - timer_settime
-    - timer_gettime
-    - timer_getoverrun
-    - timer_delete
-    - clock_settime
-    - clock_gettime
-    - clock_getres
-    - clock_nanosleep
-    - exit_group
-    - epoll_wait
-    - epoll_ctl
-    - tgkill
-    - utimes
-    - vserver
-    - mbind
-    - set_mempolicy
-    - get_mempolicy
-    - mq_open
-    - mq_unlink
-    - mq_timedsend
-    - mq_timedreceive
-    - mq_notify
-    - mq_getsetattr
-    - kexec_load
-    - waitid
-    - add_key
-    - request_key
-    - keyctl
-    - ioprio_set
-    - ioprio_get
-    - inotify_init
-    - inotify_add_watch
-    - inotify_rm_watch
-    - migrate_pages
-    - openat
-    - mkdirat
-    - mknodat
-    - fchownat
-    - futimesat
-    - newfstatat
-    - unlinkat
-    - renameat
-    - linkat
-    - symlinkat
-    - readlinkat
-    - fchmodat
-    - faccessat
-    - pselect6
-    - ppoll
-    - unshare
-    - set_robust_list
-    - get_robust_list
-    - splice
-    - tee
-    - sync_file_range
-    - vmsplice
-    - move_pages
-    - utimensat
-    - epoll_pwait
-    - signalfd
-    - timerfd_create
-    - eventfd
-    - fallocate
-    - timerfd_settime
-    - timerfd_gettime
-    - accept4
-    - signalfd4
-    - eventfd2
-    - epoll_create1
-    - dup3
-    - pipe2
-    - inotify_init1
-    - preadv
-    - pwritev
-    - rt_tgsigqueueinfo
-    - perf_event_open
-    - recvmmsg
-    - fanotify_init
-    - fanotify_mark
-    - prlimit64
-    - name_to_handle_at
-    - open_by_handle_at
-    - clock_adjtime
+    - sync
     - syncfs
-    - sendmmsg
-    - setns
-    - getcpu
-    - process_vm_readv
-    - process_vm_writev
-    - kcmp
-    - finit_module
-    - sched_setattr
-    - sched_getattr
-    - renameat2
-    - seccomp
-    - getrandom
-    - memfd_create
-    - kexec_file_load
-    - bpf
-    - execveat
+    - sync_file_range
+    - readahead
+    - mknod
+    - mknodat
+    - umount2
+    - statx
+    - perf_event_open
     - userfaultfd
     - membarrier
-    - mlock2
-    - copy_file_range
-    - preadv2
-    - pwritev2
     - pkey_mprotect
     - pkey_alloc
     - pkey_free
-    - statx
-    - io_pgetevents
-    - rseq
-  # Explicitly deny dangerous syscalls
+    - process_vm_readv
+    - process_vm_writev
+
+  # Explicitly deny dangerous syscalls — these are NOT in the allowed list above
+  # and are blocked by the seccomp default-deny action, but listed here for clarity.
   denied:
-    - ptrace          # Prevent agent from tracing other processes
-    - kexec_load      # Prevent kernel replacement
-    - reboot          # Prevent system reboot
-    - mount           # Prevent filesystem mounting
-    - umount2         # Prevent filesystem unmounting
+    - ptrace            # Prevent agent from tracing other processes
+    - kexec_load        # Prevent kernel replacement
+    - kexec_file_load   # Prevent kernel replacement (file variant)
+    - reboot            # Prevent system reboot
+    - mount             # Prevent filesystem mounting
+    - pivot_root        # Prevent root filesystem change
+    - init_module       # Prevent kernel module loading
+    - finit_module      # Prevent kernel module loading (file variant)
+    - delete_module     # Prevent kernel module removal
+    - create_module     # Legacy — deny
+    - setuid            # Prevent privilege escalation
+    - setgid            # Prevent privilege escalation
+    - setresuid         # Prevent privilege escalation
+    - setresgid         # Prevent privilege escalation
+    - setreuid          # Prevent privilege escalation
+    - setregid          # Prevent privilege escalation
+    - capset            # Prevent capability manipulation
+    - iopl              # Prevent I/O port access
+    - ioperm            # Prevent I/O port permission change
+    - bpf               # Prevent eBPF program loading
+    - swapon            # Prevent swap manipulation
+    - swapoff           # Prevent swap manipulation
+    - acct              # Prevent process accounting
+    - settimeofday      # Prevent system clock modification
+    - adjtimex          # Prevent system clock modification
+    - clock_settime     # Prevent system clock modification
+    - sethostname       # Prevent hostname modification
+    - setdomainname     # Prevent domain name modification
 
 # ─── Network Policy ───────────────────────────────────────────────────────────
 network:
-  # Agents may only connect to these external endpoints
   allowed_outbound:
     - "api.openai.com:443"
     - "api.anthropic.com:443"
@@ -355,11 +298,16 @@ network:
     - "hooks.slack.com:443"
     - "api.cognee.ai:443"
     - "polymarket.com:443"
+    - "clob.polymarket.com:443"
     - "kalshi.com:443"
+    - "trading-api.kalshi.com:443"
     - "github.com:443"
     - "pypi.org:443"
     - "registry.npmjs.org:443"
-  # Internal services always allowed
+    - "vercel.com:443"
+    - "api.vercel.com:443"
+    - "mainnet.infura.io:443"
+    - "polygon-mainnet.infura.io:443"
   allowed_internal:
     - "localhost:3100"   # Paperclip
     - "localhost:3101"   # OpenClaw
@@ -370,14 +318,16 @@ network:
     - "localhost:8766"   # OpenViking API
     - "localhost:8767"   # Percepta API
     - "localhost:8768"   # MiroFish API
+    - "localhost:9090"   # Prometheus metrics
   denied_outbound:
     - "*:22"    # No SSH outbound
     - "*:23"    # No Telnet
+    - "*:3389"  # No RDP
 
 # ─── Resource Limits ─────────────────────────────────────────────────────────
 resources:
-  max_cpu_pct: 80           # Max CPU usage per agent process
-  max_memory_mb: 8192       # Max RAM per agent (8 GB)
+  max_cpu_pct: 80
+  max_memory_mb: 8192
   max_disk_write_mb_per_min: 500
   max_network_bandwidth_mbps: 100
-  max_subprocess_depth: 5   # Prevent infinite recursive spawning
+  max_subprocess_depth: 5

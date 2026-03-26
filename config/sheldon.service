@@ -1,6 +1,6 @@
 [Unit]
-Description=SheldonOS — Autonomous Economic Entity
-Documentation=https://github.com/YOUR_USERNAME/SheldonOS
+Description=SheldonOS Autonomous Economic Entity v2.0
+Documentation=https://github.com/Sheldonos/SheldonOS
 After=network-online.target docker.service
 Wants=network-online.target
 Requires=docker.service
@@ -12,9 +12,11 @@ WorkingDirectory=/home/ubuntu/SheldonOS
 EnvironmentFile=/home/ubuntu/SheldonOS/.env
 
 # Start all Docker services first, then the orchestrator
-ExecStartPre=/usr/bin/docker-compose up -d --wait
+# Start infrastructure services only (not the orchestrator container — it runs on the host)
+ExecStartPre=/usr/bin/docker-compose up -d --wait postgres redis neo4j paperclip openclaw_gateway cognee openviking mirofish percepta pentagi prometheus grafana
 ExecStart=/usr/bin/python3 /home/ubuntu/SheldonOS/orchestrator/sheldon_orchestrator.py
-ExecStop=/usr/bin/docker-compose stop sheldon_orchestrator
+# FIXED v2.0: Stop the host-launched Python process, not a Docker container
+ExecStop=/bin/kill -SIGTERM $MAINPID
 ExecStopPost=/usr/bin/docker-compose down
 
 # Restart policy — SheldonOS never stops
@@ -30,13 +32,13 @@ LimitNPROC=4096
 # Logging
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=sheldon
+SyslogIdentifier=sheldonos
 
 # Security
 NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/home/ubuntu/SheldonOS/data /tmp/sheldon_memory
+ReadWritePaths=/home/ubuntu/SheldonOS/data /tmp/sheldon_workspace
 PrivateTmp=true
 
 [Install]

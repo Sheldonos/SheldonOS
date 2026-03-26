@@ -25,7 +25,7 @@ logger = logging.getLogger("sheldon.paperclip")
 app = FastAPI(
     title="SheldonOS — Paperclip Control Plane",
     description="Master orchestrator for the SheldonOS autonomous entity",
-    version="1.0.0",
+    version="2.0.0",
 )
 
 # ─── Models ──────────────────────────────────────────────────────────────────
@@ -47,11 +47,13 @@ class BudgetStatus(BaseModel):
     throttled: bool
 
 
-# ─── In-Memory State (replace with PostgreSQL in production) ─────────────────
+# ─── State (in-memory + PostgreSQL persistence) ───────────────────────────────────────────
 _org_config: Dict = {}
 _budget_ledger: Dict[str, Dict] = {}
 _agent_registry: Dict[str, Dict] = {}
 _task_queue: asyncio.Queue = asyncio.Queue()
+_db_pool = None  # asyncpg pool, initialized on startup
+_start_time = time.time()
 
 
 def load_org_config(path: str = "org_config.yaml") -> Dict:
@@ -83,15 +85,25 @@ def initialize_budget_ledger(config: Dict) -> Dict[str, Dict]:
 # ─── API Endpoints ────────────────────────────────────────────────────────────
 @app.on_event("startup")
 async def startup():
-    global _org_config, _budget_ledger
+    global _org_config, _budget_ledger, _db_pool
+    import os
     try:
         _org_config = load_org_config()
         _budget_ledger = initialize_budget_ledger(_org_config)
-        asyncio.create_task(heartbeat_dispatcher())
-        asyncio.create_task(budget_rebalancer())
-        logger.info("SheldonOS Paperclip Control Plane is online.")
     except FileNotFoundError:
         logger.warning("org_config.yaml not found — running in demo mode")
+    # FIXED v2.0: establish PostgreSQL pool for budget persistence
+    postgres_dsn = os.getenv("POSTGRES_DSN")
+    if postgres_dsn:
+        try:
+            import asyncpg
+            _db_pool = await asyncpg.create_pool(postgres_dsn, min_size=1, max_size=5)
+            logger.info("[Paperclip] PostgreSQL pool established")
+        except Exception as e:
+            logger.warning(f"[Paperclip] PostgreSQL unavailable: {e}")
+    asyncio.create_task(heartbeat_dispatcher())
+    asyncio.create_task(budget_rebalancer())
+    logger.info("SheldonOS Paperclip Control Plane v2.0 is online.")
 
 
 @app.post("/api/heartbeat")
@@ -214,6 +226,36 @@ async def _emit_to_cognee(company_id: str, agent_id: str, result: Dict):
             )
     except Exception as e:
         logger.warning(f"Failed to emit to Cognee: {e}")
+
+
+@app.get("/api/health")
+async def health_check():
+    return {
+        "status": "ok",
+        "service": "paperclip",
+        "version": "2.0.0",
+        "uptime_seconds": time.time() - _start_time,
+    }
+
+
+from fastapi.responses import PlainTextResponse
+
+@app.get("/metrics")
+async def prometheus_metrics():
+    """Expose Paperclip metrics for Prometheus scraping."""
+    total_tokens = sum(v.get("tokens_used_month", 0) for v in _budget_ledger.values())
+    lines = [
+        "# HELP paperclip_tokens_used_month_total Total tokens used this month",
+        "# TYPE paperclip_tokens_used_month_total gauge",
+        f"paperclip_tokens_used_month_total {total_tokens}",
+        "# HELP paperclip_companies_throttled Companies currently throttled",
+        "# TYPE paperclip_companies_throttled gauge",
+        f"paperclip_companies_throttled {sum(1 for v in _budget_ledger.values() if v.get('throttled'))}",
+        "# HELP paperclip_uptime_seconds Uptime in seconds",
+        "# TYPE paperclip_uptime_seconds gauge",
+        f"paperclip_uptime_seconds {time.time() - _start_time:.1f}",
+    ]
+    return PlainTextResponse("\n".join(lines) + "\n", media_type="text/plain")
 
 
 if __name__ == "__main__":

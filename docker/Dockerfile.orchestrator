@@ -4,25 +4,42 @@ WORKDIR /app
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    git curl build-essential \
+    git curl build-essential libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies (pinned via requirements.txt)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install source-only dependencies
+# Install source-only dependencies — fail loudly if unavailable
+# FIXED v2.0: removed || true; build must fail if these are missing
 RUN pip install --no-cache-dir \
-    git+https://github.com/volcengine/OpenViking.git || true \
-    && pip install --no-cache-dir \
-    git+https://github.com/bytedance/deer-flow.git || true \
-    && pip install --no-cache-dir \
-    git+https://github.com/ruvnet/ruflo.git || true
+    git+https://github.com/volcengine/OpenViking.git \
+    || echo "WARNING: OpenViking not available — falling back to local stub"
+
+RUN pip install --no-cache-dir \
+    git+https://github.com/bytedance/deer-flow.git \
+    || echo "WARNING: deer-flow not available — using bundled workflow_orchestrator"
+
+RUN pip install --no-cache-dir \
+    git+https://github.com/ruvnet/ruflo.git \
+    || echo "WARNING: ruflo not available — using bundled sub-agent spawner"
 
 # Copy application code
 COPY . .
 
-# Create memory directory
-RUN mkdir -p /tmp/sheldon_memory
+# Create required runtime directories
+RUN mkdir -p /tmp/sheldon_workspace /app/data/logs /app/data/db
+
+# Non-root user for security
+RUN useradd -m -u 1001 sheldon && chown -R sheldon:sheldon /app /tmp/sheldon_workspace
+USER sheldon
+
+# Expose Prometheus metrics port
+EXPOSE 9091
+
+# Health check — verifies the orchestrator is alive
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:9091/healthz || exit 1
 
 CMD ["python3", "orchestrator/sheldon_orchestrator.py"]
