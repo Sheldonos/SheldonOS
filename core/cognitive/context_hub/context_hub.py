@@ -212,6 +212,19 @@ class ContextHub:
         logger.info(f"[ContextHub] Added custom document: '{name}' ({len(content)} chars)")
         return doc
 
+    async def get_document(self, name: str) -> Optional[str]:
+        """
+        Retrieve a document's text content by name.
+        Used by SelfCorrector to inject relevant docs into agent context.
+        Returns None if the document is not found or unavailable.
+        """
+        doc = await self.get(name)
+        if doc:
+            return doc.content
+        # Try fetching by name as a direct URL fallback
+        logger.debug(f"[ContextHub] Document '{name}' not in KNOWN_SOURCES")
+        return None
+
     def list_cached(self) -> List[Dict[str, Any]]:
         """List all documents currently in the cache."""
         return [

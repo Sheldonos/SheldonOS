@@ -142,16 +142,46 @@ class CogneeClient:
         logger.info(f"[{company_id}] Outcome recorded: {outcome} | revenue=${revenue_usd:.2f}")
         return True
 
-    async def get_best_performing_strategies(self, company_id: str, top_k: int = 5) -> List[Dict]:
+    async def get_best_performing_strategies(
+        self, company_id: str = "all", top_k: int = 5, limit: int = 0
+    ) -> List[Dict]:
         """
-        Query the knowledge graph for the highest-revenue strategies used by a company.
-        Used by the Adapt layer to prioritize similar opportunities.
+        Query the knowledge graph for the highest-revenue strategies.
+        Accepts optional `limit` kwarg (alias for top_k) for v3.0 HypothesisGenerator
+        compatibility.
+        Used by the Adapt layer and HypothesisGenerator to prioritize similar opportunities.
         """
-        return await self.search(
-            query=f"highest revenue strategies for company {company_id}",
-            search_type="INSIGHTS",
-            top_k=top_k,
+        effective_k = limit if limit > 0 else top_k
+        query = (
+            f"highest revenue strategies for company {company_id}"
+            if company_id != "all"
+            else "highest revenue strategies across all companies"
         )
+        return await self.search(
+            query=query,
+            search_type="INSIGHTS",
+            top_k=effective_k,
+        )
+
+    async def log_outcome(
+        self,
+        task_description: str,
+        outcome: str,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> bool:
+        """
+        Log a task outcome to the knowledge graph.
+        Used by the Reflexion layer to record failure lessons.
+        Thin wrapper around record_outcome for v3.0 compatibility.
+        """
+        data = (
+            f"Task: {task_description}\n"
+            f"Outcome: {outcome}\n"
+            f"Metadata: {str(metadata or {})}\n"
+        )
+        await self.add(data, dataset_name="reflexion_outcomes")
+        logger.info(f"[Cognee] Logged outcome: {outcome[:60]}")
+        return True
 
     async def ingest_from_openviking(self, namespace: str, tier: str = "L2"):
         """

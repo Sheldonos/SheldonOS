@@ -148,6 +148,65 @@ class OpenVikingClient:
         self._session_cache.clear()
         logger.debug(f"Cleared L0 working memory ({count} entries)")
 
+    async def store(
+        self,
+        agent_id: str,
+        memory_type: str,
+        content: str,
+        tags: List[str] = None,
+    ) -> bool:
+        """
+        Store a memory entry for a specific agent.
+        Convenience wrapper used by the Reflexion layer (v3.0).
+
+        Args:
+            agent_id:    The agent whose memory this belongs to
+            memory_type: Memory tier string — 'L0', 'L1', or 'L2'
+            content:     The content to store
+            tags:        Optional list of tags for retrieval
+        """
+        tier_map = {"L0": MemoryTier.L0, "L1": MemoryTier.L1, "L2": MemoryTier.L2}
+        tier = tier_map.get(memory_type.upper(), MemoryTier.L1)
+        import time
+        key = f"{agent_id}:reflexion:{int(time.time())}"
+        return await self.write(
+            key=key,
+            value={"agent_id": agent_id, "content": content, "tags": tags or []},
+            tier=tier,
+            tags=(tags or []) + [agent_id],
+        )
+
+    async def retrieve(
+        self,
+        agent_id: str,
+        memory_type: str,
+        tags: List[str] = None,
+        limit: int = 5,
+    ) -> List[Dict[str, Any]]:
+        """
+        Retrieve memory entries for a specific agent.
+        Convenience wrapper used by the Reflexion layer (v3.0).
+
+        Args:
+            agent_id:    The agent whose memory to retrieve
+            memory_type: Memory tier string — 'L0', 'L1', or 'L2'
+            tags:        Optional list of tags to filter by
+            limit:       Maximum number of entries to return
+        """
+        tier_map = {"L0": MemoryTier.L0, "L1": MemoryTier.L1, "L2": MemoryTier.L2}
+        tier = tier_map.get(memory_type.upper(), MemoryTier.L1)
+        query = f"{agent_id} " + " ".join(tags or [])
+        entries = await self.search(
+            query=query,
+            tier=tier,
+            top_k=limit,
+            tags=[agent_id] + (tags or []),
+        )
+        return [
+            {"content": e.value.get("content", "") if isinstance(e.value, dict) else str(e.value)}
+            for e in entries
+        ]
+
     async def extract_long_term_knowledge(self, session_summary: str):
         """
         At the end of a session, extract important knowledge from L1 and promote to L2.

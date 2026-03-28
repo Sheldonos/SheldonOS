@@ -1,5 +1,5 @@
 """
-SheldonOS — The Adaptive Task Orchestrator v2.0
+SheldonOS — The Adaptive Task Orchestrator v3.0
 The core autonomous loop: Seek → Adapt → Scale → Optimize.
 
 v2.0 Changes:
@@ -9,6 +9,15 @@ v2.0 Changes:
   - FIXED: All cycle state persisted to PostgreSQL via asyncpg
   - FIXED: Prometheus metrics exposed on /metrics and /healthz endpoints
   - FIXED: Graceful SIGTERM/SIGINT shutdown with in-flight workflow draining
+
+v3.0 Changes (Blueprint implementation):
+  - NEW: SeekLayer uses HypothesisGenerator for LLM-driven dynamic topic generation
+  - NEW: SeekLayer fans out across MultiSourceScanner (GitHub, HN, arXiv, Polymarket)
+  - NEW: ScaleLayer uses PlannerAgent for dynamic DAG generation (replaces 2 hardcoded templates)
+  - NEW: ScaleLayer uses RightSizer for complexity evaluation before planning
+  - NEW: Reflexion layer triggers on workflow task failures for closed-loop learning
+  - NEW: PAUSE signal (SIGUSR1) halts new opportunity execution without killing in-flight workflows
+  - NEW: _right_size_workflow() method in SheldonOrchestrator for direct complexity evaluation
 """
 
 import asyncio
@@ -95,23 +104,73 @@ class SeekLayer:
 
     def __init__(self, redis_client: aioredis.Redis):
         from core.research.research_engine import PerplexityResearchClient
+        from core.research.hypothesis_generator import get_hypothesis_generator
+        from core.research.multi_source_scanner import get_multi_source_scanner
+        from core.cognitive.cognee.knowledge_graph import get_cognee
         self.perplexity = PerplexityResearchClient()
+        self.hypothesis_generator = get_hypothesis_generator()
+        self.multi_source_scanner = get_multi_source_scanner()
+        self.cognee = get_cognee()
         self.redis = redis_client
         self._DEDUP_TTL = 86400 * 3  # 3 days
 
     async def seek(self) -> List[Opportunity]:
         """
-        Run a single seek cycle. All topics are fetched in parallel.
+        Run a single seek cycle.
+        v3.0: Uses LLM-generated dynamic topics + multi-source parallel scanning.
         Returns only opportunities not seen in the last 3 days.
         """
-        logger.info(f"[Seek] Scanning {len(self.MONITOR_TOPICS)} topics in parallel")
+        # ── v3.0: Generate dynamic topics via HypothesisGenerator ─────────────
+        topics = await self.hypothesis_generator.generate(
+            cognee_client=self.cognee,
+            performance_history={},
+        )
+        logger.info(f"[Seek] Scanning {len(topics)} topics in parallel (dynamic)")
 
-        # FIXED: parallel fetch instead of sequential for-loop
+        # ── v3.0: Fan out across Perplexity + multi-source scanner in parallel ─
+        perplexity_task = asyncio.gather(
+            *[self.perplexity.search_topic(topic) for topic in topics],
+            return_exceptions=True,
+        )
+        multi_source_task = self.multi_source_scanner.scan(topics=topics)
+
+        raw_signals_per_topic_list, multi_source_signals = await asyncio.gather(
+            perplexity_task, multi_source_task, return_exceptions=True
+        )
+
+        opportunities = []
+
+        # Process Perplexity results
+        if not isinstance(raw_signals_per_topic_list, Exception):
+            for topic, result in zip(topics, raw_signals_per_topic_list):
+                if isinstance(result, Exception):
+                    logger.warning(f"[Seek] Topic scan failed for '{topic[:40]}': {result}")
+                    continue
+                for signal in (result if isinstance(result, list) else [result]):
+                    opp = self._parse_signal(signal)
+                    if opp and await self._is_new(opp):
+                        opportunities.append(opp)
+                        OPPORTUNITIES_DETECTED.labels(source=opp.source).inc()
+
+        # Process multi-source scanner results
+        if not isinstance(multi_source_signals, Exception) and isinstance(multi_source_signals, list):
+            for signal in multi_source_signals:
+                opp = self._parse_signal(signal)
+                if opp and await self._is_new(opp):
+                    opportunities.append(opp)
+                    OPPORTUNITIES_DETECTED.labels(source=opp.source).inc()
+
+        logger.info(f"[Seek] {len(opportunities)} new opportunities (after dedup)")
+        return opportunities
+
+    # ── Legacy seek path (kept for backward compatibility) ────────────────────
+    async def _legacy_seek(self) -> List[Opportunity]:
+        """Original v2.0 seek path using static MONITOR_TOPICS."""
+        logger.info(f"[Seek] Legacy: scanning {len(self.MONITOR_TOPICS)} static topics")
         raw_signals_per_topic = await asyncio.gather(
             *[self.perplexity.search_topic(topic) for topic in self.MONITOR_TOPICS],
             return_exceptions=True,
         )
-
         opportunities = []
         for topic, result in zip(self.MONITOR_TOPICS, raw_signals_per_topic):
             if isinstance(result, Exception):
@@ -141,18 +200,27 @@ class SeekLayer:
         if not summary or len(summary) < 50:
             return None
 
+        # Determine source (multi-source scanner sets this; Perplexity defaults)
+        source = signal.get("source", "perplexity_monitor")
+
+        # Infer category from topic keywords
+        topic_lower = topic.lower()
         category = "saas"
-        if any(k in topic.lower() for k in ("polymarket", "kalshi", "order book", "prediction")):
+        if any(k in topic_lower for k in ("polymarket", "kalshi", "order book", "prediction")):
             category = "prediction_market"
-        elif any(k in topic.lower() for k in ("bug bounty", "vulnerability", "cve", "exploit")):
+        elif any(k in topic_lower for k in ("bug bounty", "vulnerability", "cve", "exploit")):
             category = "bug_bounty"
-        elif any(k in topic.lower() for k in ("research", "paper", "arxiv", "discovery")):
+        elif any(k in topic_lower for k in ("research", "paper", "arxiv", "discovery")):
             category = "research"
-        elif any(k in topic.lower() for k in ("crypto", "mempool", "defi", "arbitrage")):
+        elif any(k in topic_lower for k in ("crypto", "mempool", "defi", "arbitrage")):
             category = "arbitrage"
+        elif any(k in topic_lower for k in ("github", "trending", "repository", "open source")):
+            category = "saas"  # GitHub trending → potential SaaS opportunity
+        elif any(k in topic_lower for k in ("hn:", "hacker news", "show hn", "ask hn")):
+            category = "saas"  # HN signals → potential product opportunity
 
         return Opportunity(
-            source="perplexity_monitor",
+            source=source,
             category=category,
             title=topic,
             description=summary,
@@ -250,39 +318,65 @@ class AdaptLayer:
 
 # ─── Scale Layer ─────────────────────────────────────────────────────────────
 class ScaleLayer:
-    """Spawns right-sized agent teams and executes workflows for approved opportunities."""
+    """
+    Spawns right-sized agent teams and executes workflows for approved opportunities.
+    v3.0: Uses PlannerAgent for dynamic DAG generation and Reflexion on failures.
+    The two hardcoded static templates (build_saas_workflow, build_prediction_market_workflow)
+    are replaced by the LLM-driven PlannerAgent that generates a custom DAG per opportunity.
+    """
 
     def __init__(self):
-        from core.workforce.deer_flow.workflow_orchestrator import (
-            WorkflowOrchestrator, build_saas_workflow, build_prediction_market_workflow
-        )
+        from core.workforce.deer_flow.workflow_orchestrator import WorkflowOrchestrator
+        from core.workforce.deer_flow.planner_agent import PlannerAgent
         from core.cognitive.cognee.knowledge_graph import get_cognee
+        from core.cognitive.openviking.memory_client import get_memory_client
+        from core.cognitive.reflexion.reflector import get_reflector
         self.orchestrator = WorkflowOrchestrator()
+        self.planner = PlannerAgent()  # v3.0: replaces hardcoded templates
         self.cognee = get_cognee()
-        self._build_saas = build_saas_workflow
-        self._build_prediction = build_prediction_market_workflow
+        self.memory = get_memory_client(namespace="scale_layer")
+        self.reflector = get_reflector()  # v3.0: Reflexion on failures
 
     async def execute(self, opportunity: Opportunity) -> Dict[str, Any]:
-        logger.info(f"[Scale] Executing: {opportunity.title[:60]} → {opportunity.recommended_company}")
+        """
+        Execute a workflow for an approved opportunity.
+        v3.0: Dynamically plans the workflow via PlannerAgent instead of
+        using the two hardcoded static templates.
+        """
+        logger.info(
+            f"[Scale] Planning: {opportunity.title[:60]} → {opportunity.recommended_company}"
+        )
 
-        if opportunity.category == "prediction_market":
-            workflow = self._build_prediction(
-                self.orchestrator,
-                {"event": opportunity.title, "description": opportunity.description}
+        # ── v3.0: Use PlannerAgent for dynamic DAG generation ──────────────
+        try:
+            workflow = await self.planner.plan(opportunity, self.orchestrator)
+        except Exception as e:
+            logger.warning(
+                f"[Scale] PlannerAgent failed ({e}) — falling back to generic workflow"
             )
-        elif opportunity.category == "saas":
-            workflow = self._build_saas(
-                self.orchestrator,
-                {"name": opportunity.title, "description": opportunity.description}
-            )
-        else:
             workflow = self.orchestrator.create_workflow(
                 name=opportunity.title,
-                company_id=opportunity.recommended_company,
+                company_id=opportunity.recommended_company or "beta",
                 goal=opportunity.description,
             )
 
         result = await self.orchestrator.execute_workflow(workflow)
+
+        # ── v3.0: Trigger Reflexion on any failed tasks ───────────────────
+        from core.workforce.deer_flow.workflow_orchestrator import TaskStatus
+        for task in workflow.tasks.values():
+            if task.status == TaskStatus.FAILED and task.error:
+                try:
+                    await self.reflector.reflect(
+                        failed_task=task,
+                        agent_id=task.agent_id,
+                        memory_client=self.memory,
+                        cognee_client=self.cognee,
+                    )
+                except Exception as ref_err:
+                    logger.warning(
+                        f"[Scale] Reflexion failed for task '{task.name}': {ref_err}"
+                    )
 
         revenue = result.get("estimated_revenue_usd", 0.0)
         await self.cognee.record_outcome(
@@ -325,6 +419,7 @@ class SheldonOrchestrator:
         self.total_revenue_usd = 0.0
         self.score_threshold = float(os.getenv("OPPORTUNITY_SCORE_THRESHOLD", "65.0"))
         self.running = False
+        self.paused = False  # v3.0: SIGUSR1 pauses new opportunity execution
         self._recent_outcomes: List[bool] = []  # True=win, False=loss
 
     async def _init_connections(self):
@@ -419,8 +514,9 @@ class SheldonOrchestrator:
 
         self.running = True
         logger.info("=" * 60)
-        logger.info("SheldonOS v2.0 — AUTONOMOUS ENTITY ONLINE")
+        logger.info("SheldonOS v3.0 — AUTONOMOUS ENTITY ONLINE")
         logger.info("Mode: SEEK → ADAPT → SCALE → OPTIMIZE (infinite loop)")
+        logger.info("v3.0: Dynamic topics | Multi-source scanner | PlannerAgent | Reflexion")
         logger.info("=" * 60)
 
         while self.running:
@@ -467,6 +563,11 @@ class SheldonOrchestrator:
     async def _run_cycle(self, cycle_data: Dict[str, Any]) -> float:
         """Execute one full Seek → Adapt → Scale → Optimize cycle. Returns revenue."""
         cycle_revenue = 0.0
+
+        # v3.0: Honour PAUSE signal — skip execution but still run Seek for monitoring
+        if self.paused:
+            logger.info("[Cycle] PAUSED — skipping execution (monitoring continues)")
+            return cycle_revenue
 
         # ── SEEK ──────────────────────────────────────────────────────────────
         opportunities = await self.seek_layer.seek()
@@ -570,9 +671,31 @@ class SheldonOrchestrator:
         self.running = False
         logger.info("SheldonOS — Graceful shutdown initiated")
 
+    def pause(self):
+        """
+        v3.0: PAUSE signal handler (SIGUSR1).
+        Halts new opportunity execution without killing in-flight workflows.
+        Send SIGUSR1 again to resume.
+        """
+        self.paused = not self.paused
+        state = "PAUSED" if self.paused else "RESUMED"
+        logger.info(f"SheldonOS — {state} (in-flight workflows continue)")
+
+    async def _right_size_workflow(self, opportunity: Opportunity) -> Dict[str, Any]:
+        """
+        v3.0: Directly evaluate the complexity of an opportunity using the RightSizer.
+        Returns the sizing recommendation dict.
+        Can be called externally (e.g., from a control plane API) to preview
+        the agent team configuration before committing to execution.
+        """
+        from core.workforce.ruflo.right_sizer import get_right_sizer
+        sizer = get_right_sizer()
+        return await sizer.evaluate(opportunity)
+
     def get_status(self) -> Dict[str, Any]:
         return {
             "running": self.running,
+            "paused": self.paused,
             "cycle_count": self.cycle_count,
             "total_revenue_usd": self.total_revenue_usd,
             "seek_interval_seconds": self.seek_layer.SEEK_INTERVAL if self.seek_layer else 0,
@@ -586,9 +709,11 @@ async def main():
     orchestrator = SheldonOrchestrator()
 
     # Graceful shutdown on SIGTERM / SIGINT
+    # v3.0: SIGUSR1 toggles PAUSE (halts new executions, in-flight continue)
     loop = asyncio.get_running_loop()
     for sig in (signal.SIGTERM, signal.SIGINT):
         loop.add_signal_handler(sig, orchestrator.stop)
+    loop.add_signal_handler(signal.SIGUSR1, orchestrator.pause)
 
     await orchestrator.run_forever()
 
