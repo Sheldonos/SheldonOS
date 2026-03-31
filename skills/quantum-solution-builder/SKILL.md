@@ -18,7 +18,7 @@ When a user requests to build an application using IBM Solution Workbench and Pr
 
 ### Step 2: Architecture Design (Solution Workbench Simulation)
 Act as the IBM DevOps Solution Workbench to generate the following architectural artifacts:
-1. **C4 Diagrams:** Write Mermaid code for a System Context Diagram (Level 1) and a Container Diagram (Level 2). Render these to PNG using the `manus-render-diagram` utility.
+1. **C4 Diagrams:** Write Mermaid code for a System Context Diagram (Level 1) and a Container Diagram (Level 2). Render these to PNG using the `sheldon-render-diagram` utility.
 2. **Domain Model:** Design a comprehensive JSON domain model including Aggregates, Entities, Value Objects, and Enums.
 3. **OpenAPI Specifications:** Write complete OpenAPI 3.0 YAML specifications for the core microservices.
 4. **Scaffolded Code:** Write realistic boilerplate code (e.g., Node.js/Express or Java/Spring Boot) with `TODO [BOB]` markers where business logic should be implemented.
@@ -34,7 +34,7 @@ Create a comprehensive, copy-paste-ready prompt for IBM Project Bob. This prompt
 ### Step 4: Document Compilation
 1. Read the template at `/home/ubuntu/skills/ibm-solution-accelerator/templates/solution_document_template.md`.
 2. Compile all generated artifacts and the master prompt into a single, professional Markdown document based on the template.
-3. Convert the Markdown document to a PDF using the `manus-md-to-pdf` utility.
+3. Convert the Markdown document to a PDF using the `sheldon-md-to-pdf` utility.
 4. Deliver the final PDF and Markdown files to the user.
 
 ## References

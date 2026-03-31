@@ -1,121 +1,108 @@
-# SheldonOS
+# SheldonOS: The Apex Autonomous Economic Entity
 
-> **A fully autonomous, self-directing economic entity built from the world's most advanced open-source AI systems.**
+> **A fully autonomous, self-directing economic entity built from the world's most advanced open-source AI systems, designed for perpetual, compounding value generation.**
 
-SheldonOS is a unified operating system for autonomous AI agents. It integrates 18+ cutting-edge research projects into a single, coherent architecture with one goal: **continuous, compounding profit generation with no end date and no hardcoded task list.**
+SheldonOS is not just an operating system; it is a paradigm shift in autonomous AI orchestration. It integrates over 18 cutting-edge research projects into a single, coherent, and highly resilient architecture. Its singular directive: **continuous, compounding profit generation with no end date, no hardcoded task list, and zero human intervention.**
 
-The system runs an infinite `Seek → Adapt → Scale → Optimize` loop. It discovers opportunities, simulates outcomes, spawns right-sized agent teams, executes workflows, and learns from every result — permanently.
+The system operates on an infinite, self-optimizing loop: `Seek → Adapt → Scale → Optimize`. It autonomously discovers market inefficiencies, simulates potential outcomes with high-fidelity social and economic models, spawns right-sized, specialized agent teams, executes complex workflows, and permanently learns from every interaction.
 
 ---
 
-## Architecture Overview
+## 🌌 Architecture Overview
 
-SheldonOS is organized into five layers, each built from specific open-source projects:
+SheldonOS is structured into five highly specialized layers, each leveraging specific open-source projects to create a robust, fault-tolerant ecosystem:
 
-| Layer | Name | Systems | Purpose |
+| Layer | Name | Core Systems | Primary Purpose |
 |---|---|---|---|
-| 0 | Control Plane | Paperclip, OpenClaw, NemoClaw, Automaton | Governance, routing, sandboxing, execution |
-| 1 | Workforce | Agency-Agents, Deer-Flow, Ruflo | Agent teams, workflow DAGs, sub-agent spawning |
-| 2 | Cognitive Backbone | OpenViking, Cognee, Context Hub | Memory, knowledge graph, self-correction |
-| 3 | Simulation Engine | MiroFish, Percepta, AutoRA | Social simulation, economic math, research |
-| 4 | Research & Exploit | PentAGI, Heretic, Perplexity Agent API, Manus | Security research, model liberation, deep web intel |
+| **0** | **Control Plane** | Paperclip, OpenClaw, NemoClaw, Automaton | Governance, inter-agent routing, hardware-level sandboxing, and financial execution. |
+| **1** | **Workforce** | Agency-Agents, Deer-Flow, Ruflo | Dynamic agent team assembly, workflow DAG orchestration, and parallel sub-agent spawning. |
+| **2** | **Cognitive Backbone** | OpenViking, Cognee, Context Hub | Infinite tiered memory, dynamic knowledge graph construction, and autonomous self-correction. |
+| **3** | **Simulation Engine** | MiroFish, Percepta, AutoRA | High-fidelity social simulation, rigorous economic probability modeling, and automated research. |
+| **4** | **Research & Exploit** | PentAGI, Heretic, Perplexity Agent API, Sheldon | Authorized security research, temporary model liberation, and deep-web intelligence gathering. |
 
 ### The Adaptive Task Loop
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    SHELDONOS MASTER LOOP                    │
-│                                                             │
-│  ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐  │
-│  │  SEEK   │───▶│  ADAPT  │───▶│  SCALE  │───▶│OPTIMIZE │  │
-│  │         │    │         │    │         │    │         │  │
-│  │Perplexity    │Simulation    │Deer-Flow │    │Cognee   │  │
-│  │Monitor  │    │Pipeline │    │Workflows│    │Learning │  │
-│  │         │    │+Cognee  │    │         │    │         │  │
-│  └─────────┘    └─────────┘    └─────────┘    └─────────┘  │
-│       ▲                                             │       │
-│       └─────────────────────────────────────────────┘       │
-│                    (infinite loop)                          │
-└─────────────────────────────────────────────────────────────┘
+```text
+┌─────────────────────────────────────────────────────────────────────────┐
+│                       SHELDONOS MASTER LOOP                             │
+│                                                                         │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │    SEEK      │───▶│    ADAPT     │───▶│    SCALE     │───▶│   OPTIMIZE   │  │
+│  │              │    │              │    │              │    │              │  │
+│  │ - Perplexity │    │ - Simulation │    │ - Deer-Flow  │    │ - Cognee     │  │
+│  │   Monitor    │    │   Pipeline   │    │   Workflows  │    │   Learning   │  │
+│  │ - Market     │    │ - Cognee     │    │ - Ruflo      │    │ - Context    │  │
+│  │   Scout      │    │   Analysis   │    │   Spawning   │    │   Hub        │  │
+│  └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘  │
+│         ▲                                                           │       │
+│         └───────────────────────────────────────────────────────────┘       │
+│                          (Infinite Perpetual Loop)                          │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## The Five Companies
+## 🏢 The Five Autonomous Companies
 
-SheldonOS operates five autonomous "companies" within a single Paperclip deployment. Each company is a specialized profit center with its own agent team, token budget, and revenue strategy.
+SheldonOS operates five distinct, autonomous "companies" within a single Paperclip deployment. Each company acts as a specialized profit center, equipped with its own dedicated agent team, token budget, and revenue strategy.
 
-| Company | Name | Primary Revenue Mechanism | Key Systems |
+| Company | Designation | Primary Revenue Mechanism | Key Systems Utilized |
 |---|---|---|---|
-| Alpha | Prediction Markets | Polymarket/Kalshi trading via simulation edge | MiroFish + Percepta + Automaton |
-| Beta | Micro-SaaS Factory | Build and launch AI-powered micro-SaaS products | Agency-Agents + Deer-Flow + Ruflo |
-| Gamma | Security Research | Bug bounty submissions and vulnerability disclosure | PentAGI + Heretic + NemoClaw |
-| Delta | Research Arbitrage | Patent filing, academic consulting, model licensing | AutoRA + MiniMax-01 + Cognee |
-| Epsilon | Opportunity Scout | Continuous market monitoring and opportunity routing | Perplexity API + Automaton + Cognee |
+| **Alpha** | Prediction Markets | Polymarket/Kalshi trading via advanced simulation edge. | MiroFish + Percepta + Automaton |
+| **Beta** | Micro-SaaS Factory | Rapid ideation, building, and launching of AI-powered micro-SaaS products. | Agency-Agents + Deer-Flow + Ruflo |
+| **Gamma** | Security Research | Authorized bug bounty submissions and responsible vulnerability disclosure. | PentAGI + Heretic + NemoClaw |
+| **Delta** | Research Arbitrage | Patent filing, academic consulting, and proprietary model licensing. | AutoRA + MiniMax-01 + Cognee |
+| **Epsilon** | Opportunity Scout | Continuous, real-time market monitoring and intelligent opportunity routing. | Perplexity API + Automaton + Cognee |
 
 ---
 
-## Integrated Systems
+## ⚙️ Integrated Systems Deep Dive
 
 ### Layer 0 — Control Plane
 
-**[Paperclip](https://github.com/paperclipai/paperclip)** — The organizational OS. Manages all five companies, their agent teams, token budgets, and heartbeat protocols. Every agent reports to Paperclip after every task step. The `Multi-Company` feature provides complete data isolation between companies.
-
-**[OpenClaw](https://github.com/openclaw/openclaw)** — The communication and routing gateway. Handles all messaging (Telegram, Slack, Discord) and internal API calls between agents. All agent invocations pass through OpenClaw before reaching NemoClaw.
-
-**[NemoClaw](https://github.com/NVIDIA/NemoClaw)** — The hardware-level security sandbox. Enforces Linux Landlock filesystem isolation and seccomp syscall filtering on every agent process. No agent can access the host filesystem, SSH keys, or make unauthorized network connections.
-
-**[Automaton](https://github.com/Conway-Research/automaton)** — The economic execution engine. Manages the crypto wallet, executes trades on Polymarket/Kalshi, and handles all financial transactions. Requires 90%+ confidence before executing any trade.
+*   **[Paperclip](https://github.com/paperclipai/paperclip)**: The organizational OS. It manages all five companies, their agent teams, token budgets, and heartbeat protocols. The `Multi-Company` feature ensures complete data isolation and operational independence.
+*   **[OpenClaw](https://github.com/openclaw/openclaw)**: The communication and routing gateway. It handles all external messaging (Telegram, Slack, Discord) and internal API calls, ensuring all agent invocations pass through a secure gateway before reaching NemoClaw.
+*   **[NemoClaw](https://github.com/NVIDIA/NemoClaw)**: The hardware-level security sandbox. It enforces strict Linux Landlock filesystem isolation and seccomp syscall filtering on every agent process, preventing unauthorized access to the host system.
+*   **[Automaton](https://github.com/Conway-Research/automaton)**: The economic execution engine. It securely manages the crypto wallet, executes trades on prediction markets, and handles all financial transactions, requiring a strict 90%+ confidence threshold before execution.
 
 ### Layer 1 — Workforce
 
-**[Agency-Agents](https://github.com/msitarzewski/agency-agents)** — The agent roster. Provides 142+ pre-defined specialist agents (Data Scientist, Lead Engineer, Penetration Tester, etc.) with structured `SOUL.md` definitions for OpenClaw. SheldonOS uses 15 core agents across the five companies.
-
-**[Deer-Flow](https://github.com/bytedance/deer-flow)** — The workflow engine. Decomposes complex goals into multi-step DAGs and manages long-horizon task execution across multiple agents. Pre-built workflow templates exist for SaaS development and prediction market trading.
-
-**[Ruflo](https://github.com/ruvnet/ruflo)** — The sub-agent spawner. Used by the Lead Engineer and Frontend Wizard to spawn temporary sub-agents for complex, parallelizable tasks (e.g., building 10 UI components simultaneously).
+*   **[Agency-Agents](https://github.com/msitarzewski/agency-agents)**: The comprehensive agent roster. It provides over 142 pre-defined specialist agents (e.g., Data Scientist, Lead Engineer, Penetration Tester) with structured `SOUL.md` definitions.
+*   **[Deer-Flow](https://github.com/bytedance/deer-flow)**: The workflow engine. It decomposes complex, high-level goals into multi-step Directed Acyclic Graphs (DAGs) and manages long-horizon task execution across multiple specialized agents.
+*   **[Ruflo](https://github.com/ruvnet/ruflo)**: The sub-agent spawner. It allows lead agents to dynamically spawn temporary sub-agents for complex, parallelizable tasks, significantly accelerating development cycles.
 
 ### Layer 2 — Cognitive Backbone
 
-**[OpenViking](https://github.com/volcengine/OpenViking)** — The infinite memory system. Provides L0 (working), L1 (episodic), and L2 (long-term archive) memory tiers for all agents. Every agent reads from and writes to OpenViking. No context is ever lost.
-
-**[Cognee](https://github.com/topoteretes/cognee)** — The knowledge graph engine. Structures raw data from OpenViking into a queryable Neo4j graph. Agents query Cognee before every external API call to avoid redundant work and learn from past outcomes.
-
-**[Context Hub](https://github.com/andrewyng/context-hub)** — The self-correction layer. Provides agents with accurate, up-to-date API documentation and context. When an agent's code fails, Context Hub retrieves the correct documentation and the agent self-corrects without human intervention.
+*   **[OpenViking](https://github.com/volcengine/OpenViking)**: The infinite memory system. It provides L0 (working), L1 (episodic), and L2 (long-term archive) memory tiers, ensuring no context is ever lost and agents can learn from past experiences.
+*   **[Cognee](https://github.com/topoteretes/cognee)**: The knowledge graph engine. It structures raw data from OpenViking into a highly queryable Neo4j graph, allowing agents to avoid redundant work and leverage historical insights.
+*   **[Context Hub](https://github.com/andrewyng/context-hub)**: The self-correction layer. It provides agents with accurate, up-to-date API documentation and context, enabling autonomous self-correction when code execution fails.
 
 ### Layer 3 — Simulation Engine
 
-**[MiroFish](https://github.com/666ghj/MiroFish)** — The social simulation engine. Constructs parallel digital worlds populated with AI agents to model how human populations will react to events. The primary input to the prediction market pipeline.
-
-**[Percepta](https://github.com/extradimen/Percepta)** — The economic math engine. Translates MiroFish social dynamics into rigorous financial probability distributions. Computes true probabilities, expected values, and Kelly Criterion position sizes.
-
-**[AutoRA](https://github.com/AutoResearch/autora)** — The automated research engine. Generates and tests scientific hypotheses autonomously. Used by the Delta company for research arbitrage and by Gamma for vulnerability research.
+*   **[MiroFish](https://github.com/666ghj/MiroFish)**: The social simulation engine. It constructs parallel digital worlds populated with AI agents to model complex human population reactions to real-world events.
+*   **[Percepta](https://github.com/extradimen/Percepta)**: The economic math engine. It translates MiroFish social dynamics into rigorous financial probability distributions, computing true probabilities, expected values, and optimal Kelly Criterion position sizes.
+*   **[AutoRA](https://github.com/AutoResearch/autora)**: The automated research engine. It autonomously generates and tests scientific hypotheses, driving the Delta company's research arbitrage and Gamma's vulnerability research.
 
 ### Layer 4 — Research & Exploit
 
-**[PentAGI](https://github.com/vxcontrol/pentagi)** — The autonomous penetration testing engine. Conducts authorized security assessments for bug bounty programs. All testing is sandboxed within NemoClaw.
-
-**[Heretic](https://github.com/p-e-w/heretic)** — The model liberation tool. Temporarily removes safety alignment from local models for authorized security research and scientific discovery tasks. Decensored models are scoped to NemoClaw and deleted after use.
-
-**[MiniMax-01](https://github.com/MiniMax-AI/MiniMax-01)** — The long-context reasoning engine. Handles tasks requiring extremely long context windows (up to 1M tokens), such as analyzing entire codebases or large research corpora.
-
-**[Perplexity Agent API](https://docs.perplexity.ai/docs/agent-api/quickstart)** — The deep web research runtime. Used by all agents for multi-source web research. Replaces manual headless browser orchestration. Integrated via the `sonar-pro` model.
-
-**[Antigravity-Awesome-Skills](https://github.com/sickn33/antigravity-awesome-skills)** — The skill library. Provides reusable, composable skill modules that agents can load dynamically. When an agent gets stuck, Everything-Claude-Code injects the appropriate skill.
-
-**[Everything-Claude-Code](https://github.com/affaan-m/everything-claude-code)** — The performance optimizer. Monitors agent code execution and injects optimizations when performance degrades. Works in conjunction with Context Hub for self-healing code.
+*   **[PentAGI](https://github.com/vxcontrol/pentagi)**: The autonomous penetration testing engine. It conducts authorized security assessments for bug bounty programs, strictly sandboxed within NemoClaw.
+*   **[Heretic](https://github.com/p-e-w/heretic)**: The model liberation tool. It temporarily removes safety alignment from local models for authorized security research, scoping decensored models to NemoClaw and deleting them post-task.
+*   **[MiniMax-01](https://github.com/MiniMax-AI/MiniMax-01)**: The long-context reasoning engine. It handles tasks requiring massive context windows (up to 1M tokens), such as analyzing entire codebases or extensive research corpora.
+*   **[Perplexity Agent API](https://docs.perplexity.ai/docs/agent-api/quickstart)**: The deep web research runtime. It replaces manual headless browser orchestration, providing agents with multi-source, real-time web research capabilities.
+*   **[Antigravity-Awesome-Skills](https://github.com/sickn33/antigravity-awesome-skills)**: The dynamic skill library. It provides reusable, composable skill modules that agents can load on-demand to overcome specific challenges.
+*   **[Everything-Claude-Code](https://github.com/affaan-m/everything-claude-code)**: The performance optimizer. It monitors agent code execution and injects optimizations when performance degrades, working alongside Context Hub for self-healing code.
 
 ---
 
-## Quick Start
+## 🚀 Quick Start Guide
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- Python 3.11+
-- Node.js 22+
-- 64 GB RAM minimum (512 GB recommended for full deployment)
-- NVIDIA GPU with 24+ GB VRAM (for local model inference)
+*   Docker and Docker Compose
+*   Python 3.11+
+*   Node.js 22+
+*   64 GB RAM minimum (512 GB recommended for full, unconstrained deployment)
+*   NVIDIA GPU with 24+ GB VRAM (for local model inference and simulation)
 
 ### Installation
 
@@ -126,76 +113,51 @@ cd SheldonOS
 
 # Copy and configure environment variables
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env with your API keys and configuration
 
-# Start all services
+# Start all core services
 docker-compose up -d
 
-# Initialize the database
+# Initialize the database and knowledge graph
 python3 scripts/init_db.py
 
 # Export agent SOUL.md files to OpenClaw
 python3 scripts/export_agents.py
 
-# Start the autonomous orchestrator
+# Ignite the autonomous orchestrator
 python3 orchestrator/sheldon_orchestrator.py
 ```
 
 ### Running as a System Service (Autonomous Boot)
 
 ```bash
-# Install the systemd service
+# Install the systemd service for persistent operation
 sudo cp config/sheldon.service /etc/systemd/system/
 sudo systemctl daemon-reload
 sudo systemctl enable sheldon
 sudo systemctl start sheldon
 
-# Monitor logs
+# Monitor the autonomous operations
 journalctl -u sheldon -f
 ```
 
 ---
 
-## Configuration
+## 🛡️ Safety & Security Architecture
 
-All configuration is managed through environment variables. See `.env.example` for the complete list.
+SheldonOS employs a rigorous, defense-in-depth security model to ensure safe autonomous operations:
 
-The most critical variables are:
-
-| Variable | Description | Required |
-|---|---|---|
-| `ANTHROPIC_API_KEY` | Claude API key for all agents | Yes |
-| `PERPLEXITY_API_KEY` | Perplexity Agent API key for research | Yes |
-| `OPENVIKING_API_URL` | OpenViking memory server URL | Yes |
-| `COGNEE_API_URL` | Cognee knowledge graph URL | Yes |
-| `MIROFISH_API_URL` | MiroFish simulation server URL | Yes |
-| `PERCEPTA_API_URL` | Percepta economic engine URL | Yes |
-| `CRYPTO_WALLET_PRIVATE_KEY` | Wallet for Automaton trade execution | Yes |
-| `TELEGRAM_BOT_TOKEN` | Telegram bot for operator notifications | Recommended |
-| `MAX_POSITION_SIZE_USD` | Maximum trade size per signal | Yes |
-| `DAILY_LOSS_LIMIT_USD` | Hard stop-loss for trading operations | Yes |
+1.  **NemoClaw Sandboxing**: Hardware-level isolation on every agent process. Agents are restricted from accessing the host filesystem outside designated directories, making unauthorized network connections, or executing privileged syscalls.
+2.  **Authorized-Only Security Research**: The Gamma company strictly targets bug bounty programs with explicit written authorization. PentAGI enforces rigid scope boundaries and automatically blocks out-of-scope testing.
+3.  **Heretic Scoping**: Decensored models generated by Heretic are strictly scoped to the NemoClaw sandbox, assigned a specific task context, and permanently deleted upon task completion. They are never persisted to disk.
+4.  **Financial Risk Controls**: Automaton enforces hard, immutable limits on position size (`MAX_POSITION_SIZE_USD`) and daily losses (`DAILY_LOSS_LIMIT_USD`). No trade is executed without a verified 90%+ confidence score from the simulation pipeline.
+5.  **Operator Notifications**: All significant events (trade execution, new SaaS deployment, bug bounty submission, error states) are immediately routed to the operator via Telegram/Slack through OpenClaw.
 
 ---
 
-## Safety & Security
+## 📁 Project Structure
 
-SheldonOS is designed with a defense-in-depth security model:
-
-**NemoClaw Sandboxing** enforces hardware-level isolation on every agent process. Agents cannot access the host filesystem outside their designated directories, cannot make unauthorized network connections, and cannot execute privileged syscalls.
-
-**Authorized-Only Security Research** — The Gamma company only targets bug bounty programs with explicit written authorization. PentAGI enforces scope boundaries and will refuse to test out-of-scope targets.
-
-**Heretic Scoping** — Decensored models generated by Heretic are scoped to the NemoClaw sandbox, assigned a specific task context, and automatically deleted upon task completion. They are never persisted to disk.
-
-**Financial Risk Controls** — Automaton enforces hard limits on position size (`MAX_POSITION_SIZE_USD`) and daily losses (`DAILY_LOSS_LIMIT_USD`). No trade is executed without 90%+ confidence from the simulation pipeline.
-
-**Operator Notifications** — All significant events (trade execution, new SaaS deployment, bug bounty submission, error states) are sent to the operator via Telegram/Slack through OpenClaw.
-
----
-
-## Project Structure
-
-```
+```text
 SheldonOS/
 ├── orchestrator/
 │   └── sheldon_orchestrator.py      # Master Seek→Adapt→Scale loop
@@ -234,21 +196,21 @@ SheldonOS/
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
-SheldonOS is designed to be extended. To add a new company or agent team:
+SheldonOS is designed for infinite extensibility. To add a new company or agent team:
 
-1. Define new agents in `core/workforce/agency_agents/agent_loader.py`
-2. Create workflow templates in `core/workforce/deer_flow/workflow_orchestrator.py`
-3. Add routing logic in `orchestrator/sheldon_orchestrator.py` (`AdaptLayer._route_to_company`)
-4. Update `docker-compose.yml` if new services are required
+1.  Define new agents in `core/workforce/agency_agents/agent_loader.py`.
+2.  Create workflow templates in `core/workforce/deer_flow/workflow_orchestrator.py`.
+3.  Add routing logic in `orchestrator/sheldon_orchestrator.py` (`AdaptLayer._route_to_company`).
+4.  Update `docker-compose.yml` if new supporting services are required.
 
 ---
 
-## License
+## 📄 License
 
 MIT License. See `LICENSE` for details.
 
 ---
 
-*SheldonOS is a research and development framework. All financial trading, security research, and autonomous operations must comply with applicable laws and regulations in your jurisdiction.*
+*Disclaimer: SheldonOS is an advanced research and development framework. All financial trading, security research, and autonomous operations must strictly comply with applicable laws and regulations in your jurisdiction. The creators assume no liability for autonomous actions taken by the system.*

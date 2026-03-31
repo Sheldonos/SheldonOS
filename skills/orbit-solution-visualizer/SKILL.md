@@ -65,7 +65,7 @@ Produce all artifacts in a single document. Read `references/ibm_toolchain.md` f
 
 | # | Artifact | Format |
 |---|----------|--------|
-| 1 | C4 Context Diagram | Mermaid `graph LR`, render to PNG with `manus-render-diagram` |
+| 1 | C4 Context Diagram | Mermaid `graph LR`, render to PNG with `sheldon-render-diagram` |
 | 2 | C4 Container Diagram | Mermaid `graph TB`, render to PNG |
 | 3 | C4 Component Diagram | Mermaid `graph TB` for the most complex service |
 | 4 | Domain Model | JSON with aggregates, entities, value objects, enums, domain events |
@@ -169,10 +169,10 @@ After all components are built, restart the dev server and save a checkpoint.
 ### Phase 6 — Deliver
 
 Deliver four attachments:
-1. **Solution Workbench Output PDF** — all Phase 3 artifacts compiled with `manus-md-to-pdf`
+1. **Solution Workbench Output PDF** — all Phase 3 artifacts compiled with `sheldon-md-to-pdf`
 2. **Project Bob Master Prompt** — the Phase 4 document as Markdown
 3. **DOORS Next Requirements Catalog** — the Phase 2 document as Markdown
-4. **Live Web App** — `manus-webdev://[checkpoint-id]`
+4. **Live Web App** — `sheldon-webdev://[checkpoint-id]`
 
 ---
 

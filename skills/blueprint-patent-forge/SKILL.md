@@ -91,7 +91,7 @@ ALWAYS use this exact template structure for the final output:
 **26. Technology Code:** [Relevant Code]
 **27. Business Unit:** IBM Research
 **28. AI Tools Used?** Yes
-**29. AI Tool(s):** Manus AI
+**29. AI Tool(s):** Sheldon AI
 **30. Export Control Additional:** [Relevant Category]
 
 ### STEP 4 - DOCUMENTS
@@ -122,5 +122,5 @@ Primary Inventor: IBM Research Team
 ```
 
 ## Additional Requirements
-- **Architecture Diagram:** Always generate a Mermaid diagram (`.mmd`) illustrating the system architecture and data flow, render it to a PNG using `manus-render-diagram`, and include it in the final document under the "Implementation" section.
+- **Architecture Diagram:** Always generate a Mermaid diagram (`.mmd`) illustrating the system architecture and data flow, render it to a PNG using `sheldon-render-diagram`, and include it in the final document under the "Implementation" section.
 - **Tone:** Professional, academic, and highly technical.

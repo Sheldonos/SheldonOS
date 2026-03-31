@@ -5,7 +5,7 @@ description: Autonomously manages complex, multi-stage enterprise projects from 
 
 # Master Orchestrator
 
-This skill enables Manus to act as an autonomous project manager, orchestrating the full lifecycle of a complex enterprise project. It leverages a suite of specialized enterprise skills to execute the project plan with minimal human oversight.
+This skill enables Sheldon to act as an autonomous project manager, orchestrating the full lifecycle of a complex enterprise project. It leverages a suite of specialized enterprise skills to execute the project plan with minimal human oversight.
 
 ## Core Principles
 

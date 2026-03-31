@@ -77,7 +77,7 @@ The process is broken down into seven sequential phases. Follow them in order.
     python3.11 /home/ubuntu/skills/local-lead-blitz/scripts/create_ai_leads_workbook.py
     python3.11 /home/ubuntu/skills/local-lead-blitz/scripts/create_cultural_leads_workbook.py
     ```
-3.  **Create PDF Reports:** For each of the three lead types, write a summary report in Markdown and convert it to PDF using `manus-md-to-pdf`.
+3.  **Create PDF Reports:** For each of the three lead types, write a summary report in Markdown and convert it to PDF using `sheldon-md-to-pdf`.
 4.  **Create ZIP Packages:** Create a ZIP archive for each lead package, containing the CSV, Excel workbook, and PDF report.
 
 ---
