@@ -1,0 +1,188 @@
+/**
+ * IBM Solution Designer Web App — AppShell Template
+ * 
+ * USAGE: Copy this file to client/src/pages/Home.tsx in the webdev project.
+ * Replace {{ARCHITECTURE_DATA}} with the JSON output from generate_architecture_data.py
+ * Replace {{PROJECT_NAME}} with the use case name.
+ * 
+ * This template implements the full IBM Solution Designer shell:
+ * - Dark header with IBM logo, project name, branch selector
+ * - White left sidebar with icon+label nav (10 items)
+ * - Main canvas area that switches between views
+ * - Dark status bar (Connected, Problems, CLI)
+ * 
+ * Views wired up:
+ * - Diagrams → ContainerDiagram (Level 2 canvas)
+ * - Model eleme... → ComponentDiagram (Level 3 drill-down)
+ * - Overview → ServiceOverview (sequence diagrams)
+ * - Decisions → DecisionView (ADR documents)
+ * - Domains → DomainView (domain method docs)
+ * - APIs → ApiView (OpenAPI endpoint explorer)
+ */
+
+import { useState } from "react";
+import { toast } from "sonner";
+import ContainerDiagram from "@/components/ContainerDiagram";
+import ComponentDiagram from "@/components/ComponentDiagram";
+import ServiceOverview from "@/components/ServiceOverview";
+import DecisionView from "@/components/DecisionView";
+import DomainView from "@/components/DomainView";
+import ApiView from "@/components/ApiView";
+
+// REPLACE THIS with the JSON from generate_architecture_data.py
+const ARCHITECTURE_DATA = {{ARCHITECTURE_DATA}};
+
+type ViewType = "container-diagram" | "component-diagram" | "service-overview" 
+  | "decision" | "domain" | "apis" | "integrations" | "relationships" | "cicd";
+
+const NAV_ITEMS = [
+  { id: "overview",       label: "Overview",       icon: "⊞", view: "service-overview" as ViewType },
+  { id: "apis",           label: "APIs",            icon: "≡", view: "apis" as ViewType },
+  { id: "domains",        label: "Domains",         icon: "⬡", view: "domain" as ViewType },
+  { id: "integrations",   label: "Integrations",    icon: "⊕", view: "integrations" as ViewType },
+  { id: "diagrams",       label: "Diagrams",        icon: "⬜", view: "container-diagram" as ViewType },
+  { id: "model",          label: "Model eleme...",  icon: "◈", view: "component-diagram" as ViewType },
+  { id: "spotlight",      label: "Spotlight",       icon: "◎", view: "service-overview" as ViewType },
+  { id: "relationships",  label: "Relationships",   icon: "⟷", view: "relationships" as ViewType },
+  { id: "decisions",      label: "Decisions",       icon: "⬦", view: "decision" as ViewType },
+  { id: "cicd",           label: "CI/CD",           icon: "⟳", view: "cicd" as ViewType },
+];
+
+const PLACEHOLDER_VIEWS = ["integrations", "spotlight", "relationships", "cicd"];
+
+export default function Home() {
+  const [activeNav, setActiveNav] = useState("diagrams");
+  const [activeView, setActiveView] = useState<ViewType>("container-diagram");
+  const [diagramLevel, setDiagramLevel] = useState<"container" | "component">("container");
+
+  const handleNavClick = (item: typeof NAV_ITEMS[0]) => {
+    setActiveNav(item.id);
+    if (item.id === "diagrams") {
+      setActiveView(diagramLevel === "container" ? "container-diagram" : "component-diagram");
+    } else {
+      setActiveView(item.view);
+    }
+    if (PLACEHOLDER_VIEWS.includes(item.id)) {
+      toast("Feature coming soon", { description: "Available in the full IBM Solution Designer." });
+    }
+  };
+
+  const handleDrillDown = () => {
+    setDiagramLevel("component");
+    setActiveView("component-diagram");
+    setActiveNav("model");
+  };
+
+  const handleDrillUp = () => {
+    setDiagramLevel("container");
+    setActiveView("container-diagram");
+    setActiveNav("diagrams");
+  };
+
+  const renderMain = () => {
+    switch (activeView) {
+      case "container-diagram":   return <ContainerDiagram onDrillDown={handleDrillDown} />;
+      case "component-diagram":   return <ComponentDiagram onBack={handleDrillUp} />;
+      case "service-overview":    return <ServiceOverview />;
+      case "decision":            return <DecisionView />;
+      case "domain":              return <DomainView />;
+      case "apis":                return <ApiView />;
+      default:                    return <ContainerDiagram onDrillDown={handleDrillDown} />;
+    }
+  };
+
+  const { project } = ARCHITECTURE_DATA;
+
+  return (
+    <div style={{ display:"flex", flexDirection:"column", height:"100vh", width:"100vw", 
+                  overflow:"hidden", fontFamily:"'IBM Plex Sans', sans-serif" }}>
+      {/* ── Header ── */}
+      <header style={{ height:48, background:"#161616", display:"flex", alignItems:"center",
+                       justifyContent:"space-between", padding:"0 16px", flexShrink:0,
+                       zIndex:100, borderBottom:"1px solid #393939" }}>
+        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+          <svg width="32" height="14" viewBox="0 0 32 14" fill="none">
+            <rect x="0" y="0" width="32" height="2" fill="#0f62fe"/>
+            <rect x="4" y="3" width="24" height="2" fill="#0f62fe"/>
+            <rect x="0" y="6" width="32" height="2" fill="#0f62fe"/>
+            <rect x="4" y="9" width="24" height="2" fill="#0f62fe"/>
+            <rect x="0" y="12" width="32" height="2" fill="#0f62fe"/>
+          </svg>
+          <span style={{ color:"#f4f4f4", fontSize:14, fontWeight:400 }}>IBM Solution Designer</span>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
+          <span style={{ color:"#8d8d8d", fontSize:12 }}>{project.name}</span>
+          <span style={{ color:"#525252", fontSize:12 }}>|</span>
+          <div style={{ display:"flex", alignItems:"center", gap:6, background:"#262626",
+                        border:"1px solid #393939", padding:"3px 10px", borderRadius:2, cursor:"pointer" }}>
+            <span style={{ color:"#c6c6c6", fontSize:12 }}>⎇</span>
+            <span style={{ color:"#c6c6c6", fontSize:12 }}>{project.branch}</span>
+            <span style={{ color:"#8d8d8d", fontSize:10 }}>▾</span>
+          </div>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+          {["↻","+","⚙","🌐"].map((icon,i) => (
+            <button key={i} onClick={() => toast("Feature coming soon")}
+              style={{ width:32, height:32, background:"transparent", border:"none",
+                       color:"#c6c6c6", fontSize:14, cursor:"pointer", borderRadius:2 }}>
+              {icon}
+            </button>
+          ))}
+          <div style={{ width:28, height:28, borderRadius:"50%", background:"#6929c4",
+                        display:"flex", alignItems:"center", justifyContent:"center",
+                        color:"#fff", fontSize:11, fontWeight:600, marginLeft:4, cursor:"pointer" }}>
+            {project.company.split(" ").map((w: string) => w[0]).join("").slice(0,2).toUpperCase()}
+          </div>
+        </div>
+      </header>
+
+      {/* ── Body ── */}
+      <div style={{ display:"flex", flex:1, overflow:"hidden" }}>
+        {/* Sidebar */}
+        <nav style={{ width:160, background:"#ffffff", borderRight:"1px solid #e0e0e0",
+                      display:"flex", flexDirection:"column", flexShrink:0, overflowY:"auto" }}>
+          {NAV_ITEMS.map(item => (
+            <button key={item.id} onClick={() => handleNavClick(item)}
+              style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 16px",
+                       background: activeNav===item.id ? "#e8f0fe" : "transparent",
+                       border:"none",
+                       borderLeft: activeNav===item.id ? "3px solid #0f62fe" : "3px solid transparent",
+                       color: activeNav===item.id ? "#0f62fe" : "#525252",
+                       fontSize:13, fontWeight: activeNav===item.id ? 600 : 400,
+                       textAlign:"left", cursor:"pointer", width:"100%" }}>
+              <span style={{ fontSize:14, width:16, textAlign:"center" }}>{item.icon}</span>
+              <span>{item.label}</span>
+            </button>
+          ))}
+          <div style={{ marginTop:"auto", borderTop:"1px solid #e0e0e0" }}>
+            <button onClick={() => toast("Sidebar collapse")}
+              style={{ display:"flex", alignItems:"center", gap:10, padding:"10px 16px",
+                       background:"transparent", border:"none", color:"#8d8d8d",
+                       fontSize:12, cursor:"pointer", width:"100%" }}>
+              <span>◁</span><span>Collapse</span>
+            </button>
+          </div>
+        </nav>
+
+        {/* Main */}
+        <main style={{ flex:1, overflow:"hidden", position:"relative" }}>
+          {renderMain()}
+        </main>
+      </div>
+
+      {/* ── Status Bar ── */}
+      <div style={{ height:24, background:"#161616", borderTop:"1px solid #393939",
+                    display:"flex", alignItems:"center", gap:16, padding:"0 16px", flexShrink:0 }}>
+        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+          <span style={{ width:8, height:8, borderRadius:"50%", background:"#42be65", display:"inline-block" }}/>
+          <span style={{ color:"#8d8d8d", fontSize:11 }}>Connected</span>
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:4 }}>
+          <span style={{ color:"#f1c21b", fontSize:11 }}>⚠</span>
+          <span style={{ color:"#8d8d8d", fontSize:11 }}>Problems 0</span>
+        </div>
+        <span style={{ color:"#8d8d8d", fontSize:11 }}>Solution CLI ⌨</span>
+      </div>
+    </div>
+  );
+}

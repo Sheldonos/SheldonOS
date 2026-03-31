@@ -1,0 +1,185 @@
+{
+  "web-application": {
+    "description": "Standard structure for a full-stack web application",
+    "structure": {
+      "client/": {
+        "description": "Frontend application",
+        "src/": {
+          "components/": "Reusable UI components",
+          "pages/": "Page-level components",
+          "hooks/": "Custom React hooks",
+          "utils/": "Utility functions",
+          "api/": "API client code",
+          "types/": "TypeScript type definitions",
+          "App.tsx": "Main application component",
+          "main.tsx": "Application entry point"
+        },
+        "public/": "Static assets",
+        "package.json": "Frontend dependencies",
+        "vite.config.ts": "Vite configuration",
+        "tsconfig.json": "TypeScript configuration"
+      },
+      "server/": {
+        "description": "Backend application",
+        "src/": {
+          "routes/": "API route handlers",
+          "controllers/": "Business logic controllers",
+          "models/": "Data models",
+          "middleware/": "Express middleware",
+          "services/": "Business logic services",
+          "utils/": "Utility functions",
+          "config/": "Configuration files",
+          "index.ts": "Server entry point"
+        },
+        "package.json": "Backend dependencies",
+        "tsconfig.json": "TypeScript configuration"
+      },
+      "database/": {
+        "description": "Database-related files",
+        "migrations/": "Database migration scripts",
+        "seeds/": "Seed data for development",
+        "schema.sql": "Database schema definition"
+      },
+      "tests/": {
+        "description": "Test files",
+        "unit/": "Unit tests",
+        "integration/": "Integration tests",
+        "e2e/": "End-to-end tests"
+      },
+      "docs/": {
+        "description": "Documentation",
+        "api.md": "API documentation",
+        "architecture.md": "Architecture overview",
+        "setup.md": "Setup instructions"
+      },
+      "README.md": "Project overview and setup instructions",
+      ".gitignore": "Git ignore rules",
+      ".env.example": "Example environment variables",
+      "docker-compose.yml": "Docker configuration (optional)"
+    }
+  },
+  "api-service": {
+    "description": "Structure for a standalone API service",
+    "structure": {
+      "src/": {
+        "routes/": "API route definitions",
+        "controllers/": "Request handlers",
+        "models/": "Data models",
+        "middleware/": "Middleware functions",
+        "services/": "Business logic",
+        "validators/": "Input validation schemas",
+        "utils/": "Utility functions",
+        "config/": "Configuration",
+        "index.ts": "Application entry point"
+      },
+      "tests/": {
+        "unit/": "Unit tests",
+        "integration/": "Integration tests"
+      },
+      "docs/": {
+        "api.md": "API documentation",
+        "examples.md": "Usage examples"
+      },
+      "README.md": "Project documentation",
+      "package.json": "Dependencies",
+      "tsconfig.json": "TypeScript configuration",
+      ".env.example": "Example environment variables",
+      ".gitignore": "Git ignore rules"
+    }
+  },
+  "cli-tool": {
+    "description": "Structure for a command-line tool",
+    "structure": {
+      "src/": {
+        "commands/": "Command implementations",
+        "utils/": "Utility functions",
+        "config/": "Configuration handling",
+        "index.ts": "CLI entry point"
+      },
+      "tests/": {
+        "unit/": "Unit tests",
+        "integration/": "Integration tests"
+      },
+      "bin/": {
+        "cli.js": "Executable script"
+      },
+      "README.md": "Usage documentation",
+      "package.json": "Dependencies and bin configuration",
+      ".gitignore": "Git ignore rules"
+    }
+  },
+  "python-application": {
+    "description": "Structure for a Python application",
+    "structure": {
+      "src/": {
+        "app_name/": {
+          "__init__.py": "Package initialization",
+          "main.py": "Application entry point",
+          "models/": "Data models",
+          "services/": "Business logic",
+          "utils/": "Utility functions",
+          "config.py": "Configuration"
+        }
+      },
+      "tests/": {
+        "__init__.py": "Test package initialization",
+        "test_main.py": "Main tests",
+        "test_services.py": "Service tests"
+      },
+      "docs/": "Documentation",
+      "README.md": "Project documentation",
+      "requirements.txt": "Python dependencies",
+      "setup.py": "Package setup script",
+      ".gitignore": "Git ignore rules",
+      ".env.example": "Example environment variables"
+    }
+  },
+  "data-processing": {
+    "description": "Structure for a data processing pipeline",
+    "structure": {
+      "src/": {
+        "ingestion/": "Data ingestion scripts",
+        "processing/": "Data processing logic",
+        "analysis/": "Data analysis scripts",
+        "visualization/": "Visualization code",
+        "utils/": "Utility functions",
+        "config.py": "Configuration"
+      },
+      "data/": {
+        "raw/": "Raw input data",
+        "processed/": "Processed data",
+        "output/": "Final output"
+      },
+      "notebooks/": "Jupyter notebooks for exploration",
+      "tests/": "Test files",
+      "README.md": "Project documentation",
+      "requirements.txt": "Python dependencies",
+      ".gitignore": "Git ignore rules"
+    }
+  },
+  "mobile-app": {
+    "description": "Structure for a React Native mobile application",
+    "structure": {
+      "src/": {
+        "screens/": "Screen components",
+        "components/": "Reusable UI components",
+        "navigation/": "Navigation configuration",
+        "hooks/": "Custom hooks",
+        "services/": "API and business logic",
+        "utils/": "Utility functions",
+        "types/": "TypeScript types",
+        "App.tsx": "Main application component"
+      },
+      "assets/": {
+        "images/": "Image assets",
+        "fonts/": "Font files"
+      },
+      "tests/": "Test files",
+      "README.md": "Project documentation",
+      "package.json": "Dependencies",
+      "tsconfig.json": "TypeScript configuration",
+      "app.json": "Expo/React Native configuration",
+      ".gitignore": "Git ignore rules"
+    }
+  }
+}
