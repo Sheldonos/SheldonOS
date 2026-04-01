@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
+        <title>Sheldon Stoney</title>
+        <meta
+            name="description"
+            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Sheldon Stoney" />
+        <meta
+            property="og:description"
+            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
+        />
+        <meta property="og:url" content="https://sheldonos.github.io" />
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Sheldon Stoney" />
+        <meta
+            name="twitter:description"
+            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
+        />
+
+        <!-- Preconnect to font server early -->
+        <link rel="preconnect" href="https://rsms.me/" crossorigin />
+        <!-- Preload the Inter font CSS -->
+        <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
+        <!-- Preload the variable font file -->
+        <link
+            rel="preload"
+            href="https://rsms.me/inter/font-files/InterVariable.woff2"
+            as="font"
+            type="font/woff2"
+            crossorigin
+        />
+        <!-- Load font stylesheet -->
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <!-- Preload critical assets -->
+        <link
+            rel="preload"
+            href="assets/phone-mockups/screen-300x650.jpg"
+            as="image"
+        />
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.jsdelivr.net/npm/motion@12.7.4/dist/motion.js"></script>
+    </head>
+    <body>
+        <!-- Desktop View -->
+        <div class="desktop-view">
+            <div class="main-container">
+                <!-- Phone Mockup with Tap Targets -->
+                <div class="phone-container" id="phone-container">
+                    <div class="phone-frame">
+                        <!-- Inner shadow overlay -->
+                        <div class="phone-inner-shadow"></div>
+
+                        <!-- Bezel overlay -->
+                        <div class="phone-bezel-overlay"></div>
+
+                        <!-- Black backdrop -->
+                        <div class="sheet-bg"></div>
+
+                        <!-- Clipping container for sheet transitions -->
+                        <div class="phone-screen">
+                            <!-- Phone mockup background image -->
+                            <img
+                                src="assets/phone-mockups/screen-300x650.jpg"
+                                alt="Sheldon's Home Screen"
+                                class="phone-mockup-image"
+                                id="phone-mockup-image"
+                                crossorigin="anonymous"
+                            />
+                        </div>
+
+                        <!-- Dynamic Island -->
+                        <div class="dynamic-island"></div>
+
+                        <!-- Dynamic video sheets for folder apps (two for crossfade) -->
+                        <video
+                            class="video-sheet folder-video"
+                            id="folder-video-a"
+                            muted
+                            playsinline
+                            loop
+                        ></video>
+                        <video
+                            class="video-sheet folder-video"
+                            id="folder-video-b"
+                            muted
+                            playsinline
+                            loop
+                        ></video>
+
+                        <!-- Invisible tap target overlays -->
+                        <div
+                            class="tap-target tap-widget-github"
+                            data-folder="experience"
+                        ></div>
+                        <div
+                            class="tap-target tap-widget-spotify"
+                            data-folder="projects"
+                        ></div>
+
+                        <div
+                            class="tap-target tap-app-1"
+                            data-folder="skills"
+                        ></div>
+                        <div
+                            class="tap-target tap-app-2"
+                            data-folder="education"
+                        ></div>
+                        <div
+                            class="tap-target tap-app-3"
+                            data-folder="certifications"
+                        ></div>
+                        <div
+                            class="tap-target tap-app-4"
+                            data-folder="targets"
+                        ></div>
+
+                        <div
+                            class="tap-target tap-folder-1"
+                            data-folder="experience"
+                        ></div>
+                        <div
+                            class="tap-target tap-folder-2"
+                            data-folder="projects"
+                        ></div>
+                        <div
+                            class="tap-target tap-folder-3"
+                            data-folder="skills"
+                        ></div>
+                        <div
+                            class="tap-target tap-folder-4"
+                            data-folder="education"
+                        ></div>
+
+                        <div
+                            class="tap-target tap-dock-1"
+                            data-folder="experience"
+                        ></div>
+                        <div
+                            class="tap-target tap-dock-2"
+                            data-folder="projects"
+                        ></div>
+                        <div
+                            class="tap-target tap-dock-3"
+                            data-folder="skills"
+                        ></div>
+                    </div>
+                </div>
+
+                <!-- Content Area (Right Column) -->
+                <div class="content-area" id="content-area">
+                    <div class="content-area-inner">
+                        <div class="content-header">
+                            <h1 id="intro-name" class="typewriter-target"></h1>
+                        </div>
+                        <div class="content-body">
+                            <div class="content-text">
+                                <p id="intro-p1" class="typewriter-target"></p>
+                                <p id="intro-p2" class="typewriter-target"></p>
+                                <p id="intro-p3" class="typewriter-target"></p>
+                            </div>
+                            <div class="social-icons intro-social-icons">
+                                <a
+                                    href="https://linkedin.com/in/sheldonibm/"
+                                    target="_blank"
+                                    class="social-icon"
+                                >
+                                    <img
+                                        src="assets/icons/linkedin.svg"
+                                        alt="LinkedIn"
+                                    />
+                                </a>
+                                <a
+                                    href="https://github.com/Sheldonos"
+                                    target="_blank"
+                                    class="social-icon"
+                                >
+                                    <img
+                                        src="assets/icons/github.svg"
+                                        alt="GitHub"
+                                    />
+                                </a>
+                                <a
+                                    href="mailto:smstoney@yahoo.com"
+                                    class="social-icon"
+                                >
+                                    <img
+                                        src="assets/icons/email.svg"
+                                        alt="Email"
+                                    />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tablet View (text only, 451-920px) -->
+        <div class="tablet-view">
+            <div class="tablet-content">
+                <div class="content-header">
+                    <h1>Sheldon Stoney</h1>
+                </div>
+                <div class="content-body">
+                    <div class="content-text">
+                        <p>
+                            I'm a
+                            <a
+                                href="https://linkedin.com/in/sheldonibm/"
+                                target="_blank"
+                                >Brand Technical Specialist at IBM</a
+                            >
+                            — spearheading AI and automation strategies for
+                            enterprise clients across the Southeast.
+                        </p>
+                        <p>
+                            I've prototyped 40+ GenAI apps, built 86+
+                            automations, and brought 4 products to market.
+                            Building the infrastructure for the autonomous
+                            future.
+                        </p>
+                        <p>
+                            Feel free to
+                            <a href="https://linkedin.com/in/sheldonibm/" target="_blank"
+                                >connect on LinkedIn</a
+                            >
+                            or
+                            <a href="mailto:smstoney@yahoo.com">get in touch</a
+                            >.
+                        </p>
+                    </div>
+                    <div class="social-icons">
+                        <a
+                            href="https://linkedin.com/in/sheldonibm/"
+                            target="_blank"
+                            class="social-icon"
+                        >
+                            <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+                        </a>
+                        <a
+                            href="https://github.com/Sheldonos"
+                            target="_blank"
+                            class="social-icon"
+                        >
+                            <img
+                                src="assets/icons/github.svg"
+                                alt="GitHub"
+                            />
+                        </a>
+                        <a
+                            href="mailto:smstoney@yahoo.com"
+                            class="social-icon"
+                        >
+                            <img src="assets/icons/email.svg" alt="Email" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile View -->
+        <div class="mobile-view">
+            <div class="mobile-content">
+                <div class="mobile-main">
+                    <h1 class="mobile-title">Sheldon Stoney</h1>
+
+                    <div class="mobile-body">
+                        <p class="mobile-paragraph">
+                            I'm a
+                            <a
+                                href="https://linkedin.com/in/sheldonibm/"
+                                target="_blank"
+                                class="mobile-highlight"
+                                >Brand Technical Specialist at IBM</a
+                            >
+                            — spearheading AI and automation strategies for
+                            enterprise clients across the Southeast.
+                        </p>
+
+                        <p class="mobile-paragraph">
+                            I've prototyped 40+ GenAI apps, built 86+
+                            automations, and brought 4 products to market.
+                            Building the infrastructure for the autonomous
+                            future.
+                        </p>
+
+                        <p class="mobile-paragraph">
+                            Feel free to
+                            <a
+                                href="https://linkedin.com/in/sheldonibm/"
+                                target="_blank"
+                                class="mobile-highlight"
+                                >connect</a
+                            >
+                            or shoot me an
+                            <a
+                                href="mailto:smstoney@yahoo.com"
+                                class="mobile-highlight"
+                                >email</a
+                            >
+                            if you want to get in touch.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mobile-social-icons">
+                    <a
+                        href="https://linkedin.com/in/sheldonibm/"
+                        target="_blank"
+                        class="mobile-social-icon"
+                    >
+                        <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
+                    </a>
+                    <a
+                        href="https://github.com/Sheldonos"
+                        target="_blank"
+                        class="mobile-social-icon"
+                    >
+                        <img src="assets/icons/github.svg" alt="GitHub" />
+                    </a>
+                    <a
+                        href="mailto:smstoney@yahoo.com"
+                        class="mobile-social-icon"
+                    >
+                        <img src="assets/icons/email.svg" alt="Email" />
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Sampled colors (fallbacks match current screenshot)
+            let SCREEN_OVERLAY_COLOR = "rgba(20, 24, 50, 0.7)";
+            let DOCK_OVERLAY_COLOR = "rgba(15, 18, 40, 0.7)";
+            let FRAME_GRADIENT_TOP = "#9C886E";
+            let FRAME_GRADIENT_BOTTOM = "#7A6D5B";
+
+            // Sample colors from the home screen screenshot
+            function sampleColorsFromScreenshot() {
+                const img = document.querySelector(".phone-mockup-image");
+                if (!img || !img.complete) return;
+
+                try {
+                    const canvas = document.createElement("canvas");
+                    const ctx = canvas.getContext("2d");
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+                    ctx.drawImage(img, 0, 0);
+
+                    const w = canvas.width;
+                    const h = canvas.height;
+
+                    const screenPixel = ctx.getImageData(8, Math.floor(h * 0.35), 1, 1).data;
+                    SCREEN_OVERLAY_COLOR = `rgba(${screenPixel[0]}, ${screenPixel[1]}, ${screenPixel[2]}, 0.7)`;
+
+                    const dockPixel = ctx.getImageData(80, Math.floor(h * 0.94), 1, 1).data;
+                    DOCK_OVERLAY_COLOR = `rgba(${dockPixel[0]}, ${dockPixel[1]}, ${dockPixel[2]}, 0.7)`;
+
+                    const topPixel = ctx.getImageData(Math.floor(w * 0.5), 2, 1, 1).data;
+                    const bottomPixel = ctx.getImageData(Math.floor(w * 0.5), h - 3, 1, 1).data;
+                    FRAME_GRADIENT_TOP = `rgb(${topPixel[0]}, ${topPixel[1]}, ${topPixel[2]})`;
+                    FRAME_GRADIENT_BOTTOM = `rgb(${bottomPixel[0]}, ${bottomPixel[1]}, ${bottomPixel[2]})`;
+
+                    const phoneFrame = document.querySelector(".phone-frame");
+                    const bezelOverlay = document.querySelector(".phone-bezel-overlay");
+                    const frameGradient = `
+                        radial-gradient(100% 100% at 100% 100%, rgba(255, 0, 98, 0.02) 0%, rgba(0, 255, 255, 0) 100%),
+                        linear-gradient(167deg, ${FRAME_GRADIENT_TOP} 0%, ${FRAME_GRADIENT_BOTTOM} 100%)
+                    `;
+                    if (phoneFrame) phoneFrame.style.background = frameGradient;
+                    if (bezelOverlay) bezelOverlay.style.background = frameGradient;
+                } catch (e) {
+                    // Cross-origin canvas blocked — use fallback colors
+                }
+            }
+
+            // Folder data for Sheldon's portfolio
+            const appData = {
+                folders: {
+                    experience: {
+                        name: "Experience",
+                        apps: [
+                            {
+                                name: "IBM — Brand Technical Specialist",
+                                icon: "assets/app-icons/ibm.png",
+                                description:
+                                    '<span class="app-name">IBM (2024 – Present)</span> Spearheading AI and automation strategies for enterprise clients across the Southeast. Architected the \'Sales Goldmine\' enablement platform. Partnered with Macy\'s, Yum! Brands, AMB Group, and Vanderbilt University.',
+                            },
+                            {
+                                name: "Independent AI Consultant",
+                                icon: "assets/app-icons/ai-hub.png",
+                                description:
+                                    '<span class="app-name">Independent (2021 – 2024)</span> Provided strategic AI consulting and developed custom automation solutions. Designed and implemented custom generative AI workflows. Built autonomous agentic systems for enterprise process automation.',
+                            },
+                        ],
+                    },
+                    projects: {
+                        name: "Projects",
+                        apps: [
+                            {
+                                name: "SheldonOS Framework v3.0.0",
+                                icon: "assets/app-icons/sheldonos.png",
+                                description:
+                                    '<span class="app-name">SheldonOS</span> A 6-chamber defense-in-depth architecture for autonomous AI agents, featuring formal verification and cryptographic auditing. The most ambitious thing I\'ve built.',
+                            },
+                            {
+                                name: "MEV Arbitrage Bot",
+                                icon: "assets/app-icons/security.png",
+                                description:
+                                    '<span class="app-name">MEV Bot (Rust)</span> High-frequency trading bot built in Rust, executing atomic arbitrage across decentralized exchanges. Speed and precision at the infrastructure level.',
+                            },
+                            {
+                                name: "Spotify Digital Twin",
+                                icon: "assets/app-icons/automation.png",
+                                description:
+                                    '<span class="app-name">Spotify Digital Twin</span> Strategic proposal bridging Web2 streaming with Polygon L2 blockchain for credentialing and digital twin marketplaces. One of 40+ GenAI prototypes.',
+                            },
+                        ],
+                    },
+                    skills: {
+                        name: "Skills",
+                        apps: [
+                            {
+                                name: "Generative AI Strategy",
+                                icon: "assets/app-icons/ai-hub.png",
+                                description:
+                                    '<span class="app-name">GenAI Strategy</span> Architecting enterprise-wide adoption frameworks and identifying high-value use cases. 4+ years of experience in generative AI, autonomous agentic systems, and enterprise automation.',
+                            },
+                            {
+                                name: "Workflow Automation",
+                                icon: "assets/app-icons/automation.png",
+                                description:
+                                    '<span class="app-name">Automation</span> Streamlining operations with intelligent agents and automated data pipelines. 86+ automations built. Tools: n8n, Zapier, Make, custom Python agents.',
+                            },
+                            {
+                                name: "Full-Stack Development",
+                                icon: "assets/app-icons/sheldonos.png",
+                                description:
+                                    '<span class="app-name">Full-Stack</span> Building scalable applications with modern frameworks and AI integration. Python, Rust, React, Node.js, Docker, Kubernetes, IBM Cloud, AWS.',
+                            },
+                            {
+                                name: "Agentic Security",
+                                icon: "assets/app-icons/security.png",
+                                description:
+                                    '<span class="app-name">Agentic Safety</span> Bridging the gap between theoretical AI safety and practical, production-ready enterprise deployment. Formal verification, cryptographic auditing, red-teaming.',
+                            },
+                        ],
+                    },
+                    education: {
+                        name: "Education",
+                        apps: [
+                            {
+                                name: "Syracuse University",
+                                icon: "assets/app-icons/ibm.png",
+                                description:
+                                    '<span class="app-name">Syracuse University</span> B.S. Information Management & Technology, Class of 2023. Capstone: "Khanmigo" — an AI-assisted learning platform concept pitched directly to Khan Academy.',
+                            },
+                            {
+                                name: "Agentic AI Certifications",
+                                icon: "assets/app-icons/ai-hub.png",
+                                description:
+                                    '<span class="app-name">Agentic AI</span> Udacity Agentic AI Engineer. NVIDIA Certified Professional. Anthropic MCP & AI Fluency. These are the certs that actually matter for where AI is going.',
+                            },
+                            {
+                                name: "Security & Cloud",
+                                icon: "assets/app-icons/security.png",
+                                description:
+                                    '<span class="app-name">Security & Cloud</span> eWPTX (INE). Google Cybersecurity Professional. IBM DevOps & App Modernization. The security angle is what separates agentic AI work from toy demos.',
+                            },
+                        ],
+                    },
+                    certifications: {
+                        name: "Certifications",
+                        apps: [
+                            {
+                                name: "Udacity Agentic AI Engineer",
+                                icon: "assets/app-icons/ai-hub.png",
+                                description:
+                                    '<span class="app-name">Udacity</span> Agentic AI Engineer certification. Deep focus on multi-agent orchestration, tool use, and production deployment of autonomous systems.',
+                            },
+                            {
+                                name: "NVIDIA Certified Professional",
+                                icon: "assets/app-icons/sheldonos.png",
+                                description:
+                                    '<span class="app-name">NVIDIA</span> Certified AI Professional. GPU-accelerated computing, CUDA fundamentals, and large-scale model deployment on NVIDIA infrastructure.',
+                            },
+                            {
+                                name: "eWPTX — INE Security",
+                                icon: "assets/app-icons/security.png",
+                                description:
+                                    '<span class="app-name">eWPTX (INE)</span> Advanced web penetration testing certification. Understanding offensive security is table stakes for building defensible agentic systems.',
+                            },
+                            {
+                                name: "IBM DevOps & App Modernization",
+                                icon: "assets/app-icons/ibm.png",
+                                description:
+                                    '<span class="app-name">IBM</span> DevOps & App Modernization. CI/CD pipelines, containerization, Kubernetes, and cloud-native architecture on IBM Cloud.',
+                            },
+                        ],
+                    },
+                    targets: {
+                        name: "Target Roles",
+                        apps: [
+                            {
+                                name: "Anthropic — Research Engineer, Agents",
+                                icon: "assets/app-icons/ai-hub.png",
+                                description:
+                                    '<span class="app-name">Anthropic (95% match)</span> Research Engineer, Agents. Building the safety layer for the next generation of autonomous AI. This is the mission I\'d most want to be part of.',
+                            },
+                            {
+                                name: "OpenAI — Offensive Security Engineer",
+                                icon: "assets/app-icons/security.png",
+                                description:
+                                    '<span class="app-name">OpenAI (94% match)</span> Offensive Security Engineer. Red-teaming frontier models before they ship. The intersection of my security background and AI expertise.',
+                            },
+                            {
+                                name: "NVIDIA — AI Infrastructure Engineer",
+                                icon: "assets/app-icons/sheldonos.png",
+                                description:
+                                    '<span class="app-name">NVIDIA (92% match)</span> AI Infrastructure Engineer. The compute layer is where the real leverage is. I want to be at the foundation.',
+                            },
+                            {
+                                name: "Palantir — Forward Deployed Engineer",
+                                icon: "assets/app-icons/automation.png",
+                                description:
+                                    '<span class="app-name">Palantir (91% match)</span> Forward Deployed Engineer. Deploying AI infrastructure directly with enterprise and government clients. My IBM experience maps perfectly here.',
+                            },
+                            {
+                                name: "Google DeepMind — Agentic Safety",
+                                icon: "assets/app-icons/ibm.png",
+                                description:
+                                    '<span class="app-name">Google DeepMind (90% match)</span> Research Engineer, Agentic Safety. Formal verification and safety guarantees for autonomous systems — exactly what SheldonOS was built to explore.',
+                            },
+                        ],
+                    },
+                },
+            };
+
+            // ========== STATE ==========
+            let currentFolderContext = null;
+            let folderVideoOpen = false;
+            let isAnimating = false;
+            let activeFolderVideo = "a";
+            let activeVideoSheet = null;
+            let folderAnimation = null;
+            let crossfadeAnimationA = null;
+            let crossfadeAnimationB = null;
+            let folderOperationVersion = 0;
+
+            const homeContentHTML = null; // will be set after init
+
+            // ========== HELPERS ==========
+            function isMobile() { return window.innerWidth <= 450; }
+            function isTablet() { return window.innerWidth > 450 && window.innerWidth <= 920; }
+
+            // ========== PHONE CONTAINER ==========
+            const phoneContainer = document.getElementById("phone-container");
+            const contentArea = document.getElementById("content-area");
+
+            // ========== CONTENT SWAP ==========
+            let savedHomeHTML = null;
+
+            function swapContent(html) {
+                if (!contentArea) return;
+                Motion.animate(
+                    contentArea,
+                    { opacity: [1, 0], filter: ["blur(0px)", "blur(4px)"] },
+                    { duration: 0.15, easing: "ease-in" }
+                ).finished.then(() => {
+                    contentArea.innerHTML = html;
+                    Motion.animate(
+                        contentArea,
+                        { opacity: [0, 1], filter: ["blur(4px)", "blur(0px)"] },
+                        { duration: 0.2, easing: "ease-out" }
+                    );
+                    // Re-attach back button
+                    const backBtn = contentArea.querySelector(".back-button");
+                    if (backBtn) {
+                        backBtn.addEventListener("click", closeOverlay);
+                    }
+                    // Re-attach folder item listeners
+                    attachFolderItemListeners();
+                });
+            }
+
+            function buildHomeHTML() {
+                return contentArea.innerHTML;
+            }
+
+            // ========== FOLDER VIEW ==========
+            function openFolder(folderName) {
+                const folder = appData.folders[folderName];
+                if (!folder) return;
+
+                currentFolderContext = { folderName, selectedIndex: 0 };
+                folderOperationVersion++;
+
+                const appsHTML = folder.apps.map((app, i) => `
+                    <div class="folder-app-item${i === 0 ? ' selected' : ''}" data-index="${i}">
+                        <img class="folder-app-icon" src="${app.icon}" alt="${app.name}" />
+                        <div class="folder-app-description">${app.description}</div>
+                    </div>
+                `).join('');
+
+                const folderHTML = `
+                    <div class="folder-container">
+                        <div class="content-header">
+                            <button class="back-button" id="back-btn">
+                                <img src="assets/icons/back-arrow.svg" alt="Back" />
+                            </button>
+                            <h1>${folder.name}</h1>
+                        </div>
+                        <div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0;">
+                            <div class="folder-top-mask"></div>
+                            <div class="folder-scroll-area" id="folder-scroll">
+                                ${appsHTML}
+                            </div>
+                            <div class="folder-bottom-mask"></div>
+                        </div>
+                    </div>
+                `;
+
+                swapContent(folderHTML);
+                folderVideoOpen = true;
+            }
+
+            function attachFolderItemListeners() {
+                const items = document.querySelectorAll(".folder-app-item");
+                const springConfig = { type: "spring", stiffness: 300, damping: 20 };
+
+                items.forEach((item, i) => {
+                    item.addEventListener("click", () => {
+                        // Deselect all, select clicked
+                        items.forEach(el => el.classList.remove("selected"));
+                        item.classList.add("selected");
+                        if (currentFolderContext) currentFolderContext.selectedIndex = i;
+                    });
+
+                    item.addEventListener("mouseenter", () => {
+                        item.classList.add("hover");
+                    });
+                    item.addEventListener("mouseleave", () => {
+                        item.classList.remove("hover");
+                    });
+
+                    const scaleDown = () => Motion.animate(item, { scale: 0.98 }, springConfig);
+                    const scaleUp = () => Motion.animate(item, { scale: 1 }, springConfig);
+
+                    item.addEventListener("mousedown", scaleDown);
+                    item.addEventListener("touchstart", scaleDown, { passive: true });
+                    item.addEventListener("mouseup", scaleUp);
+                    item.addEventListener("mouseleave", scaleUp);
+                    item.addEventListener("touchend", scaleUp);
+                    item.addEventListener("touchcancel", scaleUp);
+                });
+            }
+
+            function closeOverlay() {
+                folderVideoOpen = false;
+                currentFolderContext = null;
+                swapContent(savedHomeHTML);
+            }
+
+            // ========== PHONE SHAKE ==========
+            function shakePhone() {
+                if (!phoneContainer) return;
+                Motion.animate(
+                    phoneContainer,
+                    { scale: [1, 1.01, 1.01, 1.01, 1.01, 1], rotate: [0, -0.5, 0.5, -0.5, 0.5, 0] },
+                    { duration: 0.5, easing: "ease-in-out" }
+                );
+            }
+
+            // ========== TAP TARGET SETUP ==========
+            function setupTapTargets() {
+                const springConfig = { type: "spring", stiffness: 300, damping: 20 };
+
+                document.querySelectorAll(".tap-target[data-folder]").forEach(target => {
+                    const folderName = target.dataset.folder;
+
+                    target.addEventListener("click", () => {
+                        openFolder(folderName);
+                    });
+
+                    const scaleDown = () => Motion.animate(phoneContainer, { scale: 0.99 }, springConfig);
+                    const scaleUp = () => Motion.animate(phoneContainer, { scale: 1 }, springConfig);
+
+                    target.addEventListener("mousedown", scaleDown);
+                    target.addEventListener("touchstart", scaleDown, { passive: true });
+                    target.addEventListener("mouseup", scaleUp);
+                    target.addEventListener("mouseleave", scaleUp);
+                    target.addEventListener("touchend", scaleUp);
+                    target.addEventListener("touchcancel", scaleUp);
+                });
+            }
+
+            // ========== INTRO ANIMATION SYSTEM ==========
+            const introSequence = [
+                {
+                    target: "intro-name",
+                    text: "Sheldon Stoney",
+                    pauseAfter: 400,
+                    skipLineBreaks: true,
+                },
+                {
+                    target: "intro-p1",
+                    text: 'I\'m a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a>',
+                    pauseAfter: 500,
+                    append: false,
+                },
+                {
+                    target: "intro-p1",
+                    text: " — spearheading AI and automation strategies for enterprise clients across the Southeast.",
+                    pauseAfter: 400,
+                    append: true,
+                },
+                {
+                    target: "intro-p2",
+                    text: "I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.",
+                    pauseAfter: 400,
+                    append: false,
+                },
+                {
+                    target: "intro-p3",
+                    text: 'Feel free to <a href="#" class="tap-around-link">tap around</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a> and thanks for stopping by.',
+                    pauseAfter: 0,
+                    append: false,
+                },
+            ];
+
+            let introComplete = false;
+
+            function typeWriter(element, html, speed = 20, append = false, skipLineBreaks = false) {
+                return new Promise((resolve) => {
+                    const startHTML = append ? element.innerHTML : "";
+                    let htmlIndex = 0;
+                    let currentHTML = startHTML;
+                    let inTag = false;
+
+                    let lastHeight = 0;
+                    if (!skipLineBreaks) {
+                        element.innerHTML = currentHTML || "\u200B";
+                        lastHeight = element.scrollHeight;
+                        if (!currentHTML) element.innerHTML = "";
+                    }
+
+                    function type() {
+                        if (htmlIndex < html.length) {
+                            const char = html[htmlIndex];
+
+                            if (char === "<") inTag = true;
+
+                            if (inTag) {
+                                let tagEnd = html.indexOf(">", htmlIndex);
+                                currentHTML += html.substring(htmlIndex, tagEnd + 1);
+                                htmlIndex = tagEnd + 1;
+                                if (char === "<" && html[htmlIndex - 1] === ">") inTag = false;
+                                element.innerHTML = currentHTML;
+                                setTimeout(type, 0);
+                            } else {
+                                if (!skipLineBreaks && char !== " " && (currentHTML.endsWith(" ") || currentHTML === startHTML || currentHTML === "")) {
+                                    let wordEnd = htmlIndex;
+                                    while (wordEnd < html.length && html[wordEnd] !== " " && html[wordEnd] !== "<") {
+                                        wordEnd++;
+                                    }
+                                    const word = html.substring(htmlIndex, wordEnd);
+                                    const testHTML = currentHTML + word;
+                                    element.innerHTML = testHTML;
+                                    const newHeight = element.scrollHeight;
+                                    if (newHeight > lastHeight && currentHTML !== startHTML && currentHTML !== "") {
+                                        currentHTML += "<br>";
+                                        lastHeight = newHeight;
+                                    } else {
+                                        lastHeight = newHeight;
+                                    }
+                                    element.innerHTML = currentHTML;
+                                }
+
+                                currentHTML += char;
+                                htmlIndex++;
+                                element.innerHTML = currentHTML;
+                                setTimeout(type, speed);
+                            }
+                        } else {
+                            resolve();
+                        }
+                    }
+
+                    type();
+                });
+            }
+
+            async function runIntroSequence() {
+                const socialEl = document.querySelector(".intro-social-icons");
+
+                for (const segment of introSequence) {
+                    const el = document.getElementById(segment.target);
+                    if (!el) continue;
+
+                    await typeWriter(el, segment.text, 20, segment.append || false, segment.skipLineBreaks || false);
+
+                    if (segment.pauseAfter > 0) {
+                        await new Promise(r => setTimeout(r, segment.pauseAfter));
+                    }
+                }
+
+                // Reveal social icons
+                if (socialEl) socialEl.classList.add("revealed");
+                introComplete = true;
+
+                // Attach tap-around link
+                const tapLink = document.querySelector(".tap-around-link");
+                if (tapLink) {
+                    tapLink.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        shakePhone();
+                    });
+                }
+
+                // Store home HTML for back navigation
+                savedHomeHTML = contentArea.innerHTML;
+
+                // Trigger phone slide-up animation
+                triggerPhoneSlideUp();
+
+                // Mark as seen
+                localStorage.setItem("hasSeenIntro", "1");
+            }
+
+            function triggerPhoneSlideUp() {
+                const desktopView = document.querySelector(".desktop-view");
+                if (!desktopView || !phoneContainer || !contentArea) return;
+
+                const contentStartRect = contentArea.getBoundingClientRect();
+
+                desktopView.classList.remove("intro-mode");
+
+                const phoneEndRect = phoneContainer.getBoundingClientRect();
+                const contentEndRect = contentArea.getBoundingClientRect();
+
+                contentArea.style.position = "absolute";
+                contentArea.style.left = contentStartRect.left + "px";
+                contentArea.style.top = contentEndRect.top + "px";
+                contentArea.style.willChange = "transform";
+
+                phoneContainer.style.position = "absolute";
+                phoneContainer.style.left = phoneEndRect.left + "px";
+                phoneContainer.style.top = phoneEndRect.top + "px";
+                phoneContainer.style.willChange = "transform";
+
+                const deltaX = contentEndRect.left - contentStartRect.left;
+
+                const springConfig = { type: "spring", stiffness: 40, damping: 10, mass: 1 };
+
+                Motion.animate(contentArea, { x: [0, deltaX] }, springConfig).finished.then(() => {
+                    contentArea.style.position = "";
+                    contentArea.style.left = "";
+                    contentArea.style.top = "";
+                    contentArea.style.transform = "";
+                    contentArea.style.willChange = "";
+                    phoneContainer.style.position = "";
+                    phoneContainer.style.left = "";
+                    phoneContainer.style.top = "";
+                    phoneContainer.style.transform = "";
+                    phoneContainer.style.willChange = "";
+
+                    // Save home HTML after animation settles
+                    savedHomeHTML = contentArea.innerHTML;
+                });
+
+                const startY = window.innerHeight - phoneEndRect.top;
+                Motion.animate(phoneContainer, { y: [startY, 0], rotate: [-3, 0] }, springConfig);
+            }
+
+            function skipIntro() {
+                const socialEl = document.querySelector(".intro-social-icons");
+
+                for (const segment of introSequence) {
+                    const el = document.getElementById(segment.target);
+                    if (!el) continue;
+                    if (segment.append) {
+                        el.innerHTML += segment.text;
+                    } else {
+                        el.innerHTML = segment.text;
+                    }
+                }
+
+                if (socialEl) socialEl.classList.add("revealed");
+                introComplete = true;
+
+                const tapLink = document.querySelector(".tap-around-link");
+                if (tapLink) {
+                    tapLink.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        shakePhone();
+                    });
+                }
+
+                savedHomeHTML = contentArea.innerHTML;
+            }
+
+            window.resetIntro = () => {
+                localStorage.removeItem("hasSeenIntro");
+                location.reload();
+            };
+
+            function init() {
+                setupTapTargets();
+
+                // Sample colors from screenshot
+                const img = document.querySelector(".phone-mockup-image");
+                if (img && img.complete) {
+                    sampleColorsFromScreenshot();
+                } else if (img) {
+                    img.addEventListener("load", sampleColorsFromScreenshot);
+                }
+            }
+
+            function startApp() {
+                if (isMobile() || isTablet()) {
+                    init();
+                    return;
+                }
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const forceIntro = urlParams.get("intro") === "1";
+                const hasSeenIntro = localStorage.getItem("hasSeenIntro");
+
+                if (hasSeenIntro && !forceIntro) {
+                    const desktopView = document.querySelector(".desktop-view");
+                    desktopView.style.opacity = "0";
+
+                    init();
+                    skipIntro();
+
+                    setTimeout(() => {
+                        Motion.animate(
+                            desktopView,
+                            { opacity: [0, 1] },
+                            { duration: 0.3, easing: "ease-out" }
+                        ).finished.then(() => {
+                            desktopView.style.opacity = "";
+                        });
+                    }, 200);
+                } else {
+                    document.querySelector(".desktop-view").classList.add("intro-mode");
+                    init();
+
+                    document.fonts.ready.then(() => {
+                        setTimeout(runIntroSequence, 100);
+                    });
+                }
+            }
+
+            startApp();
+        </script>
+
+        <!-- Corner smoothing module -->
+        <script type="module">
+            import { squircleObserver } from "https://esm.sh/corner-smoothing";
+            import { getSvgPath } from "https://esm.sh/figma-squircle";
+
+            // Phone frame: 49px radius
+            const phoneFrame = document.querySelector(".phone-frame");
+            if (phoneFrame) squircleObserver(phoneFrame, { cornerRadius: 49 });
+
+            // Inner shadow: squircle ring mask
+            const innerShadow = document.querySelector(".phone-inner-shadow");
+            if (innerShadow) {
+                const applyInnerShadowMask = () => {
+                    const width = innerShadow.clientWidth;
+                    const height = innerShadow.clientHeight;
+                    const outerRadius = 49;
+                    const borderWidth = 3;
+                    const innerRadius = outerRadius - borderWidth;
+                    const innerWidth = width - borderWidth * 2;
+                    const innerHeight = height - borderWidth * 2;
+
+                    const outerPath = getSvgPath({ width, height, cornerRadius: outerRadius, cornerSmoothing: 0.6 });
+                    const innerPath = getSvgPath({ width: innerWidth, height: innerHeight, cornerRadius: innerRadius, cornerSmoothing: 0.6 });
+
+                    const outerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><path d="${outerPath}" fill="white"/></svg>`;
+                    const innerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${innerWidth}" height="${innerHeight}"><path d="${innerPath}" fill="white"/></svg>`;
+
+                    const outerUrl = `url("data:image/svg+xml,${encodeURIComponent(outerSvg)}")`;
+                    const innerUrl = `url("data:image/svg+xml,${encodeURIComponent(innerSvg)}")`;
+
+                    innerShadow.style.webkitMaskImage = `${outerUrl}, ${innerUrl}`;
+                    innerShadow.style.maskImage = `${outerUrl}, ${innerUrl}`;
+                    innerShadow.style.webkitMaskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
+                    innerShadow.style.maskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
+                    innerShadow.style.webkitMaskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
+                    innerShadow.style.maskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
+                    innerShadow.style.webkitMaskRepeat = "no-repeat";
+                    innerShadow.style.maskRepeat = "no-repeat";
+                    innerShadow.style.webkitMaskComposite = "xor";
+                    innerShadow.style.maskComposite = "exclude";
+                };
+
+                applyInnerShadowMask();
+                new ResizeObserver(applyInnerShadowMask).observe(innerShadow);
+            }
+
+            // Bezel overlay: squircle ring mask
+            const bezelOverlay = document.querySelector(".phone-bezel-overlay");
+            if (bezelOverlay) {
+                const applySquircleMask = () => {
+                    const width = bezelOverlay.clientWidth;
+                    const height = bezelOverlay.clientHeight;
+                    const outerRadius = 49;
+                    const borderWidth = 9;
+                    const innerRadius = outerRadius - borderWidth;
+                    const innerWidth = width - borderWidth * 2;
+                    const innerHeight = height - borderWidth * 2;
+
+                    const outerPath = getSvgPath({ width, height, cornerRadius: outerRadius, cornerSmoothing: 0.6 });
+                    const innerPath = getSvgPath({ width: innerWidth, height: innerHeight, cornerRadius: innerRadius, cornerSmoothing: 0.6 });
+
+                    const outerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><path d="${outerPath}" fill="white"/></svg>`;
+                    const innerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${innerWidth}" height="${innerHeight}"><path d="${innerPath}" fill="white"/></svg>`;
+
+                    const outerUrl = `url("data:image/svg+xml,${encodeURIComponent(outerSvg)}")`;
+                    const innerUrl = `url("data:image/svg+xml,${encodeURIComponent(innerSvg)}")`;
+
+                    bezelOverlay.style.webkitMaskImage = `${outerUrl}, ${innerUrl}`;
+                    bezelOverlay.style.maskImage = `${outerUrl}, ${innerUrl}`;
+                    bezelOverlay.style.webkitMaskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
+                    bezelOverlay.style.maskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
+                    bezelOverlay.style.webkitMaskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
+                    bezelOverlay.style.maskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
+                    bezelOverlay.style.webkitMaskRepeat = "no-repeat";
+                    bezelOverlay.style.maskRepeat = "no-repeat";
+                    bezelOverlay.style.webkitMaskComposite = "xor";
+                    bezelOverlay.style.maskComposite = "exclude";
+                };
+
+                applySquircleMask();
+                new ResizeObserver(applySquircleMask).observe(bezelOverlay);
+            }
+
+            // Phone screen & sheet-bg: 40px radius
+            const phoneScreen = document.querySelector(".phone-screen");
+            const sheetBg = document.querySelector(".sheet-bg");
+            if (phoneScreen) squircleObserver(phoneScreen, { cornerRadius: 40 });
+            if (sheetBg) squircleObserver(sheetBg, { cornerRadius: 40 });
+
+            // Dynamic island: pill shape
+            const dynamicIsland = document.querySelector(".dynamic-island");
+            if (dynamicIsland) squircleObserver(dynamicIsland, { cornerRadius: 13 });
+
+            // App icons in folders: 12px radius
+            window.applyFolderIconSquircles = () => {
+                document.querySelectorAll(".folder-app-icon").forEach((el) => {
+                    if (!el.dataset.squircled) {
+                        squircleObserver(el, { cornerRadius: 12 });
+                        el.dataset.squircled = "true";
+                    }
+                });
+            };
+            window.applyFolderIconSquircles();
+
+            // Re-apply squircles after content swaps (observe DOM changes)
+            const observer = new MutationObserver(() => {
+                if (window.applyFolderIconSquircles) {
+                    window.applyFolderIconSquircles();
+                }
+            });
+            observer.observe(document.body, { childList: true, subtree: true });
+        </script>
+    </body>
+</html>
