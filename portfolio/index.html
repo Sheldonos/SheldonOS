@@ -20,6 +20,163 @@
         <link rel="stylesheet" href="style.css" />
         <script src="https://cdn.jsdelivr.net/npm/motion@12.7.4/dist/motion.js"></script>
         <style>
+            /* ===== HTML PHONE HOME SCREEN ===== */
+            #phone-screen-html {
+                position: absolute;
+                inset: var(--phone-frame-padding);
+                border-radius: var(--phone-mockup-radius);
+                overflow: hidden;
+                z-index: 1;
+                display: flex;
+                flex-direction: column;
+            }
+            .hs-bg {
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, #0a0a2e 0%, #0d0d3d 30%, #1a0a4a 60%, #2a0a5a 100%);
+                z-index: 0;
+            }
+            .hs-status-bar {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 14px 4px;
+                flex-shrink: 0;
+            }
+            .hs-time {
+                font-size: 13px;
+                font-weight: 700;
+                color: white;
+                letter-spacing: -0.3px;
+            }
+            .hs-status-icons {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .hs-battery {
+                width: 22px;
+                height: 11px;
+                border: 1.5px solid rgba(255,255,255,0.8);
+                border-radius: 2px;
+                position: relative;
+                display: flex;
+                align-items: center;
+                padding: 1.5px;
+            }
+            .hs-battery-fill {
+                width: 75%;
+                height: 100%;
+                background: white;
+                border-radius: 1px;
+            }
+            .hs-battery-tip {
+                position: absolute;
+                right: -4px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 2px;
+                height: 5px;
+                background: rgba(255,255,255,0.6);
+                border-radius: 0 1px 1px 0;
+            }
+            .hs-date {
+                position: relative;
+                z-index: 2;
+                text-align: center;
+                font-size: 11px;
+                color: rgba(255,255,255,0.65);
+                margin-bottom: 6px;
+                flex-shrink: 0;
+            }
+            .hs-grid {
+                position: relative;
+                z-index: 2;
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0;
+                padding: 0 10px;
+                flex-shrink: 0;
+            }
+            .hs-app-cell {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                padding: 6px 2px 8px;
+            }
+            .hs-app-cell.hs-empty { visibility: hidden; }
+            .hs-icon {
+                width: 52px;
+                height: 52px;
+                border-radius: 12px;
+                overflow: hidden;
+                flex-shrink: 0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+            }
+            .hs-icon img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+            .hs-label {
+                font-size: 9px;
+                color: rgba(255,255,255,0.85);
+                text-align: center;
+                white-space: nowrap;
+                text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+                font-weight: 400;
+            }
+            .hs-dock {
+                position: absolute;
+                bottom: 14px;
+                left: 10px;
+                right: 10px;
+                height: 72px;
+                z-index: 2;
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+                padding: 0 14px;
+            }
+            .hs-dock-bg {
+                position: absolute;
+                inset: 0;
+                background: rgba(255,255,255,0.12);
+                border-radius: 18px;
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+            }
+            .hs-dock-icon {
+                position: relative;
+                width: 48px;
+                height: 48px;
+                border-radius: 11px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+                z-index: 1;
+            }
+            .hs-dock-icon img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+            .hs-home-indicator {
+                position: absolute;
+                bottom: 6px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 4px;
+                background: rgba(255,255,255,0.5);
+                border-radius: 2px;
+                z-index: 3;
+            }
+
             /* ===== APP PANEL STYLES ===== */
             .app-panel {
                 display: flex;
@@ -622,14 +779,76 @@
                         <div class="phone-inner-shadow"></div>
                         <div class="phone-bezel-overlay"></div>
                         <div class="sheet-bg"></div>
-                        <div class="phone-screen">
-                            <img
-                                src="assets/phone-mockups/screen-300x650.jpg"
-                                alt="Sheldon's Home Screen"
-                                class="phone-mockup-image"
-                                id="phone-mockup-image"
-                                crossorigin="anonymous"
-                            />
+                        <div class="phone-screen" id="phone-screen-html">
+                            <!-- HTML/CSS Phone Home Screen -->
+                            <div class="hs-bg"></div>
+                            <div class="hs-status-bar">
+                                <span class="hs-time">9:41</span>
+                                <div class="hs-status-icons">
+                                    <svg width="16" height="12" viewBox="0 0 16 12" fill="white" opacity="0.9"><rect x="0" y="4" width="3" height="8" rx="1"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="1"/><rect x="9" y="0.5" width="3" height="11.5" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity="0.3"/></svg>
+                                    <svg width="15" height="12" viewBox="0 0 15 12" fill="white" opacity="0.9"><path d="M7.5 2.5C9.8 2.5 11.8 3.5 13.2 5.1L14.5 3.7C12.7 1.8 10.2 0.5 7.5 0.5C4.8 0.5 2.3 1.8 0.5 3.7L1.8 5.1C3.2 3.5 5.2 2.5 7.5 2.5Z"/><path d="M7.5 5.5C9 5.5 10.3 6.1 11.3 7.1L12.6 5.7C11.2 4.4 9.4 3.5 7.5 3.5C5.6 3.5 3.8 4.4 2.4 5.7L3.7 7.1C4.7 6.1 6 5.5 7.5 5.5Z"/><circle cx="7.5" cy="10" r="2"/></svg>
+                                    <div class="hs-battery"><div class="hs-battery-fill"></div><div class="hs-battery-tip"></div></div>
+                                </div>
+                            </div>
+                            <div class="hs-date">Wednesday, April 1</div>
+                            <!-- App Grid -->
+                            <div class="hs-grid">
+                                <!-- Row 1 -->
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/spotify-icon.png" alt="Spotify"></div>
+                                    <span class="hs-label">Spotify</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/github-icon.png" alt="GitHub"></div>
+                                    <span class="hs-label">GitHub</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/linkedin-icon.png" alt="LinkedIn"></div>
+                                    <span class="hs-label">LinkedIn</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/claude-icon.png" alt="Claude"></div>
+                                    <span class="hs-label">Claude</span>
+                                </div>
+                                <!-- Row 2 -->
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/ibm-new-icon.png" alt="IBM"></div>
+                                    <span class="hs-label">IBM</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/manus-icon.png" alt="Manus"></div>
+                                    <span class="hs-label">Manus</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/cursor-icon.png" alt="Cursor"></div>
+                                    <span class="hs-label">Cursor</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/notion-icon.png" alt="Notion"></div>
+                                    <span class="hs-label">Notion</span>
+                                </div>
+                                <!-- Row 3 -->
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/youtube-icon.png" alt="YouTube"></div>
+                                    <span class="hs-label">YouTube</span>
+                                </div>
+                                <div class="hs-app-cell">
+                                    <div class="hs-icon"><img src="assets/app-icons/x-icon.png" alt="X"></div>
+                                    <span class="hs-label">X</span>
+                                </div>
+                                <!-- Empty cells to fill row 3 -->
+                                <div class="hs-app-cell hs-empty"></div>
+                                <div class="hs-app-cell hs-empty"></div>
+                            </div>
+                            <!-- Dock -->
+                            <div class="hs-dock">
+                                <div class="hs-dock-bg"></div>
+                                <div class="hs-dock-icon"><img src="assets/app-icons/spotify-icon.png" alt="Spotify"></div>
+                                <div class="hs-dock-icon"><img src="assets/app-icons/github-icon.png" alt="GitHub"></div>
+                                <div class="hs-dock-icon"><img src="assets/app-icons/linkedin-icon.png" alt="LinkedIn"></div>
+                            </div>
+                            <!-- Home indicator -->
+                            <div class="hs-home-indicator"></div>
                         </div>
                         <div class="dynamic-island"></div>
                         <video class="video-sheet folder-video" id="folder-video-a" muted playsinline loop></video>
@@ -1297,10 +1516,8 @@
 
             // ===== INIT =====
             window.addEventListener("DOMContentLoaded", () => {
-                const mockupImg = document.getElementById("phone-mockup-image");
-                if (mockupImg.complete) sampleColorsFromScreenshot();
-                else mockupImg.addEventListener("load", sampleColorsFromScreenshot);
-
+                // Phone screen is now pure HTML - no image to sample colors from
+                // Just initialize the interactions and animations
                 setupTapTargets();
                 runPhoneIntro();
                 runIntroSequence();
