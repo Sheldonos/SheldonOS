@@ -438,120 +438,63 @@ body {
 #folder-video-a { z-index: 21; }
 #folder-video-b { z-index: 22; }
 
-/* Tap Targets */
+/* Tap Targets — 4-column app grid + dock */
+/*
+  Phone screen content area:
+  - tap-inset (phone-frame-padding + phone-content-inset) = 20px from left edge
+  - Screen width inside frame: ~278px
+  - 4 columns of 52px icons with 18px padding between = (4*52 + 3*18) = 262px total
+  - x_start = (278 - 262) / 2 + 20 = 28px from left edge of phone frame
+  - Row heights: icon(52) + label(14) + pad(8) = 74px per row
+  - Row 1 starts at y=60 from top of screen content
+  - Tap inset from top of phone frame = phone-frame-padding(9) + phone-content-inset(11) = 20px
+*/
 .tap-target {
     position: absolute;
     cursor: pointer;
     z-index: 10;
     border-radius: 0;
 
-    --col-1: var(--phone-tap-inset);
-    --col-2: calc(var(--phone-tap-inset) + var(--app-width));
-    --col-3: calc(var(--phone-tap-inset) + var(--widget-width));
-    --col-4: calc(
-        var(--phone-tap-inset) + var(--widget-width) + var(--app-width)
-    );
+    /* 4-col grid: icon=52, gap=18, start_x=28 from frame left edge */
+    --grid-icon: 52px;
+    --grid-gap: 18px;
+    --grid-x0: 28px;  /* left edge of col 1 */
+    --grid-x1: calc(var(--grid-x0) + var(--grid-icon) + var(--grid-gap));  /* col 2 */
+    --grid-x2: calc(var(--grid-x1) + var(--grid-icon) + var(--grid-gap));  /* col 3 */
+    --grid-x3: calc(var(--grid-x2) + var(--grid-icon) + var(--grid-gap));  /* col 4 */
 
+    /* Row tops: row1_y=60 + frame_top_inset=20 = 80 from frame top */
+    --row-h: 74px;  /* 52 icon + 14 label + 8 pad */
+    --row1-top: 80px;
+    --row2-top: calc(var(--row1-top) + var(--row-h));
+    --row3-top: calc(var(--row2-top) + var(--row-h));
+
+    /* Dock */
     --dock-col-1: calc(var(--phone-tap-inset) + var(--dock-extra-inset));
-    --dock-col-2: calc(
-        var(--phone-tap-inset) + var(--dock-extra-inset) + var(--dock-width)
-    );
-    --dock-col-3: calc(
-        var(--phone-tap-inset) + var(--dock-extra-inset) +
-            (var(--dock-width) * 2)
-    );
+    --dock-col-2: calc(var(--phone-tap-inset) + var(--dock-extra-inset) + var(--dock-width));
+    --dock-col-3: calc(var(--phone-tap-inset) + var(--dock-extra-inset) + (var(--dock-width) * 2));
 }
 
-.tap-widget-github {
-    top: var(--tap-offset-top);
-    left: var(--col-1);
-    width: var(--widget-width);
-    height: var(--widget-height);
-}
+/* Row 1 */
+.tap-r1-c1 { top: var(--row1-top); left: var(--grid-x0); width: var(--grid-icon); height: var(--row-h); }
+.tap-r1-c2 { top: var(--row1-top); left: var(--grid-x1); width: var(--grid-icon); height: var(--row-h); }
+.tap-r1-c3 { top: var(--row1-top); left: var(--grid-x2); width: var(--grid-icon); height: var(--row-h); }
+.tap-r1-c4 { top: var(--row1-top); left: var(--grid-x3); width: var(--grid-icon); height: var(--row-h); }
 
-.tap-widget-spotify {
-    top: var(--tap-offset-top);
-    left: var(--col-3);
-    width: var(--widget-width);
-    height: var(--widget-height);
-}
+/* Row 2 */
+.tap-r2-c1 { top: var(--row2-top); left: var(--grid-x0); width: var(--grid-icon); height: var(--row-h); }
+.tap-r2-c2 { top: var(--row2-top); left: var(--grid-x1); width: var(--grid-icon); height: var(--row-h); }
+.tap-r2-c3 { top: var(--row2-top); left: var(--grid-x2); width: var(--grid-icon); height: var(--row-h); }
+.tap-r2-c4 { top: var(--row2-top); left: var(--grid-x3); width: var(--grid-icon); height: var(--row-h); }
 
-.tap-app-1 {
-    top: calc(var(--tap-offset-top) + var(--widget-height));
-    left: var(--col-1);
-    width: var(--app-width);
-    height: var(--app-height);
-}
+/* Row 3 */
+.tap-r3-c1 { top: var(--row3-top); left: var(--grid-x0); width: var(--grid-icon); height: var(--row-h); }
+.tap-r3-c2 { top: var(--row3-top); left: var(--grid-x1); width: var(--grid-icon); height: var(--row-h); }
 
-.tap-app-2 {
-    top: calc(var(--tap-offset-top) + var(--widget-height));
-    left: var(--col-2);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-app-3 {
-    top: calc(var(--tap-offset-top) + var(--widget-height));
-    left: var(--col-3);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-app-4 {
-    top: calc(var(--tap-offset-top) + var(--widget-height));
-    left: var(--col-4);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-folder-1 {
-    top: calc(var(--tap-offset-top) + var(--widget-height) + var(--app-height));
-    left: var(--col-1);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-folder-2 {
-    top: calc(var(--tap-offset-top) + var(--widget-height) + var(--app-height));
-    left: var(--col-2);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-folder-3 {
-    top: calc(var(--tap-offset-top) + var(--widget-height) + var(--app-height));
-    left: var(--col-3);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-folder-4 {
-    top: calc(var(--tap-offset-top) + var(--widget-height) + var(--app-height));
-    left: var(--col-4);
-    width: var(--app-width);
-    height: var(--app-height);
-}
-
-.tap-dock-1 {
-    bottom: var(--dock-offset-bottom);
-    left: var(--dock-col-1);
-    width: var(--dock-width);
-    height: var(--dock-height);
-}
-
-.tap-dock-2 {
-    bottom: var(--dock-offset-bottom);
-    left: var(--dock-col-2);
-    width: var(--dock-width);
-    height: var(--dock-height);
-}
-
-.tap-dock-3 {
-    bottom: var(--dock-offset-bottom);
-    left: var(--dock-col-3);
-    width: var(--dock-width);
-    height: var(--dock-height);
-}
+/* Dock */
+.tap-dock-1 { bottom: var(--dock-offset-bottom); left: var(--dock-col-1); width: var(--dock-width); height: var(--dock-height); }
+.tap-dock-2 { bottom: var(--dock-offset-bottom); left: var(--dock-col-2); width: var(--dock-width); height: var(--dock-height); }
+.tap-dock-3 { bottom: var(--dock-offset-bottom); left: var(--dock-col-3); width: var(--dock-width); height: var(--dock-height); }
 
 /* App Detail View */
 .app-header h1 {

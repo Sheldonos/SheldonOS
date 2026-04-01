@@ -2,75 +2,627 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
         <title>Sheldon Stoney</title>
-        <meta
-            name="description"
-            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
-        />
-
-        <!-- Open Graph -->
+        <meta name="description" content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future." />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Sheldon Stoney" />
-        <meta
-            property="og:description"
-            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
-        />
+        <meta property="og:description" content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future." />
         <meta property="og:url" content="https://sheldonos.github.io" />
-
-        <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Sheldon Stoney" />
-        <meta
-            name="twitter:description"
-            content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future."
-        />
-
-        <!-- Preconnect to font server early -->
+        <meta name="twitter:description" content="AI & Automation Specialist at IBM. Building the infrastructure for the autonomous future." />
         <link rel="preconnect" href="https://rsms.me/" crossorigin />
-        <!-- Preload the Inter font CSS -->
         <link rel="preload" href="https://rsms.me/inter/inter.css" as="style" />
-        <!-- Preload the variable font file -->
-        <link
-            rel="preload"
-            href="https://rsms.me/inter/font-files/InterVariable.woff2"
-            as="font"
-            type="font/woff2"
-            crossorigin
-        />
-        <!-- Load font stylesheet -->
+        <link rel="preload" href="https://rsms.me/inter/font-files/InterVariable.woff2" as="font" type="font/woff2" crossorigin />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
-        <!-- Preload critical assets -->
-        <link
-            rel="preload"
-            href="assets/phone-mockups/screen-300x650.jpg"
-            as="image"
-        />
+        <link rel="preload" href="assets/phone-mockups/screen-300x650.jpg" as="image" />
         <link rel="stylesheet" href="style.css" />
         <script src="https://cdn.jsdelivr.net/npm/motion@12.7.4/dist/motion.js"></script>
+        <style>
+            /* ===== APP PANEL STYLES ===== */
+            .app-panel {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            .app-panel-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 20px;
+                flex-shrink: 0;
+            }
+            .app-panel-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                object-fit: cover;
+                flex-shrink: 0;
+            }
+            .app-panel-title {
+                font-size: 22px;
+                font-weight: 700;
+                color: #f0ece4;
+                margin: 0;
+                line-height: 1.1;
+            }
+            .app-panel-subtitle {
+                font-size: 12px;
+                color: rgba(240,236,228,0.5);
+                margin: 0;
+                font-weight: 400;
+            }
+            .app-panel-body {
+                flex: 1;
+                overflow-y: auto;
+                overflow-x: hidden;
+                min-height: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+            }
+            .app-panel-body::-webkit-scrollbar { display: none; }
+
+            /* Spotify panel */
+            .spotify-embed-wrap {
+                border-radius: 12px;
+                overflow: hidden;
+                flex-shrink: 0;
+            }
+            .spotify-embed-wrap iframe {
+                display: block;
+                border-radius: 12px;
+            }
+            .spotify-note {
+                font-size: 11px;
+                color: rgba(240,236,228,0.4);
+                text-align: center;
+                margin-top: 4px;
+            }
+            .spotify-tracks {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .spotify-track {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 10px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.15s;
+                text-decoration: none;
+            }
+            .spotify-track:hover { background: rgba(29,185,84,0.15); }
+            .spotify-track-num {
+                font-size: 11px;
+                color: rgba(240,236,228,0.35);
+                width: 16px;
+                text-align: center;
+                flex-shrink: 0;
+            }
+            .spotify-track-info { flex: 1; min-width: 0; }
+            .spotify-track-name {
+                font-size: 13px;
+                font-weight: 500;
+                color: #f0ece4;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .spotify-track-artist {
+                font-size: 11px;
+                color: rgba(240,236,228,0.45);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .spotify-play-icon {
+                font-size: 14px;
+                color: #1DB954;
+                flex-shrink: 0;
+                opacity: 0;
+                transition: opacity 0.15s;
+            }
+            .spotify-track:hover .spotify-play-icon { opacity: 1; }
+
+            /* GitHub panel */
+            .github-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+            .github-stat-card {
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                padding: 12px;
+                text-align: center;
+            }
+            .github-stat-num {
+                font-size: 22px;
+                font-weight: 700;
+                color: #f0ece4;
+                line-height: 1;
+            }
+            .github-stat-label {
+                font-size: 10px;
+                color: rgba(240,236,228,0.45);
+                margin-top: 3px;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+            }
+            .github-repos {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .github-repo {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background 0.15s;
+            }
+            .github-repo:hover { background: rgba(255,255,255,0.09); }
+            .github-repo-name {
+                font-size: 13px;
+                font-weight: 600;
+                color: #58a6ff;
+            }
+            .github-repo-desc {
+                font-size: 11px;
+                color: rgba(240,236,228,0.5);
+                line-height: 1.4;
+            }
+            .github-repo-meta {
+                display: flex;
+                gap: 10px;
+                margin-top: 2px;
+            }
+            .github-repo-lang {
+                font-size: 10px;
+                color: rgba(240,236,228,0.4);
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+            .lang-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                display: inline-block;
+            }
+
+            /* LinkedIn panel */
+            .linkedin-profile {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                background: rgba(10,102,194,0.15);
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+            .linkedin-avatar {
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #0A66C2, #004182);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                font-weight: 700;
+                color: white;
+                flex-shrink: 0;
+            }
+            .linkedin-name {
+                font-size: 16px;
+                font-weight: 700;
+                color: #f0ece4;
+            }
+            .linkedin-title {
+                font-size: 12px;
+                color: rgba(240,236,228,0.55);
+                margin-top: 2px;
+            }
+            .linkedin-stats {
+                display: flex;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+            .linkedin-stat {
+                flex: 1;
+                background: rgba(255,255,255,0.05);
+                border-radius: 8px;
+                padding: 10px;
+                text-align: center;
+            }
+            .linkedin-stat-num {
+                font-size: 18px;
+                font-weight: 700;
+                color: #f0ece4;
+            }
+            .linkedin-stat-label {
+                font-size: 10px;
+                color: rgba(240,236,228,0.4);
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                margin-top: 2px;
+            }
+            .linkedin-posts {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .linkedin-post {
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                font-size: 12px;
+                color: rgba(240,236,228,0.7);
+                line-height: 1.5;
+                border-left: 2px solid #0A66C2;
+            }
+            .linkedin-post-date {
+                font-size: 10px;
+                color: rgba(240,236,228,0.35);
+                margin-top: 4px;
+            }
+            .linkedin-cta {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                padding: 10px;
+                background: #0A66C2;
+                border-radius: 8px;
+                color: white;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                flex-shrink: 0;
+                transition: background 0.15s;
+            }
+            .linkedin-cta:hover { background: #004182; }
+
+            /* IBM panel */
+            .ibm-header {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                background: rgba(0,29,108,0.3);
+                border-radius: 12px;
+                flex-shrink: 0;
+            }
+            .ibm-role {
+                font-size: 14px;
+                font-weight: 700;
+                color: #f0ece4;
+            }
+            .ibm-tenure {
+                font-size: 11px;
+                color: rgba(240,236,228,0.5);
+                margin-top: 2px;
+            }
+            .ibm-metrics {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+            .ibm-metric {
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                padding: 10px 8px;
+                text-align: center;
+            }
+            .ibm-metric-num {
+                font-size: 20px;
+                font-weight: 700;
+                color: #f0ece4;
+                line-height: 1;
+            }
+            .ibm-metric-label {
+                font-size: 9px;
+                color: rgba(240,236,228,0.4);
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                margin-top: 3px;
+            }
+            .ibm-clients {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+            .ibm-client {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 8px;
+            }
+            .ibm-client-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: #0043CE;
+                flex-shrink: 0;
+            }
+            .ibm-client-name {
+                font-size: 12px;
+                font-weight: 500;
+                color: #f0ece4;
+            }
+            .ibm-client-desc {
+                font-size: 10px;
+                color: rgba(240,236,228,0.4);
+                margin-left: auto;
+            }
+
+            /* Manus / AI Tools panel */
+            .ai-tool-list {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .ai-tool-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                cursor: pointer;
+                text-decoration: none;
+                transition: background 0.15s;
+            }
+            .ai-tool-item:hover { background: rgba(255,255,255,0.09); }
+            .ai-tool-icon {
+                width: 36px;
+                height: 36px;
+                border-radius: 8px;
+                object-fit: cover;
+                flex-shrink: 0;
+            }
+            .ai-tool-name {
+                font-size: 13px;
+                font-weight: 600;
+                color: #f0ece4;
+            }
+            .ai-tool-desc {
+                font-size: 11px;
+                color: rgba(240,236,228,0.45);
+                margin-top: 1px;
+            }
+            .ai-tool-badge {
+                margin-left: auto;
+                font-size: 9px;
+                padding: 2px 7px;
+                border-radius: 20px;
+                font-weight: 600;
+                flex-shrink: 0;
+            }
+            .badge-daily { background: rgba(29,185,84,0.2); color: #1DB954; }
+            .badge-work { background: rgba(0,67,206,0.25); color: #58a6ff; }
+            .badge-build { background: rgba(204,120,92,0.25); color: #CC785C; }
+
+            /* Cursor panel */
+            .cursor-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+                flex-shrink: 0;
+            }
+            .cursor-stat {
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                padding: 12px;
+                text-align: center;
+            }
+            .cursor-stat-num {
+                font-size: 22px;
+                font-weight: 700;
+                color: #f0ece4;
+            }
+            .cursor-stat-label {
+                font-size: 10px;
+                color: rgba(240,236,228,0.4);
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+                margin-top: 3px;
+            }
+            .cursor-projects {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .cursor-project {
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                border-left: 2px solid #58a6ff;
+            }
+            .cursor-project-name {
+                font-size: 13px;
+                font-weight: 600;
+                color: #f0ece4;
+            }
+            .cursor-project-lang {
+                font-size: 11px;
+                color: rgba(240,236,228,0.45);
+                margin-top: 2px;
+            }
+
+            /* YouTube panel */
+            .yt-embed-wrap {
+                border-radius: 12px;
+                overflow: hidden;
+                flex-shrink: 0;
+            }
+            .yt-embed-wrap iframe {
+                display: block;
+                width: 100%;
+                border-radius: 12px;
+            }
+            .yt-channels {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .yt-channel {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 8px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                text-decoration: none;
+                transition: background 0.15s;
+            }
+            .yt-channel:hover { background: rgba(255,0,0,0.1); }
+            .yt-channel-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #FF0000, #CC0000);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                color: white;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+            .yt-channel-name {
+                font-size: 13px;
+                font-weight: 500;
+                color: #f0ece4;
+            }
+            .yt-channel-desc {
+                font-size: 11px;
+                color: rgba(240,236,228,0.4);
+            }
+
+            /* X/Twitter panel */
+            .x-feed {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .x-tweet {
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                border-left: 2px solid rgba(255,255,255,0.15);
+            }
+            .x-tweet-text {
+                font-size: 12px;
+                color: rgba(240,236,228,0.8);
+                line-height: 1.5;
+            }
+            .x-tweet-meta {
+                display: flex;
+                gap: 12px;
+                margin-top: 6px;
+            }
+            .x-tweet-stat {
+                font-size: 10px;
+                color: rgba(240,236,228,0.35);
+            }
+
+            /* Notion panel */
+            .notion-pages {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .notion-page {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 12px;
+                background: rgba(255,255,255,0.05);
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background 0.15s;
+            }
+            .notion-page:hover { background: rgba(255,255,255,0.09); }
+            .notion-page-emoji {
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+            .notion-page-name {
+                font-size: 13px;
+                font-weight: 500;
+                color: #f0ece4;
+            }
+            .notion-page-type {
+                font-size: 10px;
+                color: rgba(240,236,228,0.4);
+                margin-top: 1px;
+            }
+            .notion-page-arrow {
+                margin-left: auto;
+                color: rgba(240,236,228,0.25);
+                font-size: 12px;
+            }
+
+            /* Section label */
+            .panel-section-label {
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                color: rgba(240,236,228,0.35);
+                margin-bottom: 2px;
+                flex-shrink: 0;
+            }
+
+            /* Open in app button */
+            .open-app-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                padding: 9px;
+                border-radius: 8px;
+                font-size: 12px;
+                font-weight: 600;
+                text-decoration: none;
+                flex-shrink: 0;
+                transition: opacity 0.15s;
+            }
+            .open-app-btn:hover { opacity: 0.8; }
+            .btn-spotify { background: #1DB954; color: #000; }
+            .btn-github { background: rgba(255,255,255,0.1); color: #f0ece4; }
+            .btn-linkedin { background: #0A66C2; color: white; }
+            .btn-youtube { background: #FF0000; color: white; }
+            .btn-x { background: #000; color: white; border: 1px solid rgba(255,255,255,0.15); }
+            .btn-notion { background: rgba(255,255,255,0.1); color: #f0ece4; }
+        </style>
     </head>
     <body>
         <!-- Desktop View -->
         <div class="desktop-view">
             <div class="main-container">
-                <!-- Phone Mockup with Tap Targets -->
+                <!-- Phone Mockup -->
                 <div class="phone-container" id="phone-container">
                     <div class="phone-frame">
-                        <!-- Inner shadow overlay -->
                         <div class="phone-inner-shadow"></div>
-
-                        <!-- Bezel overlay -->
                         <div class="phone-bezel-overlay"></div>
-
-                        <!-- Black backdrop -->
                         <div class="sheet-bg"></div>
-
-                        <!-- Clipping container for sheet transitions -->
                         <div class="phone-screen">
-                            <!-- Phone mockup background image -->
                             <img
                                 src="assets/phone-mockups/screen-300x650.jpg"
                                 alt="Sheldon's Home Screen"
@@ -79,86 +631,32 @@
                                 crossorigin="anonymous"
                             />
                         </div>
-
-                        <!-- Dynamic Island -->
                         <div class="dynamic-island"></div>
+                        <video class="video-sheet folder-video" id="folder-video-a" muted playsinline loop></video>
+                        <video class="video-sheet folder-video" id="folder-video-b" muted playsinline loop></video>
 
-                        <!-- Dynamic video sheets for folder apps (two for crossfade) -->
-                        <video
-                            class="video-sheet folder-video"
-                            id="folder-video-a"
-                            muted
-                            playsinline
-                            loop
-                        ></video>
-                        <video
-                            class="video-sheet folder-video"
-                            id="folder-video-b"
-                            muted
-                            playsinline
-                            loop
-                        ></video>
-
-                        <!-- Invisible tap target overlays -->
-                        <div
-                            class="tap-target tap-widget-github"
-                            data-folder="experience"
-                        ></div>
-                        <div
-                            class="tap-target tap-widget-spotify"
-                            data-folder="projects"
-                        ></div>
-
-                        <div
-                            class="tap-target tap-app-1"
-                            data-folder="skills"
-                        ></div>
-                        <div
-                            class="tap-target tap-app-2"
-                            data-folder="education"
-                        ></div>
-                        <div
-                            class="tap-target tap-app-3"
-                            data-folder="certifications"
-                        ></div>
-                        <div
-                            class="tap-target tap-app-4"
-                            data-folder="targets"
-                        ></div>
-
-                        <div
-                            class="tap-target tap-folder-1"
-                            data-folder="experience"
-                        ></div>
-                        <div
-                            class="tap-target tap-folder-2"
-                            data-folder="projects"
-                        ></div>
-                        <div
-                            class="tap-target tap-folder-3"
-                            data-folder="skills"
-                        ></div>
-                        <div
-                            class="tap-target tap-folder-4"
-                            data-folder="education"
-                        ></div>
-
-                        <div
-                            class="tap-target tap-dock-1"
-                            data-folder="experience"
-                        ></div>
-                        <div
-                            class="tap-target tap-dock-2"
-                            data-folder="projects"
-                        ></div>
-                        <div
-                            class="tap-target tap-dock-3"
-                            data-folder="skills"
-                        ></div>
+                        <!-- Tap targets mapped to real apps -->
+                        <!-- Row 1: Spotify, GitHub, LinkedIn, Claude -->
+                        <div class="tap-target tap-r1-c1" data-app="spotify"></div>
+                        <div class="tap-target tap-r1-c2" data-app="github"></div>
+                        <div class="tap-target tap-r1-c3" data-app="linkedin"></div>
+                        <div class="tap-target tap-r1-c4" data-app="claude"></div>
+                        <!-- Row 2: IBM, Manus, Cursor, Notion -->
+                        <div class="tap-target tap-r2-c1" data-app="ibm"></div>
+                        <div class="tap-target tap-r2-c2" data-app="manus"></div>
+                        <div class="tap-target tap-r2-c3" data-app="cursor"></div>
+                        <div class="tap-target tap-r2-c4" data-app="notion"></div>
+                        <!-- Row 3: YouTube, X -->
+                        <div class="tap-target tap-r3-c1" data-app="youtube"></div>
+                        <div class="tap-target tap-r3-c2" data-app="x"></div>
+                        <!-- Dock: Spotify, GitHub, LinkedIn -->
+                        <div class="tap-target tap-dock-1" data-app="spotify"></div>
+                        <div class="tap-target tap-dock-2" data-app="github"></div>
+                        <div class="tap-target tap-dock-3" data-app="linkedin"></div>
                     </div>
                 </div>
 
-                <!-- Content Area (Right Column) -->
+                <!-- Content Area -->
                 <div class="content-area" id="content-area">
                     <div class="content-area-inner">
                         <div class="content-header">
@@ -171,34 +669,14 @@
                                 <p id="intro-p3" class="typewriter-target"></p>
                             </div>
                             <div class="social-icons intro-social-icons">
-                                <a
-                                    href="https://linkedin.com/in/sheldonibm/"
-                                    target="_blank"
-                                    class="social-icon"
-                                >
-                                    <img
-                                        src="assets/icons/linkedin.svg"
-                                        alt="LinkedIn"
-                                    />
+                                <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="social-icon">
+                                    <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
                                 </a>
-                                <a
-                                    href="https://github.com/Sheldonos"
-                                    target="_blank"
-                                    class="social-icon"
-                                >
-                                    <img
-                                        src="assets/icons/github.svg"
-                                        alt="GitHub"
-                                    />
+                                <a href="https://github.com/Sheldonos" target="_blank" class="social-icon">
+                                    <img src="assets/icons/github.svg" alt="GitHub" />
                                 </a>
-                                <a
-                                    href="mailto:smstoney@yahoo.com"
-                                    class="social-icon"
-                                >
-                                    <img
-                                        src="assets/icons/email.svg"
-                                        alt="Email"
-                                    />
+                                <a href="mailto:smstoney@yahoo.com" class="social-icon">
+                                    <img src="assets/icons/email.svg" alt="Email" />
                                 </a>
                             </div>
                         </div>
@@ -207,64 +685,20 @@
             </div>
         </div>
 
-        <!-- Tablet View (text only, 451-920px) -->
+        <!-- Tablet View -->
         <div class="tablet-view">
             <div class="tablet-content">
-                <div class="content-header">
-                    <h1>Sheldon Stoney</h1>
-                </div>
+                <div class="content-header"><h1>Sheldon Stoney</h1></div>
                 <div class="content-body">
                     <div class="content-text">
-                        <p>
-                            I'm a
-                            <a
-                                href="https://linkedin.com/in/sheldonibm/"
-                                target="_blank"
-                                >Brand Technical Specialist at IBM</a
-                            >
-                            — spearheading AI and automation strategies for
-                            enterprise clients across the Southeast.
-                        </p>
-                        <p>
-                            I've prototyped 40+ GenAI apps, built 86+
-                            automations, and brought 4 products to market.
-                            Building the infrastructure for the autonomous
-                            future.
-                        </p>
-                        <p>
-                            Feel free to
-                            <a href="https://linkedin.com/in/sheldonibm/" target="_blank"
-                                >connect on LinkedIn</a
-                            >
-                            or
-                            <a href="mailto:smstoney@yahoo.com">get in touch</a
-                            >.
-                        </p>
+                        <p>I'm a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
+                        <p>I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.</p>
+                        <p>Feel free to <a href="https://linkedin.com/in/sheldonibm/" target="_blank">connect on LinkedIn</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a>.</p>
                     </div>
                     <div class="social-icons">
-                        <a
-                            href="https://linkedin.com/in/sheldonibm/"
-                            target="_blank"
-                            class="social-icon"
-                        >
-                            <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
-                        </a>
-                        <a
-                            href="https://github.com/Sheldonos"
-                            target="_blank"
-                            class="social-icon"
-                        >
-                            <img
-                                src="assets/icons/github.svg"
-                                alt="GitHub"
-                            />
-                        </a>
-                        <a
-                            href="mailto:smstoney@yahoo.com"
-                            class="social-icon"
-                        >
-                            <img src="assets/icons/email.svg" alt="Email" />
-                        </a>
+                        <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+                        <a href="https://github.com/Sheldonos" target="_blank" class="social-icon"><img src="assets/icons/github.svg" alt="GitHub" /></a>
+                        <a href="mailto:smstoney@yahoo.com" class="social-icon"><img src="assets/icons/email.svg" alt="Email" /></a>
                     </div>
                 </div>
             </div>
@@ -275,303 +709,467 @@
             <div class="mobile-content">
                 <div class="mobile-main">
                     <h1 class="mobile-title">Sheldon Stoney</h1>
-
                     <div class="mobile-body">
-                        <p class="mobile-paragraph">
-                            I'm a
-                            <a
-                                href="https://linkedin.com/in/sheldonibm/"
-                                target="_blank"
-                                class="mobile-highlight"
-                                >Brand Technical Specialist at IBM</a
-                            >
-                            — spearheading AI and automation strategies for
-                            enterprise clients across the Southeast.
-                        </p>
-
-                        <p class="mobile-paragraph">
-                            I've prototyped 40+ GenAI apps, built 86+
-                            automations, and brought 4 products to market.
-                            Building the infrastructure for the autonomous
-                            future.
-                        </p>
-
-                        <p class="mobile-paragraph">
-                            Feel free to
-                            <a
-                                href="https://linkedin.com/in/sheldonibm/"
-                                target="_blank"
-                                class="mobile-highlight"
-                                >connect</a
-                            >
-                            or shoot me an
-                            <a
-                                href="mailto:smstoney@yahoo.com"
-                                class="mobile-highlight"
-                                >email</a
-                            >
-                            if you want to get in touch.
-                        </p>
+                        <p class="mobile-paragraph">I'm a <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-highlight">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
+                        <p class="mobile-paragraph">I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.</p>
+                        <p class="mobile-paragraph">Feel free to <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-highlight">connect</a> or shoot me an <a href="mailto:smstoney@yahoo.com" class="mobile-highlight">email</a>.</p>
                     </div>
                 </div>
-
                 <div class="mobile-social-icons">
-                    <a
-                        href="https://linkedin.com/in/sheldonibm/"
-                        target="_blank"
-                        class="mobile-social-icon"
-                    >
-                        <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
-                    </a>
-                    <a
-                        href="https://github.com/Sheldonos"
-                        target="_blank"
-                        class="mobile-social-icon"
-                    >
-                        <img src="assets/icons/github.svg" alt="GitHub" />
-                    </a>
-                    <a
-                        href="mailto:smstoney@yahoo.com"
-                        class="mobile-social-icon"
-                    >
-                        <img src="assets/icons/email.svg" alt="Email" />
-                    </a>
+                    <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+                    <a href="https://github.com/Sheldonos" target="_blank" class="mobile-social-icon"><img src="assets/icons/github.svg" alt="GitHub" /></a>
+                    <a href="mailto:smstoney@yahoo.com" class="mobile-social-icon"><img src="assets/icons/email.svg" alt="Email" /></a>
                 </div>
             </div>
         </div>
 
         <script>
-            // Sampled colors (fallbacks match current screenshot)
-            let SCREEN_OVERLAY_COLOR = "rgba(20, 24, 50, 0.7)";
-            let DOCK_OVERLAY_COLOR = "rgba(15, 18, 40, 0.7)";
+            // ===== COLOR SAMPLING =====
             let FRAME_GRADIENT_TOP = "#9C886E";
             let FRAME_GRADIENT_BOTTOM = "#7A6D5B";
 
-            // Sample colors from the home screen screenshot
             function sampleColorsFromScreenshot() {
                 const img = document.querySelector(".phone-mockup-image");
                 if (!img || !img.complete) return;
-
                 try {
                     const canvas = document.createElement("canvas");
                     const ctx = canvas.getContext("2d");
                     canvas.width = img.naturalWidth;
                     canvas.height = img.naturalHeight;
                     ctx.drawImage(img, 0, 0);
-
-                    const w = canvas.width;
-                    const h = canvas.height;
-
-                    const screenPixel = ctx.getImageData(8, Math.floor(h * 0.35), 1, 1).data;
-                    SCREEN_OVERLAY_COLOR = `rgba(${screenPixel[0]}, ${screenPixel[1]}, ${screenPixel[2]}, 0.7)`;
-
-                    const dockPixel = ctx.getImageData(80, Math.floor(h * 0.94), 1, 1).data;
-                    DOCK_OVERLAY_COLOR = `rgba(${dockPixel[0]}, ${dockPixel[1]}, ${dockPixel[2]}, 0.7)`;
-
+                    const w = canvas.width, h = canvas.height;
                     const topPixel = ctx.getImageData(Math.floor(w * 0.5), 2, 1, 1).data;
                     const bottomPixel = ctx.getImageData(Math.floor(w * 0.5), h - 3, 1, 1).data;
                     FRAME_GRADIENT_TOP = `rgb(${topPixel[0]}, ${topPixel[1]}, ${topPixel[2]})`;
                     FRAME_GRADIENT_BOTTOM = `rgb(${bottomPixel[0]}, ${bottomPixel[1]}, ${bottomPixel[2]})`;
-
                     const phoneFrame = document.querySelector(".phone-frame");
                     const bezelOverlay = document.querySelector(".phone-bezel-overlay");
-                    const frameGradient = `
-                        radial-gradient(100% 100% at 100% 100%, rgba(255, 0, 98, 0.02) 0%, rgba(0, 255, 255, 0) 100%),
-                        linear-gradient(167deg, ${FRAME_GRADIENT_TOP} 0%, ${FRAME_GRADIENT_BOTTOM} 100%)
-                    `;
+                    const frameGradient = `radial-gradient(100% 100% at 100% 100%, rgba(255,0,98,0.02) 0%, rgba(0,255,255,0) 100%), linear-gradient(167deg, ${FRAME_GRADIENT_TOP} 0%, ${FRAME_GRADIENT_BOTTOM} 100%)`;
                     if (phoneFrame) phoneFrame.style.background = frameGradient;
                     if (bezelOverlay) bezelOverlay.style.background = frameGradient;
-                } catch (e) {
-                    // Cross-origin canvas blocked — use fallback colors
-                }
+                } catch(e) {}
             }
 
-            // Folder data for Sheldon's portfolio
+            // ===== APP DATA =====
             const appData = {
-                folders: {
-                    experience: {
-                        name: "Experience",
-                        apps: [
-                            {
-                                name: "IBM — Brand Technical Specialist",
-                                icon: "assets/app-icons/ibm.png",
-                                description:
-                                    '<span class="app-name">IBM (2024 – Present)</span> Spearheading AI and automation strategies for enterprise clients across the Southeast. Architected the \'Sales Goldmine\' enablement platform. Partnered with Macy\'s, Yum! Brands, AMB Group, and Vanderbilt University.',
-                            },
-                            {
-                                name: "Independent AI Consultant",
-                                icon: "assets/app-icons/ai-hub.png",
-                                description:
-                                    '<span class="app-name">Independent (2021 – 2024)</span> Provided strategic AI consulting and developed custom automation solutions. Designed and implemented custom generative AI workflows. Built autonomous agentic systems for enterprise process automation.',
-                            },
-                        ],
-                    },
-                    projects: {
-                        name: "Projects",
-                        apps: [
-                            {
-                                name: "SheldonOS Framework v3.0.0",
-                                icon: "assets/app-icons/sheldonos.png",
-                                description:
-                                    '<span class="app-name">SheldonOS</span> A 6-chamber defense-in-depth architecture for autonomous AI agents, featuring formal verification and cryptographic auditing. The most ambitious thing I\'ve built.',
-                            },
-                            {
-                                name: "MEV Arbitrage Bot",
-                                icon: "assets/app-icons/security.png",
-                                description:
-                                    '<span class="app-name">MEV Bot (Rust)</span> High-frequency trading bot built in Rust, executing atomic arbitrage across decentralized exchanges. Speed and precision at the infrastructure level.',
-                            },
-                            {
-                                name: "Spotify Digital Twin",
-                                icon: "assets/app-icons/automation.png",
-                                description:
-                                    '<span class="app-name">Spotify Digital Twin</span> Strategic proposal bridging Web2 streaming with Polygon L2 blockchain for credentialing and digital twin marketplaces. One of 40+ GenAI prototypes.',
-                            },
-                        ],
-                    },
-                    skills: {
-                        name: "Skills",
-                        apps: [
-                            {
-                                name: "Generative AI Strategy",
-                                icon: "assets/app-icons/ai-hub.png",
-                                description:
-                                    '<span class="app-name">GenAI Strategy</span> Architecting enterprise-wide adoption frameworks and identifying high-value use cases. 4+ years of experience in generative AI, autonomous agentic systems, and enterprise automation.',
-                            },
-                            {
-                                name: "Workflow Automation",
-                                icon: "assets/app-icons/automation.png",
-                                description:
-                                    '<span class="app-name">Automation</span> Streamlining operations with intelligent agents and automated data pipelines. 86+ automations built. Tools: n8n, Zapier, Make, custom Python agents.',
-                            },
-                            {
-                                name: "Full-Stack Development",
-                                icon: "assets/app-icons/sheldonos.png",
-                                description:
-                                    '<span class="app-name">Full-Stack</span> Building scalable applications with modern frameworks and AI integration. Python, Rust, React, Node.js, Docker, Kubernetes, IBM Cloud, AWS.',
-                            },
-                            {
-                                name: "Agentic Security",
-                                icon: "assets/app-icons/security.png",
-                                description:
-                                    '<span class="app-name">Agentic Safety</span> Bridging the gap between theoretical AI safety and practical, production-ready enterprise deployment. Formal verification, cryptographic auditing, red-teaming.',
-                            },
-                        ],
-                    },
-                    education: {
-                        name: "Education",
-                        apps: [
-                            {
-                                name: "Syracuse University",
-                                icon: "assets/app-icons/ibm.png",
-                                description:
-                                    '<span class="app-name">Syracuse University</span> B.S. Information Management & Technology, Class of 2023. Capstone: "Khanmigo" — an AI-assisted learning platform concept pitched directly to Khan Academy.',
-                            },
-                            {
-                                name: "Agentic AI Certifications",
-                                icon: "assets/app-icons/ai-hub.png",
-                                description:
-                                    '<span class="app-name">Agentic AI</span> Udacity Agentic AI Engineer. NVIDIA Certified Professional. Anthropic MCP & AI Fluency. These are the certs that actually matter for where AI is going.',
-                            },
-                            {
-                                name: "Security & Cloud",
-                                icon: "assets/app-icons/security.png",
-                                description:
-                                    '<span class="app-name">Security & Cloud</span> eWPTX (INE). Google Cybersecurity Professional. IBM DevOps & App Modernization. The security angle is what separates agentic AI work from toy demos.',
-                            },
-                        ],
-                    },
-                    certifications: {
-                        name: "Certifications",
-                        apps: [
-                            {
-                                name: "Udacity Agentic AI Engineer",
-                                icon: "assets/app-icons/ai-hub.png",
-                                description:
-                                    '<span class="app-name">Udacity</span> Agentic AI Engineer certification. Deep focus on multi-agent orchestration, tool use, and production deployment of autonomous systems.',
-                            },
-                            {
-                                name: "NVIDIA Certified Professional",
-                                icon: "assets/app-icons/sheldonos.png",
-                                description:
-                                    '<span class="app-name">NVIDIA</span> Certified AI Professional. GPU-accelerated computing, CUDA fundamentals, and large-scale model deployment on NVIDIA infrastructure.',
-                            },
-                            {
-                                name: "eWPTX — INE Security",
-                                icon: "assets/app-icons/security.png",
-                                description:
-                                    '<span class="app-name">eWPTX (INE)</span> Advanced web penetration testing certification. Understanding offensive security is table stakes for building defensible agentic systems.',
-                            },
-                            {
-                                name: "IBM DevOps & App Modernization",
-                                icon: "assets/app-icons/ibm.png",
-                                description:
-                                    '<span class="app-name">IBM</span> DevOps & App Modernization. CI/CD pipelines, containerization, Kubernetes, and cloud-native architecture on IBM Cloud.',
-                            },
-                        ],
-                    },
-                    targets: {
-                        name: "Target Roles",
-                        apps: [
-                            {
-                                name: "Anthropic — Research Engineer, Agents",
-                                icon: "assets/app-icons/ai-hub.png",
-                                description:
-                                    '<span class="app-name">Anthropic (95% match)</span> Research Engineer, Agents. Building the safety layer for the next generation of autonomous AI. This is the mission I\'d most want to be part of.',
-                            },
-                            {
-                                name: "OpenAI — Offensive Security Engineer",
-                                icon: "assets/app-icons/security.png",
-                                description:
-                                    '<span class="app-name">OpenAI (94% match)</span> Offensive Security Engineer. Red-teaming frontier models before they ship. The intersection of my security background and AI expertise.',
-                            },
-                            {
-                                name: "NVIDIA — AI Infrastructure Engineer",
-                                icon: "assets/app-icons/sheldonos.png",
-                                description:
-                                    '<span class="app-name">NVIDIA (92% match)</span> AI Infrastructure Engineer. The compute layer is where the real leverage is. I want to be at the foundation.',
-                            },
-                            {
-                                name: "Palantir — Forward Deployed Engineer",
-                                icon: "assets/app-icons/automation.png",
-                                description:
-                                    '<span class="app-name">Palantir (91% match)</span> Forward Deployed Engineer. Deploying AI infrastructure directly with enterprise and government clients. My IBM experience maps perfectly here.',
-                            },
-                            {
-                                name: "Google DeepMind — Agentic Safety",
-                                icon: "assets/app-icons/ibm.png",
-                                description:
-                                    '<span class="app-name">Google DeepMind (90% match)</span> Research Engineer, Agentic Safety. Formal verification and safety guarantees for autonomous systems — exactly what SheldonOS was built to explore.',
-                            },
-                        ],
-                    },
+                spotify: {
+                    name: "Spotify",
+                    icon: "assets/app-icons/spotify-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">Spotify</p>
+                                    <p class="app-panel-subtitle">What's on rotation</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="spotify-embed-wrap">
+                                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                </div>
+                                <p class="panel-section-label">Tracks I keep coming back to</p>
+                                <div class="spotify-tracks">
+                                    ${[
+                                        ["HUMBLE.", "Kendrick Lamar"],
+                                        ["Alright", "Kendrick Lamar"],
+                                        ["Money Trees", "Kendrick Lamar"],
+                                        ["God's Plan", "Drake"],
+                                        ["Sicko Mode", "Travis Scott"],
+                                        ["The London", "Young Thug"],
+                                        ["Mask Off", "Future"],
+                                    ].map(([name, artist], i) => `
+                                        <a class="spotify-track" href="https://open.spotify.com/search/${encodeURIComponent(name + ' ' + artist)}" target="_blank">
+                                            <span class="spotify-track-num">${i+1}</span>
+                                            <div class="spotify-track-info">
+                                                <div class="spotify-track-name">${name}</div>
+                                                <div class="spotify-track-artist">${artist}</div>
+                                            </div>
+                                            <span class="spotify-play-icon">▶</span>
+                                        </a>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn btn-spotify" href="https://open.spotify.com" target="_blank">Open Spotify</a>
+                            </div>
+                        </div>
+                    `
+                },
+                github: {
+                    name: "GitHub",
+                    icon: "assets/app-icons/github-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">GitHub</p>
+                                    <p class="app-panel-subtitle">@Sheldonos</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="github-stats">
+                                    <div class="github-stat-card"><div class="github-stat-num">40+</div><div class="github-stat-label">Repos</div></div>
+                                    <div class="github-stat-card"><div class="github-stat-num">86+</div><div class="github-stat-label">Automations</div></div>
+                                    <div class="github-stat-card"><div class="github-stat-num">4</div><div class="github-stat-label">Products</div></div>
+                                    <div class="github-stat-card"><div class="github-stat-num">∞</div><div class="github-stat-label">Commits</div></div>
+                                </div>
+                                <p class="panel-section-label">Pinned Repos</p>
+                                <div class="github-repos">
+                                    <a class="github-repo" href="https://github.com/Sheldonos/SheldonOS" target="_blank">
+                                        <div class="github-repo-name">SheldonOS</div>
+                                        <div class="github-repo-desc">6-chamber defense-in-depth architecture for autonomous AI agents with formal verification.</div>
+                                        <div class="github-repo-meta">
+                                            <span class="github-repo-lang"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                                            <span class="github-repo-lang"><span class="lang-dot" style="background:#DEA584"></span>Rust</span>
+                                        </div>
+                                    </a>
+                                    <a class="github-repo" href="https://github.com/Sheldonos" target="_blank">
+                                        <div class="github-repo-name">mev-arbitrage-bot</div>
+                                        <div class="github-repo-desc">High-frequency MEV arbitrage bot executing atomic swaps across DEXs.</div>
+                                        <div class="github-repo-meta">
+                                            <span class="github-repo-lang"><span class="lang-dot" style="background:#DEA584"></span>Rust</span>
+                                        </div>
+                                    </a>
+                                    <a class="github-repo" href="https://github.com/Sheldonos" target="_blank">
+                                        <div class="github-repo-name">ai3d-portfolio</div>
+                                        <div class="github-repo-desc">This portfolio — built as an interactive iPhone home screen experience.</div>
+                                        <div class="github-repo-meta">
+                                            <span class="github-repo-lang"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                                            <span class="github-repo-lang"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <a class="open-app-btn btn-github" href="https://github.com/Sheldonos" target="_blank">View GitHub Profile →</a>
+                            </div>
+                        </div>
+                    `
+                },
+                linkedin: {
+                    name: "LinkedIn",
+                    icon: "assets/app-icons/linkedin-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">LinkedIn</p>
+                                    <p class="app-panel-subtitle">Professional network</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="linkedin-profile">
+                                    <div class="linkedin-avatar">S</div>
+                                    <div>
+                                        <div class="linkedin-name">Sheldon Stoney</div>
+                                        <div class="linkedin-title">Brand Technical Specialist @ IBM<br/>AI & Automation | Southeast</div>
+                                    </div>
+                                </div>
+                                <div class="linkedin-stats">
+                                    <div class="linkedin-stat"><div class="linkedin-stat-num">500+</div><div class="linkedin-stat-label">Connections</div></div>
+                                    <div class="linkedin-stat"><div class="linkedin-stat-num">4 yrs</div><div class="linkedin-stat-label">Experience</div></div>
+                                    <div class="linkedin-stat"><div class="linkedin-stat-num">IBM</div><div class="linkedin-stat-label">Current</div></div>
+                                </div>
+                                <p class="panel-section-label">Recent Activity</p>
+                                <div class="linkedin-posts">
+                                    <div class="linkedin-post">
+                                        "Just shipped the Sales Goldmine platform — an AI-powered enablement tool for IBM's Southeast enterprise clients. 86 automations and counting."
+                                        <div class="linkedin-post-date">2 weeks ago</div>
+                                    </div>
+                                    <div class="linkedin-post">
+                                        "The future of enterprise AI isn't chatbots. It's autonomous agents with formal safety guarantees. That's what SheldonOS is building toward."
+                                        <div class="linkedin-post-date">1 month ago</div>
+                                    </div>
+                                    <div class="linkedin-post">
+                                        "Partnered with Macy's, Yum! Brands, AMB Group, and Vanderbilt this quarter on GenAI strategy. Every enterprise is at a different stage — the key is meeting them where they are."
+                                        <div class="linkedin-post-date">2 months ago</div>
+                                    </div>
+                                </div>
+                                <a class="linkedin-cta" href="https://linkedin.com/in/sheldonibm/" target="_blank">Connect on LinkedIn</a>
+                            </div>
+                        </div>
+                    `
+                },
+                claude: {
+                    name: "Claude",
+                    icon: "assets/app-icons/claude-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">Claude</p>
+                                    <p class="app-panel-subtitle">by Anthropic — daily driver</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div style="padding:14px;background:rgba(204,120,92,0.1);border-radius:12px;border-left:3px solid #CC785C;flex-shrink:0;">
+                                    <p style="font-size:13px;color:rgba(240,236,228,0.8);line-height:1.6;margin:0;">Claude is my primary AI assistant for deep reasoning, writing, and architecture work. I use it daily for SheldonOS design decisions, client strategy docs, and code review.</p>
+                                </div>
+                                <p class="panel-section-label">How I use it</p>
+                                <div class="ai-tool-list">
+                                    ${[
+                                        ["🏗️", "Architecture Design", "SheldonOS formal verification logic", "daily"],
+                                        ["✍️", "Technical Writing", "Client proposals, strategy docs", "daily"],
+                                        ["🔍", "Code Review", "Rust & Python agent code", "daily"],
+                                        ["🧠", "Research Synthesis", "AI safety papers & frameworks", "weekly"],
+                                    ].map(([emoji, name, desc, freq]) => `
+                                        <div class="ai-tool-item">
+                                            <span style="font-size:22px;flex-shrink:0">${emoji}</span>
+                                            <div>
+                                                <div class="ai-tool-name">${name}</div>
+                                                <div class="ai-tool-desc">${desc}</div>
+                                            </div>
+                                            <span class="ai-tool-badge badge-${freq === 'daily' ? 'daily' : 'work'}">${freq}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn" style="background:rgba(204,120,92,0.2);color:#CC785C;" href="https://claude.ai" target="_blank">Open Claude →</a>
+                            </div>
+                        </div>
+                    `
+                },
+                ibm: {
+                    name: "IBM",
+                    icon: "assets/app-icons/ibm-new-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">IBM</p>
+                                    <p class="app-panel-subtitle">Brand Technical Specialist</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="ibm-header">
+                                    <img src="assets/app-icons/ibm-new-icon.png" style="width:40px;height:40px;border-radius:8px;" />
+                                    <div>
+                                        <div class="ibm-role">Brand Technical Specialist</div>
+                                        <div class="ibm-tenure">IBM · 2024 – Present · Southeast Region</div>
+                                    </div>
+                                </div>
+                                <div class="ibm-metrics">
+                                    <div class="ibm-metric"><div class="ibm-metric-num">40+</div><div class="ibm-metric-label">GenAI Apps</div></div>
+                                    <div class="ibm-metric"><div class="ibm-metric-num">86+</div><div class="ibm-metric-label">Automations</div></div>
+                                    <div class="ibm-metric"><div class="ibm-metric-num">4</div><div class="ibm-metric-label">Products</div></div>
+                                </div>
+                                <p class="panel-section-label">Enterprise Clients</p>
+                                <div class="ibm-clients">
+                                    ${[
+                                        ["Macy's", "GenAI retail strategy"],
+                                        ["Yum! Brands", "AI automation"],
+                                        ["AMB Group", "Enterprise AI"],
+                                        ["Vanderbilt University", "AI enablement"],
+                                    ].map(([name, desc]) => `
+                                        <div class="ibm-client">
+                                            <div class="ibm-client-dot"></div>
+                                            <div class="ibm-client-name">${name}</div>
+                                            <div class="ibm-client-desc">${desc}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <div style="padding:12px;background:rgba(0,29,108,0.2);border-radius:10px;font-size:12px;color:rgba(240,236,228,0.65);line-height:1.5;flex-shrink:0;">
+                                    Architected the 'Sales Goldmine' enablement platform — an AI-powered tool that transformed how IBM's Southeast team approaches enterprise AI adoption.
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                manus: {
+                    name: "Manus",
+                    icon: "assets/app-icons/manus-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">AI Stack</p>
+                                    <p class="app-panel-subtitle">Tools I build with daily</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <p class="panel-section-label">Daily AI Tools</p>
+                                <div class="ai-tool-list">
+                                    ${[
+                                        ["manus-icon.png", "Manus", "Autonomous agent tasks & research", "daily"],
+                                        ["claude-icon.png", "Claude", "Deep reasoning & architecture", "daily"],
+                                        ["cursor-icon.png", "Cursor", "AI-powered code editor", "daily"],
+                                        ["notion-icon.png", "Notion AI", "Docs, notes & knowledge base", "daily"],
+                                        ["ibm-new-icon.png", "IBM watsonx", "Enterprise AI deployments", "work"],
+                                        ["github-icon.png", "GitHub Copilot", "Code completion & PR reviews", "daily"],
+                                    ].map(([icon, name, desc, badge]) => `
+                                        <div class="ai-tool-item">
+                                            <img class="ai-tool-icon" src="assets/app-icons/${icon}" alt="${name}" />
+                                            <div>
+                                                <div class="ai-tool-name">${name}</div>
+                                                <div class="ai-tool-desc">${desc}</div>
+                                            </div>
+                                            <span class="ai-tool-badge badge-${badge === 'daily' ? 'daily' : 'work'}">${badge}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                cursor: {
+                    name: "Cursor",
+                    icon: "assets/app-icons/cursor-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">Cursor</p>
+                                    <p class="app-panel-subtitle">AI code editor — primary IDE</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="cursor-stats">
+                                    <div class="cursor-stat"><div class="cursor-stat-num">Python</div><div class="cursor-stat-label">Primary Lang</div></div>
+                                    <div class="cursor-stat"><div class="cursor-stat-num">Rust</div><div class="cursor-stat-label">Systems Lang</div></div>
+                                    <div class="cursor-stat"><div class="cursor-stat-num">React</div><div class="cursor-stat-label">Frontend</div></div>
+                                    <div class="cursor-stat"><div class="cursor-stat-num">Node</div><div class="cursor-stat-label">Backend</div></div>
+                                </div>
+                                <p class="panel-section-label">Active Projects</p>
+                                <div class="cursor-projects">
+                                    ${[
+                                        ["SheldonOS v3.0.0", "Python · Rust · Formal verification"],
+                                        ["MEV Arbitrage Bot", "Rust · Solana · High-frequency"],
+                                        ["Sales Goldmine", "Python · IBM watsonx · React"],
+                                        ["AI Portfolio", "HTML · CSS · JavaScript"],
+                                    ].map(([name, lang]) => `
+                                        <div class="cursor-project">
+                                            <div class="cursor-project-name">${name}</div>
+                                            <div class="cursor-project-lang">${lang}</div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn" style="background:rgba(255,255,255,0.08);color:#f0ece4;" href="https://cursor.sh" target="_blank">cursor.sh →</a>
+                            </div>
+                        </div>
+                    `
+                },
+                notion: {
+                    name: "Notion",
+                    icon: "assets/app-icons/notion-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">Notion</p>
+                                    <p class="app-panel-subtitle">Second brain & workspace</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <p class="panel-section-label">Workspaces</p>
+                                <div class="notion-pages">
+                                    ${[
+                                        ["🤖", "SheldonOS Architecture", "Design doc"],
+                                        ["💼", "IBM Client Playbooks", "Database"],
+                                        ["📚", "AI Research Notes", "Wiki"],
+                                        ["🎯", "Career Strategy 2025", "Doc"],
+                                        ["⚡", "Automation Tracker", "Database"],
+                                        ["🔐", "Security Research", "Wiki"],
+                                        ["💡", "Project Ideas", "Board"],
+                                    ].map(([emoji, name, type]) => `
+                                        <div class="notion-page">
+                                            <span class="notion-page-emoji">${emoji}</span>
+                                            <div>
+                                                <div class="notion-page-name">${name}</div>
+                                                <div class="notion-page-type">${type}</div>
+                                            </div>
+                                            <span class="notion-page-arrow">›</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn btn-notion" href="https://notion.so" target="_blank">Open Notion →</a>
+                            </div>
+                        </div>
+                    `
+                },
+                youtube: {
+                    name: "YouTube",
+                    icon: "assets/app-icons/youtube-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">YouTube</p>
+                                    <p class="app-panel-subtitle">What I'm watching</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <div class="yt-embed-wrap">
+                                    <iframe width="100%" height="180" src="https://www.youtube.com/embed/videoseries?list=PLrAXtmErZgOdP_8GztsuKi9nrraNbKKp4" title="YouTube playlist" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+                                </div>
+                                <p class="panel-section-label">Channels I follow</p>
+                                <div class="yt-channels">
+                                    ${[
+                                        ["A", "Andrej Karpathy", "AI/ML deep dives"],
+                                        ["L", "Lex Fridman", "Long-form AI & tech"],
+                                        ["Y", "Y Combinator", "Startup & founder content"],
+                                        ["T", "Two Minute Papers", "AI research breakdowns"],
+                                        ["3", "3Blue1Brown", "Math & ML intuition"],
+                                    ].map(([letter, name, desc]) => `
+                                        <a class="yt-channel" href="https://www.youtube.com/results?search_query=${encodeURIComponent(name)}" target="_blank">
+                                            <div class="yt-channel-icon">${letter}</div>
+                                            <div>
+                                                <div class="yt-channel-name">${name}</div>
+                                                <div class="yt-channel-desc">${desc}</div>
+                                            </div>
+                                        </a>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn btn-youtube" href="https://youtube.com" target="_blank">Open YouTube →</a>
+                            </div>
+                        </div>
+                    `
+                },
+                x: {
+                    name: "X",
+                    icon: "assets/app-icons/x-icon.png",
+                    buildPanel: () => `
+                        <div class="app-panel">
+                            <div class="app-panel-header">
+                                <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
+                                <div>
+                                    <p class="app-panel-title">X (Twitter)</p>
+                                    <p class="app-panel-subtitle">AI & tech discourse</p>
+                                </div>
+                            </div>
+                            <div class="app-panel-body">
+                                <p class="panel-section-label">Accounts I follow closely</p>
+                                <div class="x-feed">
+                                    ${[
+                                        ["@sama", "Sam Altman — OpenAI CEO. First to know what's shipping."],
+                                        ["@karpathy", "Andrej Karpathy — Best technical AI content on the platform."],
+                                        ["@ylecun", "Yann LeCun — Contrarian takes on AGI. Always worth reading."],
+                                        ["@elonmusk", "Elon Musk — Signal-to-noise is rough but the signal is real."],
+                                        ["@naval", "Naval Ravikant — Wealth, leverage, and clear thinking."],
+                                        ["@paulg", "Paul Graham — Essays that rewire how you think about startups."],
+                                    ].map(([handle, desc]) => `
+                                        <a class="x-tweet" href="https://x.com/${handle.slice(1)}" target="_blank" style="text-decoration:none;">
+                                            <div class="x-tweet-text"><strong style="color:#f0ece4">${handle}</strong> — ${desc}</div>
+                                        </a>
+                                    `).join('')}
+                                </div>
+                                <a class="open-app-btn btn-x" href="https://x.com" target="_blank">Open X →</a>
+                            </div>
+                        </div>
+                    `
                 },
             };
 
-            // ========== STATE ==========
-            let currentFolderContext = null;
-            let folderVideoOpen = false;
+            // ===== STATE =====
             let isAnimating = false;
-            let activeFolderVideo = "a";
-            let activeVideoSheet = null;
-            let folderAnimation = null;
-            let crossfadeAnimationA = null;
-            let crossfadeAnimationB = null;
-            let folderOperationVersion = 0;
-
-            const homeContentHTML = null; // will be set after init
-
-            // ========== HELPERS ==========
-            function isMobile() { return window.innerWidth <= 450; }
-            function isTablet() { return window.innerWidth > 450 && window.innerWidth <= 920; }
-
-            // ========== PHONE CONTAINER ==========
             const phoneContainer = document.getElementById("phone-container");
             const contentArea = document.getElementById("content-area");
-
-            // ========== CONTENT SWAP ==========
             let savedHomeHTML = null;
 
+            // ===== CONTENT SWAP =====
             function swapContent(html) {
                 if (!contentArea) return;
                 Motion.animate(
@@ -585,118 +1183,29 @@
                         { opacity: [0, 1], filter: ["blur(4px)", "blur(0px)"] },
                         { duration: 0.2, easing: "ease-out" }
                     );
-                    // Re-attach back button
-                    const backBtn = contentArea.querySelector(".back-button");
-                    if (backBtn) {
-                        backBtn.addEventListener("click", closeOverlay);
-                    }
-                    // Re-attach folder item listeners
-                    attachFolderItemListeners();
+                    const backBtn = contentArea.querySelector("#back-btn");
+                    if (backBtn) backBtn.addEventListener("click", closeApp);
                 });
             }
 
-            function buildHomeHTML() {
-                return contentArea.innerHTML;
+            function openApp(appKey) {
+                const app = appData[appKey];
+                if (!app) return;
+                swapContent(app.buildPanel());
             }
 
-            // ========== FOLDER VIEW ==========
-            function openFolder(folderName) {
-                const folder = appData.folders[folderName];
-                if (!folder) return;
-
-                currentFolderContext = { folderName, selectedIndex: 0 };
-                folderOperationVersion++;
-
-                const appsHTML = folder.apps.map((app, i) => `
-                    <div class="folder-app-item${i === 0 ? ' selected' : ''}" data-index="${i}">
-                        <img class="folder-app-icon" src="${app.icon}" alt="${app.name}" />
-                        <div class="folder-app-description">${app.description}</div>
-                    </div>
-                `).join('');
-
-                const folderHTML = `
-                    <div class="folder-container">
-                        <div class="content-header">
-                            <button class="back-button" id="back-btn">
-                                <img src="assets/icons/back-arrow.svg" alt="Back" />
-                            </button>
-                            <h1>${folder.name}</h1>
-                        </div>
-                        <div style="position:relative;flex:1;display:flex;flex-direction:column;min-height:0;">
-                            <div class="folder-top-mask"></div>
-                            <div class="folder-scroll-area" id="folder-scroll">
-                                ${appsHTML}
-                            </div>
-                            <div class="folder-bottom-mask"></div>
-                        </div>
-                    </div>
-                `;
-
-                swapContent(folderHTML);
-                folderVideoOpen = true;
-            }
-
-            function attachFolderItemListeners() {
-                const items = document.querySelectorAll(".folder-app-item");
-                const springConfig = { type: "spring", stiffness: 300, damping: 20 };
-
-                items.forEach((item, i) => {
-                    item.addEventListener("click", () => {
-                        // Deselect all, select clicked
-                        items.forEach(el => el.classList.remove("selected"));
-                        item.classList.add("selected");
-                        if (currentFolderContext) currentFolderContext.selectedIndex = i;
-                    });
-
-                    item.addEventListener("mouseenter", () => {
-                        item.classList.add("hover");
-                    });
-                    item.addEventListener("mouseleave", () => {
-                        item.classList.remove("hover");
-                    });
-
-                    const scaleDown = () => Motion.animate(item, { scale: 0.98 }, springConfig);
-                    const scaleUp = () => Motion.animate(item, { scale: 1 }, springConfig);
-
-                    item.addEventListener("mousedown", scaleDown);
-                    item.addEventListener("touchstart", scaleDown, { passive: true });
-                    item.addEventListener("mouseup", scaleUp);
-                    item.addEventListener("mouseleave", scaleUp);
-                    item.addEventListener("touchend", scaleUp);
-                    item.addEventListener("touchcancel", scaleUp);
-                });
-            }
-
-            function closeOverlay() {
-                folderVideoOpen = false;
-                currentFolderContext = null;
+            function closeApp() {
                 swapContent(savedHomeHTML);
             }
 
-            // ========== PHONE SHAKE ==========
-            function shakePhone() {
-                if (!phoneContainer) return;
-                Motion.animate(
-                    phoneContainer,
-                    { scale: [1, 1.01, 1.01, 1.01, 1.01, 1], rotate: [0, -0.5, 0.5, -0.5, 0.5, 0] },
-                    { duration: 0.5, easing: "ease-in-out" }
-                );
-            }
-
-            // ========== TAP TARGET SETUP ==========
+            // ===== TAP TARGET SETUP =====
             function setupTapTargets() {
                 const springConfig = { type: "spring", stiffness: 300, damping: 20 };
-
-                document.querySelectorAll(".tap-target[data-folder]").forEach(target => {
-                    const folderName = target.dataset.folder;
-
-                    target.addEventListener("click", () => {
-                        openFolder(folderName);
-                    });
-
+                document.querySelectorAll(".tap-target[data-app]").forEach(target => {
+                    const appKey = target.dataset.app;
+                    target.addEventListener("click", () => openApp(appKey));
                     const scaleDown = () => Motion.animate(phoneContainer, { scale: 0.99 }, springConfig);
                     const scaleUp = () => Motion.animate(phoneContainer, { scale: 1 }, springConfig);
-
                     target.addEventListener("mousedown", scaleDown);
                     target.addEventListener("touchstart", scaleDown, { passive: true });
                     target.addEventListener("mouseup", scaleUp);
@@ -706,38 +1215,13 @@
                 });
             }
 
-            // ========== INTRO ANIMATION SYSTEM ==========
+            // ===== INTRO ANIMATION =====
             const introSequence = [
-                {
-                    target: "intro-name",
-                    text: "Sheldon Stoney",
-                    pauseAfter: 400,
-                    skipLineBreaks: true,
-                },
-                {
-                    target: "intro-p1",
-                    text: 'I\'m a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a>',
-                    pauseAfter: 500,
-                    append: false,
-                },
-                {
-                    target: "intro-p1",
-                    text: " — spearheading AI and automation strategies for enterprise clients across the Southeast.",
-                    pauseAfter: 400,
-                    append: true,
-                },
-                {
-                    target: "intro-p2",
-                    text: "I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.",
-                    pauseAfter: 400,
-                    append: false,
-                },
-                {
-                    target: "intro-p3",
-                    text: 'Feel free to <a href="#" class="tap-around-link">tap around</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a> and thanks for stopping by.',
-                    pauseAfter: 0,
-                    append: false,
-                },
+                { target: "intro-name", text: "Sheldon Stoney", pauseAfter: 400, skipLineBreaks: true },
+                { target: "intro-p1", text: 'I\'m a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a>', pauseAfter: 500, append: false },
+                { target: "intro-p1", text: " — spearheading AI and automation strategies for enterprise clients across the Southeast.", pauseAfter: 400, append: true },
+                { target: "intro-p2", text: "I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.", pauseAfter: 400, append: false },
+                { target: "intro-p3", text: 'Feel free to <a href="#" class="tap-around-link">tap around</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a> and thanks for stopping by.', pauseAfter: 0, append: false },
             ];
 
             let introComplete = false;
@@ -749,19 +1233,10 @@
                     let currentHTML = startHTML;
                     let inTag = false;
 
-                    let lastHeight = 0;
-                    if (!skipLineBreaks) {
-                        element.innerHTML = currentHTML || "\u200B";
-                        lastHeight = element.scrollHeight;
-                        if (!currentHTML) element.innerHTML = "";
-                    }
-
                     function type() {
                         if (htmlIndex < html.length) {
                             const char = html[htmlIndex];
-
                             if (char === "<") inTag = true;
-
                             if (inTag) {
                                 let tagEnd = html.indexOf(">", htmlIndex);
                                 currentHTML += html.substring(htmlIndex, tagEnd + 1);
@@ -770,24 +1245,6 @@
                                 element.innerHTML = currentHTML;
                                 setTimeout(type, 0);
                             } else {
-                                if (!skipLineBreaks && char !== " " && (currentHTML.endsWith(" ") || currentHTML === startHTML || currentHTML === "")) {
-                                    let wordEnd = htmlIndex;
-                                    while (wordEnd < html.length && html[wordEnd] !== " " && html[wordEnd] !== "<") {
-                                        wordEnd++;
-                                    }
-                                    const word = html.substring(htmlIndex, wordEnd);
-                                    const testHTML = currentHTML + word;
-                                    element.innerHTML = testHTML;
-                                    const newHeight = element.scrollHeight;
-                                    if (newHeight > lastHeight && currentHTML !== startHTML && currentHTML !== "") {
-                                        currentHTML += "<br>";
-                                        lastHeight = newHeight;
-                                    } else {
-                                        lastHeight = newHeight;
-                                    }
-                                    element.innerHTML = currentHTML;
-                                }
-
                                 currentHTML += char;
                                 htmlIndex++;
                                 element.innerHTML = currentHTML;
@@ -797,287 +1254,57 @@
                             resolve();
                         }
                     }
-
                     type();
                 });
             }
 
+            function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
             async function runIntroSequence() {
-                const socialEl = document.querySelector(".intro-social-icons");
-
-                for (const segment of introSequence) {
-                    const el = document.getElementById(segment.target);
+                await sleep(800);
+                for (const step of introSequence) {
+                    const el = document.getElementById(step.target);
                     if (!el) continue;
-
-                    await typeWriter(el, segment.text, 20, segment.append || false, segment.skipLineBreaks || false);
-
-                    if (segment.pauseAfter > 0) {
-                        await new Promise(r => setTimeout(r, segment.pauseAfter));
-                    }
+                    await typeWriter(el, step.text, 18, step.append || false, step.skipLineBreaks || false);
+                    if (step.pauseAfter) await sleep(step.pauseAfter);
                 }
-
-                // Reveal social icons
-                if (socialEl) socialEl.classList.add("revealed");
                 introComplete = true;
+                savedHomeHTML = contentArea.innerHTML;
 
                 // Attach tap-around link
-                const tapLink = document.querySelector(".tap-around-link");
-                if (tapLink) {
-                    tapLink.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        shakePhone();
-                    });
+                const tapLink = contentArea.querySelector(".tap-around-link");
+                if (tapLink) tapLink.addEventListener("click", (e) => { e.preventDefault(); });
+
+                // Show social icons
+                const socialIcons = contentArea.querySelector(".intro-social-icons");
+                if (socialIcons) {
+                    Motion.animate(socialIcons, { opacity: [0, 1] }, { duration: 0.5 });
                 }
-
-                // Store home HTML for back navigation
-                savedHomeHTML = contentArea.innerHTML;
-
-                // Trigger phone slide-up animation
-                triggerPhoneSlideUp();
-
-                // Mark as seen
-                localStorage.setItem("hasSeenIntro", "1");
             }
 
-            function triggerPhoneSlideUp() {
-                const desktopView = document.querySelector(".desktop-view");
-                if (!desktopView || !phoneContainer || !contentArea) return;
-
-                const contentStartRect = contentArea.getBoundingClientRect();
-
-                desktopView.classList.remove("intro-mode");
-
-                const phoneEndRect = phoneContainer.getBoundingClientRect();
-                const contentEndRect = contentArea.getBoundingClientRect();
-
-                contentArea.style.position = "absolute";
-                contentArea.style.left = contentStartRect.left + "px";
-                contentArea.style.top = contentEndRect.top + "px";
-                contentArea.style.willChange = "transform";
-
-                phoneContainer.style.position = "absolute";
-                phoneContainer.style.left = phoneEndRect.left + "px";
-                phoneContainer.style.top = phoneEndRect.top + "px";
-                phoneContainer.style.willChange = "transform";
-
-                const deltaX = contentEndRect.left - contentStartRect.left;
-
-                const springConfig = { type: "spring", stiffness: 40, damping: 10, mass: 1 };
-
-                Motion.animate(contentArea, { x: [0, deltaX] }, springConfig).finished.then(() => {
-                    contentArea.style.position = "";
-                    contentArea.style.left = "";
-                    contentArea.style.top = "";
-                    contentArea.style.transform = "";
-                    contentArea.style.willChange = "";
-                    phoneContainer.style.position = "";
-                    phoneContainer.style.left = "";
-                    phoneContainer.style.top = "";
-                    phoneContainer.style.transform = "";
-                    phoneContainer.style.willChange = "";
-
-                    // Save home HTML after animation settles
-                    savedHomeHTML = contentArea.innerHTML;
-                });
-
-                const startY = window.innerHeight - phoneEndRect.top;
-                Motion.animate(phoneContainer, { y: [startY, 0], rotate: [-3, 0] }, springConfig);
+            // ===== PHONE SLIDE-UP INTRO =====
+            async function runPhoneIntro() {
+                if (!phoneContainer) return;
+                phoneContainer.style.opacity = "0";
+                phoneContainer.style.transform = "translateY(60px)";
+                await sleep(300);
+                Motion.animate(
+                    phoneContainer,
+                    { opacity: [0, 1], y: [60, 0] },
+                    { duration: 0.8, easing: [0.34, 1.56, 0.64, 1] }
+                );
             }
 
-            function skipIntro() {
-                const socialEl = document.querySelector(".intro-social-icons");
+            // ===== INIT =====
+            window.addEventListener("DOMContentLoaded", () => {
+                const mockupImg = document.getElementById("phone-mockup-image");
+                if (mockupImg.complete) sampleColorsFromScreenshot();
+                else mockupImg.addEventListener("load", sampleColorsFromScreenshot);
 
-                for (const segment of introSequence) {
-                    const el = document.getElementById(segment.target);
-                    if (!el) continue;
-                    if (segment.append) {
-                        el.innerHTML += segment.text;
-                    } else {
-                        el.innerHTML = segment.text;
-                    }
-                }
-
-                if (socialEl) socialEl.classList.add("revealed");
-                introComplete = true;
-
-                const tapLink = document.querySelector(".tap-around-link");
-                if (tapLink) {
-                    tapLink.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        shakePhone();
-                    });
-                }
-
-                savedHomeHTML = contentArea.innerHTML;
-            }
-
-            window.resetIntro = () => {
-                localStorage.removeItem("hasSeenIntro");
-                location.reload();
-            };
-
-            function init() {
                 setupTapTargets();
-
-                // Sample colors from screenshot
-                const img = document.querySelector(".phone-mockup-image");
-                if (img && img.complete) {
-                    sampleColorsFromScreenshot();
-                } else if (img) {
-                    img.addEventListener("load", sampleColorsFromScreenshot);
-                }
-            }
-
-            function startApp() {
-                if (isMobile() || isTablet()) {
-                    init();
-                    return;
-                }
-
-                const urlParams = new URLSearchParams(window.location.search);
-                const forceIntro = urlParams.get("intro") === "1";
-                const hasSeenIntro = localStorage.getItem("hasSeenIntro");
-
-                if (hasSeenIntro && !forceIntro) {
-                    const desktopView = document.querySelector(".desktop-view");
-                    desktopView.style.opacity = "0";
-
-                    init();
-                    skipIntro();
-
-                    setTimeout(() => {
-                        Motion.animate(
-                            desktopView,
-                            { opacity: [0, 1] },
-                            { duration: 0.3, easing: "ease-out" }
-                        ).finished.then(() => {
-                            desktopView.style.opacity = "";
-                        });
-                    }, 200);
-                } else {
-                    document.querySelector(".desktop-view").classList.add("intro-mode");
-                    init();
-
-                    document.fonts.ready.then(() => {
-                        setTimeout(runIntroSequence, 100);
-                    });
-                }
-            }
-
-            startApp();
-        </script>
-
-        <!-- Corner smoothing module -->
-        <script type="module">
-            import { squircleObserver } from "https://esm.sh/corner-smoothing";
-            import { getSvgPath } from "https://esm.sh/figma-squircle";
-
-            // Phone frame: 49px radius
-            const phoneFrame = document.querySelector(".phone-frame");
-            if (phoneFrame) squircleObserver(phoneFrame, { cornerRadius: 49 });
-
-            // Inner shadow: squircle ring mask
-            const innerShadow = document.querySelector(".phone-inner-shadow");
-            if (innerShadow) {
-                const applyInnerShadowMask = () => {
-                    const width = innerShadow.clientWidth;
-                    const height = innerShadow.clientHeight;
-                    const outerRadius = 49;
-                    const borderWidth = 3;
-                    const innerRadius = outerRadius - borderWidth;
-                    const innerWidth = width - borderWidth * 2;
-                    const innerHeight = height - borderWidth * 2;
-
-                    const outerPath = getSvgPath({ width, height, cornerRadius: outerRadius, cornerSmoothing: 0.6 });
-                    const innerPath = getSvgPath({ width: innerWidth, height: innerHeight, cornerRadius: innerRadius, cornerSmoothing: 0.6 });
-
-                    const outerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><path d="${outerPath}" fill="white"/></svg>`;
-                    const innerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${innerWidth}" height="${innerHeight}"><path d="${innerPath}" fill="white"/></svg>`;
-
-                    const outerUrl = `url("data:image/svg+xml,${encodeURIComponent(outerSvg)}")`;
-                    const innerUrl = `url("data:image/svg+xml,${encodeURIComponent(innerSvg)}")`;
-
-                    innerShadow.style.webkitMaskImage = `${outerUrl}, ${innerUrl}`;
-                    innerShadow.style.maskImage = `${outerUrl}, ${innerUrl}`;
-                    innerShadow.style.webkitMaskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
-                    innerShadow.style.maskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
-                    innerShadow.style.webkitMaskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
-                    innerShadow.style.maskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
-                    innerShadow.style.webkitMaskRepeat = "no-repeat";
-                    innerShadow.style.maskRepeat = "no-repeat";
-                    innerShadow.style.webkitMaskComposite = "xor";
-                    innerShadow.style.maskComposite = "exclude";
-                };
-
-                applyInnerShadowMask();
-                new ResizeObserver(applyInnerShadowMask).observe(innerShadow);
-            }
-
-            // Bezel overlay: squircle ring mask
-            const bezelOverlay = document.querySelector(".phone-bezel-overlay");
-            if (bezelOverlay) {
-                const applySquircleMask = () => {
-                    const width = bezelOverlay.clientWidth;
-                    const height = bezelOverlay.clientHeight;
-                    const outerRadius = 49;
-                    const borderWidth = 9;
-                    const innerRadius = outerRadius - borderWidth;
-                    const innerWidth = width - borderWidth * 2;
-                    const innerHeight = height - borderWidth * 2;
-
-                    const outerPath = getSvgPath({ width, height, cornerRadius: outerRadius, cornerSmoothing: 0.6 });
-                    const innerPath = getSvgPath({ width: innerWidth, height: innerHeight, cornerRadius: innerRadius, cornerSmoothing: 0.6 });
-
-                    const outerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><path d="${outerPath}" fill="white"/></svg>`;
-                    const innerSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${innerWidth}" height="${innerHeight}"><path d="${innerPath}" fill="white"/></svg>`;
-
-                    const outerUrl = `url("data:image/svg+xml,${encodeURIComponent(outerSvg)}")`;
-                    const innerUrl = `url("data:image/svg+xml,${encodeURIComponent(innerSvg)}")`;
-
-                    bezelOverlay.style.webkitMaskImage = `${outerUrl}, ${innerUrl}`;
-                    bezelOverlay.style.maskImage = `${outerUrl}, ${innerUrl}`;
-                    bezelOverlay.style.webkitMaskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
-                    bezelOverlay.style.maskPosition = `0 0, ${borderWidth}px ${borderWidth}px`;
-                    bezelOverlay.style.webkitMaskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
-                    bezelOverlay.style.maskSize = `100% 100%, ${innerWidth}px ${innerHeight}px`;
-                    bezelOverlay.style.webkitMaskRepeat = "no-repeat";
-                    bezelOverlay.style.maskRepeat = "no-repeat";
-                    bezelOverlay.style.webkitMaskComposite = "xor";
-                    bezelOverlay.style.maskComposite = "exclude";
-                };
-
-                applySquircleMask();
-                new ResizeObserver(applySquircleMask).observe(bezelOverlay);
-            }
-
-            // Phone screen & sheet-bg: 40px radius
-            const phoneScreen = document.querySelector(".phone-screen");
-            const sheetBg = document.querySelector(".sheet-bg");
-            if (phoneScreen) squircleObserver(phoneScreen, { cornerRadius: 40 });
-            if (sheetBg) squircleObserver(sheetBg, { cornerRadius: 40 });
-
-            // Dynamic island: pill shape
-            const dynamicIsland = document.querySelector(".dynamic-island");
-            if (dynamicIsland) squircleObserver(dynamicIsland, { cornerRadius: 13 });
-
-            // App icons in folders: 12px radius
-            window.applyFolderIconSquircles = () => {
-                document.querySelectorAll(".folder-app-icon").forEach((el) => {
-                    if (!el.dataset.squircled) {
-                        squircleObserver(el, { cornerRadius: 12 });
-                        el.dataset.squircled = "true";
-                    }
-                });
-            };
-            window.applyFolderIconSquircles();
-
-            // Re-apply squircles after content swaps (observe DOM changes)
-            const observer = new MutationObserver(() => {
-                if (window.applyFolderIconSquircles) {
-                    window.applyFolderIconSquircles();
-                }
+                runPhoneIntro();
+                runIntroSequence();
             });
-            observer.observe(document.body, { childList: true, subtree: true });
         </script>
     </body>
 </html>
