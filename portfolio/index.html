@@ -761,12 +761,11 @@
                 transition: opacity 0.15s;
             }
             .open-app-btn:hover { opacity: 0.8; }
-            .btn-spotify { background: #1DB954; color: #000; }
+            .btn-applemusic { background: linear-gradient(135deg, #FC3C44, #FF2D55); color: #fff; }
             .btn-github { background: rgba(255,255,255,0.1); color: #f0ece4; }
             .btn-linkedin { background: #0A66C2; color: white; }
             .btn-youtube { background: #FF0000; color: white; }
-            .btn-x { background: #000; color: white; border: 1px solid rgba(255,255,255,0.15); }
-            .btn-notion { background: rgba(255,255,255,0.1); color: #f0ece4; }
+            .btn-higgsfield { background: rgba(120,80,255,0.2); color: #9B70FF; }
         </style>
     </head>
     <body>
@@ -795,8 +794,8 @@
                             <div class="hs-grid">
                                 <!-- Row 1 -->
                                 <div class="hs-app-cell">
-                                    <div class="hs-icon"><img src="assets/app-icons/spotify-icon.png" alt="Spotify"></div>
-                                    <span class="hs-label">Spotify</span>
+                                    <div class="hs-icon"><img src="assets/app-icons/apple-music-icon.png" alt="Apple Music"></div>
+                                    <span class="hs-label">Music</span>
                                 </div>
                                 <div class="hs-app-cell">
                                     <div class="hs-icon"><img src="assets/app-icons/github-icon.png" alt="GitHub"></div>
@@ -824,8 +823,8 @@
                                     <span class="hs-label">Cursor</span>
                                 </div>
                                 <div class="hs-app-cell">
-                                    <div class="hs-icon"><img src="assets/app-icons/notion-icon.png" alt="Notion"></div>
-                                    <span class="hs-label">Notion</span>
+                                    <div class="hs-icon"><img src="assets/app-icons/gemini-icon.png" alt="Gemini"></div>
+                                    <span class="hs-label">Gemini</span>
                                 </div>
                                 <!-- Row 3 -->
                                 <div class="hs-app-cell">
@@ -833,8 +832,8 @@
                                     <span class="hs-label">YouTube</span>
                                 </div>
                                 <div class="hs-app-cell">
-                                    <div class="hs-icon"><img src="assets/app-icons/x-icon.png" alt="X"></div>
-                                    <span class="hs-label">X</span>
+                                    <div class="hs-icon"><img src="assets/app-icons/higgsfield-icon.png" alt="Higgsfield"></div>
+                                    <span class="hs-label">Higgsfield</span>
                                 </div>
                                 <!-- Empty cells to fill row 3 -->
                                 <div class="hs-app-cell hs-empty"></div>
@@ -843,7 +842,7 @@
                             <!-- Dock -->
                             <div class="hs-dock">
                                 <div class="hs-dock-bg"></div>
-                                <div class="hs-dock-icon"><img src="assets/app-icons/spotify-icon.png" alt="Spotify"></div>
+                                <div class="hs-dock-icon"><img src="assets/app-icons/apple-music-icon.png" alt="Apple Music"></div>
                                 <div class="hs-dock-icon"><img src="assets/app-icons/github-icon.png" alt="GitHub"></div>
                                 <div class="hs-dock-icon"><img src="assets/app-icons/linkedin-icon.png" alt="LinkedIn"></div>
                             </div>
@@ -855,21 +854,21 @@
                         <video class="video-sheet folder-video" id="folder-video-b" muted playsinline loop></video>
 
                         <!-- Tap targets mapped to real apps -->
-                        <!-- Row 1: Spotify, GitHub, LinkedIn, Claude -->
-                        <div class="tap-target tap-r1-c1" data-app="spotify"></div>
+                        <!-- Row 1: Apple Music, GitHub, LinkedIn, Claude -->
+                        <div class="tap-target tap-r1-c1" data-app="applemusic"></div>
                         <div class="tap-target tap-r1-c2" data-app="github"></div>
                         <div class="tap-target tap-r1-c3" data-app="linkedin"></div>
                         <div class="tap-target tap-r1-c4" data-app="claude"></div>
-                        <!-- Row 2: IBM, Manus, Cursor, Notion -->
+                        <!-- Row 2: IBM, Manus, Cursor, Gemini -->
                         <div class="tap-target tap-r2-c1" data-app="ibm"></div>
                         <div class="tap-target tap-r2-c2" data-app="manus"></div>
                         <div class="tap-target tap-r2-c3" data-app="cursor"></div>
-                        <div class="tap-target tap-r2-c4" data-app="notion"></div>
-                        <!-- Row 3: YouTube, X -->
+                        <div class="tap-target tap-r2-c4" data-app="gemini"></div>
+                        <!-- Row 3: YouTube, Higgsfield -->
                         <div class="tap-target tap-r3-c1" data-app="youtube"></div>
-                        <div class="tap-target tap-r3-c2" data-app="x"></div>
-                        <!-- Dock: Spotify, GitHub, LinkedIn -->
-                        <div class="tap-target tap-dock-1" data-app="spotify"></div>
+                        <div class="tap-target tap-r3-c2" data-app="higgsfield"></div>
+                        <!-- Dock: Apple Music, GitHub, LinkedIn -->
+                        <div class="tap-target tap-dock-1" data-app="applemusic"></div>
                         <div class="tap-target tap-dock-2" data-app="github"></div>
                         <div class="tap-target tap-dock-3" data-app="linkedin"></div>
                     </div>
@@ -888,7 +887,7 @@
                                 <p id="intro-p3" class="typewriter-target"></p>
                             </div>
                             <div class="social-icons intro-social-icons">
-                                <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="social-icon">
+                                <a href="https://www.linkedin.com/in/sheldonibm" target="_blank" class="social-icon">
                                     <img src="assets/icons/linkedin.svg" alt="LinkedIn" />
                                 </a>
                                 <a href="https://github.com/Sheldonos" target="_blank" class="social-icon">
@@ -910,12 +909,12 @@
                 <div class="content-header"><h1>Sheldon Stoney</h1></div>
                 <div class="content-body">
                     <div class="content-text">
-                        <p>I'm a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
+                        <p>I'm a <a href="https://www.linkedin.com/in/sheldonibm" target="_blank">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
                         <p>I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.</p>
-                        <p>Feel free to <a href="https://linkedin.com/in/sheldonibm/" target="_blank">connect on LinkedIn</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a>.</p>
+                        <p>Feel free to <a href="https://www.linkedin.com/in/sheldonibm" target="_blank">connect on LinkedIn</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a>.</p>
                     </div>
                     <div class="social-icons">
-                        <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+                        <a href="https://www.linkedin.com/in/sheldonibm" target="_blank" class="social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
                         <a href="https://github.com/Sheldonos" target="_blank" class="social-icon"><img src="assets/icons/github.svg" alt="GitHub" /></a>
                         <a href="mailto:smstoney@yahoo.com" class="social-icon"><img src="assets/icons/email.svg" alt="Email" /></a>
                     </div>
@@ -929,13 +928,13 @@
                 <div class="mobile-main">
                     <h1 class="mobile-title">Sheldon Stoney</h1>
                     <div class="mobile-body">
-                        <p class="mobile-paragraph">I'm a <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-highlight">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
+                        <p class="mobile-paragraph">I'm a <a href="https://www.linkedin.com/in/sheldonibm" target="_blank" class="mobile-highlight">Brand Technical Specialist at IBM</a> — spearheading AI and automation strategies for enterprise clients across the Southeast.</p>
                         <p class="mobile-paragraph">I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.</p>
-                        <p class="mobile-paragraph">Feel free to <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-highlight">connect</a> or shoot me an <a href="mailto:smstoney@yahoo.com" class="mobile-highlight">email</a>.</p>
+                        <p class="mobile-paragraph">Feel free to <a href="https://www.linkedin.com/in/sheldonibm" target="_blank" class="mobile-highlight">connect</a> or shoot me an <a href="mailto:smstoney@yahoo.com" class="mobile-highlight">email</a>.</p>
                     </div>
                 </div>
                 <div class="mobile-social-icons">
-                    <a href="https://linkedin.com/in/sheldonibm/" target="_blank" class="mobile-social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
+                    <a href="https://www.linkedin.com/in/sheldonibm" target="_blank" class="mobile-social-icon"><img src="assets/icons/linkedin.svg" alt="LinkedIn" /></a>
                     <a href="https://github.com/Sheldonos" target="_blank" class="mobile-social-icon"><img src="assets/icons/github.svg" alt="GitHub" /></a>
                     <a href="mailto:smstoney@yahoo.com" class="mobile-social-icon"><img src="assets/icons/email.svg" alt="Email" /></a>
                 </div>
@@ -971,44 +970,23 @@
 
             // ===== APP DATA =====
             const appData = {
-                spotify: {
-                    name: "Spotify",
-                    icon: "assets/app-icons/spotify-icon.png",
+                applemusic: {
+                    name: "Apple Music",
+                    icon: "assets/app-icons/apple-music-icon.png",
                     buildPanel: () => `
                         <div class="app-panel">
                             <div class="app-panel-header">
                                 <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
                                 <div>
-                                    <p class="app-panel-title">Spotify</p>
-                                    <p class="app-panel-subtitle">What's on rotation</p>
+                                    <p class="app-panel-title">Apple Music</p>
+                                    <p class="app-panel-subtitle">Ausome — what's on rotation</p>
                                 </div>
                             </div>
                             <div class="app-panel-body">
                                 <div class="spotify-embed-wrap">
-                                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4sWSpwq3LiO?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                                    <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameborder="0" height="175" style="width:100%;overflow:hidden;border-radius:12px;" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src="https://embed.music.apple.com/us/playlist/ausome/pl.u-6mo4k9mcWldlBp"></iframe>
                                 </div>
-                                <p class="panel-section-label">Tracks I keep coming back to</p>
-                                <div class="spotify-tracks">
-                                    ${[
-                                        ["HUMBLE.", "Kendrick Lamar"],
-                                        ["Alright", "Kendrick Lamar"],
-                                        ["Money Trees", "Kendrick Lamar"],
-                                        ["God's Plan", "Drake"],
-                                        ["Sicko Mode", "Travis Scott"],
-                                        ["The London", "Young Thug"],
-                                        ["Mask Off", "Future"],
-                                    ].map(([name, artist], i) => `
-                                        <a class="spotify-track" href="https://open.spotify.com/search/${encodeURIComponent(name + ' ' + artist)}" target="_blank">
-                                            <span class="spotify-track-num">${i+1}</span>
-                                            <div class="spotify-track-info">
-                                                <div class="spotify-track-name">${name}</div>
-                                                <div class="spotify-track-artist">${artist}</div>
-                                            </div>
-                                            <span class="spotify-play-icon">▶</span>
-                                        </a>
-                                    `).join('')}
-                                </div>
-                                <a class="open-app-btn btn-spotify" href="https://open.spotify.com" target="_blank">Open Spotify</a>
+                                <a class="open-app-btn btn-applemusic" href="https://music.apple.com/us/playlist/ausome/pl.u-6mo4k9mcWldlBp" target="_blank">Open in Apple Music →</a>
                             </div>
                         </div>
                     `
@@ -1103,7 +1081,7 @@
                                         <div class="linkedin-post-date">2 months ago</div>
                                     </div>
                                 </div>
-                                <a class="linkedin-cta" href="https://linkedin.com/in/sheldonibm/" target="_blank">Connect on LinkedIn</a>
+                                <a class="linkedin-cta" href="https://www.linkedin.com/in/sheldonibm" target="_blank">Connect on LinkedIn</a>
                             </div>
                         </div>
                     `
@@ -1269,41 +1247,41 @@
                         </div>
                     `
                 },
-                notion: {
-                    name: "Notion",
-                    icon: "assets/app-icons/notion-icon.png",
+                gemini: {
+                    name: "Gemini",
+                    icon: "assets/app-icons/gemini-icon.png",
                     buildPanel: () => `
                         <div class="app-panel">
                             <div class="app-panel-header">
                                 <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
                                 <div>
-                                    <p class="app-panel-title">Notion</p>
-                                    <p class="app-panel-subtitle">Second brain & workspace</p>
+                                    <p class="app-panel-title">Gemini</p>
+                                    <p class="app-panel-subtitle">by Google — AI image & research</p>
                                 </div>
                             </div>
                             <div class="app-panel-body">
-                                <p class="panel-section-label">Workspaces</p>
-                                <div class="notion-pages">
+                                <div style="padding:14px;background:rgba(66,133,244,0.1);border-radius:12px;border-left:3px solid #4285F4;flex-shrink:0;">
+                                    <p style="font-size:13px;color:rgba(240,236,228,0.8);line-height:1.6;margin:0;">I use Gemini primarily for AI image generation — the quality and prompt understanding is unmatched for creative and professional visuals. Also use it for deep research synthesis and multimodal tasks.</p>
+                                </div>
+                                <p class="panel-section-label">How I use it</p>
+                                <div class="ai-tool-list">
                                     ${[
-                                        ["🤖", "SheldonOS Architecture", "Design doc"],
-                                        ["💼", "IBM Client Playbooks", "Database"],
-                                        ["📚", "AI Research Notes", "Wiki"],
-                                        ["🎯", "Career Strategy 2025", "Doc"],
-                                        ["⚡", "Automation Tracker", "Database"],
-                                        ["🔐", "Security Research", "Wiki"],
-                                        ["💡", "Project Ideas", "Board"],
-                                    ].map(([emoji, name, type]) => `
-                                        <div class="notion-page">
-                                            <span class="notion-page-emoji">${emoji}</span>
+                                        ["🎨", "Image Generation", "Brand visuals, concept art, mockups", "daily"],
+                                        ["🔍", "Deep Research", "Market analysis, technical deep dives", "daily"],
+                                        ["📊", "Multimodal Analysis", "Document & image understanding", "work"],
+                                        ["💡", "Idea Expansion", "Creative brainstorming & concept dev", "work"],
+                                    ].map(([emoji, name, desc, freq]) => `
+                                        <div class="ai-tool-item">
+                                            <span style="font-size:22px;flex-shrink:0">${emoji}</span>
                                             <div>
-                                                <div class="notion-page-name">${name}</div>
-                                                <div class="notion-page-type">${type}</div>
+                                                <div class="ai-tool-name">${name}</div>
+                                                <div class="ai-tool-desc">${desc}</div>
                                             </div>
-                                            <span class="notion-page-arrow">›</span>
+                                            <span class="ai-tool-badge badge-${freq === 'daily' ? 'daily' : 'work'}">${freq}</span>
                                         </div>
                                     `).join('')}
                                 </div>
-                                <a class="open-app-btn btn-notion" href="https://notion.so" target="_blank">Open Notion →</a>
+                                <a class="open-app-btn" style="background:rgba(66,133,244,0.2);color:#4285F4;" href="https://gemini.google.com" target="_blank">Open Gemini →</a>
                             </div>
                         </div>
                     `
@@ -1327,11 +1305,14 @@
                                 <p class="panel-section-label">Channels I follow</p>
                                 <div class="yt-channels">
                                     ${[
-                                        ["A", "Andrej Karpathy", "AI/ML deep dives"],
-                                        ["L", "Lex Fridman", "Long-form AI & tech"],
-                                        ["Y", "Y Combinator", "Startup & founder content"],
-                                        ["T", "Two Minute Papers", "AI research breakdowns"],
-                                        ["3", "3Blue1Brown", "Math & ML intuition"],
+                                        ["G", "Greg Isenberg", "Community-led growth & startups"],
+                                        ["V", "Veritasium", "Science & engineering deep dives"],
+                                        ["R", "Roberto P Nickson", "Cinematography & creative tech"],
+                                        ["D", "Diary of a CEO", "Founder stories & business mindset"],
+                                        ["H", "Harvard Business School", "Strategy, leadership & MBA content"],
+                                        ["M", "MIT", "Cutting-edge research & lectures"],
+                                        ["L", "The Learning Logbook", "Learning systems & productivity"],
+                                        ["A", "a16z", "Venture, AI, and tech futures"],
                                     ].map(([letter, name, desc]) => `
                                         <a class="yt-channel" href="https://www.youtube.com/results?search_query=${encodeURIComponent(name)}" target="_blank">
                                             <div class="yt-channel-icon">${letter}</div>
@@ -1347,35 +1328,41 @@
                         </div>
                     `
                 },
-                x: {
-                    name: "X",
-                    icon: "assets/app-icons/x-icon.png",
+                higgsfield: {
+                    name: "Higgsfield",
+                    icon: "assets/app-icons/higgsfield-icon.png",
                     buildPanel: () => `
                         <div class="app-panel">
                             <div class="app-panel-header">
                                 <button class="back-button" id="back-btn"><img src="assets/icons/back-arrow.svg" alt="Back" /></button>
                                 <div>
-                                    <p class="app-panel-title">X (Twitter)</p>
-                                    <p class="app-panel-subtitle">AI & tech discourse</p>
+                                    <p class="app-panel-title">Higgsfield</p>
+                                    <p class="app-panel-subtitle">AI video generation</p>
                                 </div>
                             </div>
                             <div class="app-panel-body">
-                                <p class="panel-section-label">Accounts I follow closely</p>
-                                <div class="x-feed">
+                                <div style="padding:14px;background:rgba(120,80,255,0.1);border-radius:12px;border-left:3px solid #7850FF;flex-shrink:0;">
+                                    <p style="font-size:13px;color:rgba(240,236,228,0.8);line-height:1.6;margin:0;">Higgsfield is my go-to for AI video generation — cinematic quality, character consistency, and creative control that's miles ahead of the competition. I use it for client demos, product concepts, and creative projects.</p>
+                                </div>
+                                <p class="panel-section-label">How I use it</p>
+                                <div class="ai-tool-list">
                                     ${[
-                                        ["@sama", "Sam Altman — OpenAI CEO. First to know what's shipping."],
-                                        ["@karpathy", "Andrej Karpathy — Best technical AI content on the platform."],
-                                        ["@ylecun", "Yann LeCun — Contrarian takes on AGI. Always worth reading."],
-                                        ["@elonmusk", "Elon Musk — Signal-to-noise is rough but the signal is real."],
-                                        ["@naval", "Naval Ravikant — Wealth, leverage, and clear thinking."],
-                                        ["@paulg", "Paul Graham — Essays that rewire how you think about startups."],
-                                    ].map(([handle, desc]) => `
-                                        <a class="x-tweet" href="https://x.com/${handle.slice(1)}" target="_blank" style="text-decoration:none;">
-                                            <div class="x-tweet-text"><strong style="color:#f0ece4">${handle}</strong> — ${desc}</div>
-                                        </a>
+                                        ["🎬", "Cinematic Video Gen", "Client demos & product concepts", "work"],
+                                        ["🎭", "Character Consistency", "Brand character & persona videos", "work"],
+                                        ["🌆", "Scene Generation", "Environment & setting visualization", "work"],
+                                        ["⚡", "Rapid Prototyping", "Quick video mockups for pitches", "work"],
+                                    ].map(([emoji, name, desc, freq]) => `
+                                        <div class="ai-tool-item">
+                                            <span style="font-size:22px;flex-shrink:0">${emoji}</span>
+                                            <div>
+                                                <div class="ai-tool-name">${name}</div>
+                                                <div class="ai-tool-desc">${desc}</div>
+                                            </div>
+                                            <span class="ai-tool-badge badge-work">${freq}</span>
+                                        </div>
                                     `).join('')}
                                 </div>
-                                <a class="open-app-btn btn-x" href="https://x.com" target="_blank">Open X →</a>
+                                <a class="open-app-btn" style="background:rgba(120,80,255,0.2);color:#9B70FF;" href="https://higgsfield.ai" target="_blank">Open Higgsfield →</a>
                             </div>
                         </div>
                     `
@@ -1437,7 +1424,7 @@
             // ===== INTRO ANIMATION =====
             const introSequence = [
                 { target: "intro-name", text: "Sheldon Stoney", pauseAfter: 400, skipLineBreaks: true },
-                { target: "intro-p1", text: 'I\'m a <a href="https://linkedin.com/in/sheldonibm/" target="_blank">Brand Technical Specialist at IBM</a>', pauseAfter: 500, append: false },
+                { target: "intro-p1", text: 'I\'m a <a href="https://www.linkedin.com/in/sheldonibm" target="_blank">Brand Technical Specialist at IBM</a>', pauseAfter: 500, append: false },
                 { target: "intro-p1", text: " — spearheading AI and automation strategies for enterprise clients across the Southeast.", pauseAfter: 400, append: true },
                 { target: "intro-p2", text: "I've prototyped 40+ GenAI apps, built 86+ automations, and brought 4 products to market. Building the infrastructure for the autonomous future.", pauseAfter: 400, append: false },
                 { target: "intro-p3", text: 'Feel free to <a href="#" class="tap-around-link">tap around</a> or <a href="mailto:smstoney@yahoo.com">get in touch</a> and thanks for stopping by.', pauseAfter: 0, append: false },
