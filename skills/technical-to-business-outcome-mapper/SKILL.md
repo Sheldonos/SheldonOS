@@ -1,11 +1,11 @@
 ---
-name: enterprise-sales-pearl-gatherer
-description: A universal strategic framework for enterprise sales opportunity analysis, transcript mining, and business-to-technical translation. Use when a user asks to analyze a sales opportunity, review client transcripts/10-Ks, map technical capabilities to business lines for ANY industry, or craft client-facing sales narratives that align with buyer missions across the entire IBM technology portfolio.
+name: technical-to-business-outcome-mapper
+description: A universal framework for translating IBM technical capabilities into business outcomes for any industry. Use when a user asks to analyze a sales opportunity, review client transcripts/10-Ks, map IBM solutions to lines of business for ANY industry, or craft client-facing narratives that connect technical features to the buyer's strategic mission.
 ---
 
-# Enterprise Sales Pearl Gatherer
+# Technical to Business Outcome Mapper
 
-This skill provides a systematic, industry-agnostic methodology for analyzing enterprise sales opportunities, extracting actionable intelligence ("pearls") from client communications, and translating technical capabilities into compelling business outcomes. It is designed to help sellers align any IBM solution with the strategic mission of their buyers, regardless of the client's industry vertical.
+This skill provides a systematic, industry-agnostic methodology for translating IBM technical capabilities into compelling business outcomes. It is designed to help sellers analyze any client's business — using uploaded documents, transcripts, or 10-K filings — and construct a narrative that maps IBM solutions directly to the buyer's strategic mission, regardless of industry vertical.
 
 ## Core Philosophy
 
