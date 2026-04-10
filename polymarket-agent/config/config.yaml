@@ -1,0 +1,138 @@
+# ============================================================
+# Polymarket Autonomous Trading Agent - Configuration
+# ============================================================
+
+# --- LLM Provider (user-configurable) ---
+llm:
+  provider: "openai"          # openai | anthropic | ollama | openrouter
+  model: "gpt-4.1-mini"       # Model name for the provider
+  api_key_env: "OPENAI_API_KEY"  # Env var name holding the API key
+  base_url: null              # Override base URL (null = use provider default)
+  max_tokens: 4096
+  temperature: 0.1
+
+# --- Polymarket API ---
+polymarket:
+  gamma_api_url: "https://gamma-api.polymarket.com"
+  clob_api_url: "https://clob.polymarket.com"
+  data_api_url: "https://data-api.polymarket.com"
+  rate_limit_rpm: 60          # Requests per minute
+  private_key_env: "POLYMARKET_PRIVATE_KEY"  # For live trading only
+  api_key_env: "POLYMARKET_API_KEY"          # For live trading only
+
+# --- Kronos Forecasting Model ---
+kronos:
+  tokenizer_model: "NeoQuasar/Kronos-Tokenizer-base"
+  predictor_model: "NeoQuasar/Kronos-small"
+  max_context: 512
+  lookback_periods: 400
+  pred_len: 60                # Prediction horizon in minutes
+  temperature: 1.0
+  top_p: 0.9
+  sample_count: 5             # Number of samples for uncertainty estimation
+  use_gpu: false              # Set to true if CUDA available
+
+# --- Risk Management ---
+risk:
+  max_bankroll_per_trade: 0.05    # Max 5% of bankroll per trade
+  kelly_fraction: 0.25            # Fractional Kelly (0.25 = quarter Kelly)
+  min_edge_threshold: 0.03        # Minimum edge (3%) to enter a trade
+  min_confidence: 0.60            # Minimum model confidence
+  min_liquidity: 5000             # Minimum market liquidity in USDC
+  min_volume_24h: 1000            # Minimum 24h volume
+  max_spread: 0.05                # Maximum bid-ask spread (5%)
+  max_open_positions: 20          # Maximum simultaneous open positions
+  stop_loss_pct: 0.30             # Stop loss at 30% loss on position
+  take_profit_pct: 0.80           # Take profit when YES/NO reaches 80/20
+
+# --- Strategy Selection ---
+strategy:
+  active_strategies:
+    - "mispricing_hunter"
+    - "momentum_follower"
+    - "arbitrage_scanner"
+    - "whale_follower"
+  ensemble_weights:
+    mispricing_hunter: 0.35
+    momentum_follower: 0.25
+    arbitrage_scanner: 0.20
+    whale_follower: 0.20
+
+# --- Market Filters ---
+market_filters:
+  categories:
+    - "crypto"
+    - "sports"
+    - "politics"
+    - "finance"
+    - "science"
+  exclude_categories: []
+  min_days_to_resolution: 1
+  max_days_to_resolution: 90
+  require_order_book: true
+  risk_grade_min: "C"             # Minimum polyterm risk grade (A=best, F=worst)
+
+# --- Backtesting ---
+backtest:
+  start_date: "2024-01-01"
+  end_date: "2025-12-31"
+  initial_bankroll: 10000.0       # Starting capital in USDC
+  transaction_cost: 0.002         # 0.2% per trade (Polymarket fee)
+  slippage_model: "linear"        # linear | sqrt | fixed
+  slippage_bps: 10                # Basis points of slippage
+  data_cache_dir: "data/historical"
+  results_dir: "reports"
+
+# --- Self-Learning ---
+learning:
+  evaluation_interval_hours: 24   # How often to evaluate performance
+  min_trades_for_eval: 50         # Minimum trades before evaluation
+  retraining_threshold: 0.45      # Retrain if accuracy drops below 45%
+  memory_window_days: 90          # Days of history for retraining
+  strategy_weight_lr: 0.05        # Learning rate for strategy weight updates
+  performance_log: "logs/performance.jsonl"
+  prediction_log: "logs/predictions.jsonl"
+  trade_log: "logs/trades.jsonl"
+
+# --- Agent Loop ---
+agent:
+  scan_interval_seconds: 60       # Market scan frequency
+  scan_interval_minutes: 30       # Alias used by orchestrator
+  max_iterations: 1000            # Max agent loop iterations (0 = infinite)
+  enable_live_trading: false      # SAFETY: must be explicitly enabled
+  dry_run: true                   # Paper trading mode
+  simulation_mode: true           # Alias: paper trading mode
+  verbose: true
+  save_trajectories: true
+  trajectory_dir: "logs/trajectories"
+  initial_bankroll: 1000.0        # Starting capital in USDC
+  max_concurrent_positions: 5     # Max simultaneous open positions
+  # Context window management (MiroFish + hermes-agent pattern)
+  context_handoff_threshold: 0.56 # Trigger agent handoff at 56% context usage
+  agent_id: "polymarket_trader_v1"
+
+# --- Self-Learning (extended) ---
+learning:
+  enabled: true
+  evaluation_interval_hours: 24   # How often to evaluate performance
+  min_trades_for_eval: 50         # Minimum trades before evaluation
+  min_trades_to_learn: 10         # Minimum resolved trades before adapting weights
+  learning_interval_hours: 6      # Run learning cycle every 6 hours
+  weight_ema_alpha: 0.10          # EMA smoothing for weight adaptation
+  retraining_threshold: 0.45      # Retrain if accuracy drops below 45%
+  memory_window_days: 90          # Days of history for retraining
+  strategy_weight_lr: 0.05        # Learning rate for strategy weight updates
+  performance_log: "logs/trades.jsonl"
+  prediction_log: "logs/predictions.jsonl"
+  trade_log: "logs/trades.jsonl"
+  checkpoint_path: "logs/learning_checkpoint.json"
+  knowledge_path: "logs/market_knowledge.jsonl"
+
+# --- Backtesting (extended) ---
+backtesting:
+  initial_bankroll: 1000.0
+  transaction_cost: 0.002
+  holding_period_hours: 24
+  max_concurrent_positions: 5
+  walk_forward_windows: 4
+  results_dir: "backtesting/results"
