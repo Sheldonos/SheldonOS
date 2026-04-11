@@ -136,3 +136,119 @@ backtesting:
   max_concurrent_positions: 5
   walk_forward_windows: 4
   results_dir: "backtesting/results"
+
+# ============================================================
+# DAEMON CONFIGURATION (autonomous 24/7 mode)
+# ============================================================
+
+# --- Trading (daemon) ---
+trading:
+  initial_bankroll: 1000.0          # Starting capital in USDC
+  currency: "USDC"
+
+# --- Sniper Scoring Engine ---
+sniper:
+  min_edge: 0.04                    # Minimum edge to consider a market (4%)
+  min_confidence: 0.65              # Minimum model confidence (65%)
+  min_liquidity: 5000               # Minimum market liquidity in USDC
+  max_kelly_fraction: 0.04          # Hard cap on Kelly fraction (4%)
+  max_bet_usdc: 500.0               # Hard cap on single bet size in USDC
+  weights:
+    mispricing: 0.30
+    liquidity:  0.15
+    velocity:   0.10
+    whale:      0.15
+    kronos:     0.20
+    archetype:  0.10
+
+# --- Daemon Core ---
+daemon:
+  state_file: "data/daemon_state.json"
+  positions_file: "data/positions.jsonl"
+
+  # Execution engine
+  execution:
+    mode: "dry_run"                 # dry_run | paper | live
+    max_daily_loss_pct: 0.20        # Halt if daily P&L < -20% of bankroll
+    max_concurrent_positions: 5     # Total across all agents
+    max_bet_usdc: 500.0             # Hard cap per bet
+    min_bankroll_floor: 100.0       # Never bet if bankroll < $100
+    min_sniper_score: 60.0          # Minimum composite score to execute
+    re_score_threshold: 0.05        # Skip if price drifted >5¢ since scoring
+
+  # Market scanner
+  scanner:
+    scan_interval_seconds: 60       # How often to scan all markets
+    max_markets_per_scan: 300       # Max markets to fetch per scan
+    kronos_top_n_markets: 50        # Top N markets to run Kronos on
+    opportunity_cooldown_seconds: 300  # Don't re-emit same market within 5 min
+    categories:
+      - "sports"
+      - "soccer"
+      - "crypto"
+      - "politics"
+      - "world"
+      - "tech"
+      - "science"
+
+  # Supervisor
+  supervisor:
+    health_check_interval_seconds: 30
+    max_restarts_per_agent: 10
+
+  # Agent fleet (one sub-agent per market category)
+  # Each agent has its own scanner, executor, and bankroll slice.
+  # Set enabled: false to disable any agent.
+  agent_fleet:
+    - name: "CryptoSniper"
+      categories: ["crypto", "bitcoin", "ethereum", "defi"]
+      bankroll_allocation: 0.25
+      min_sniper_score: 65.0
+      scan_interval_seconds: 30
+      max_concurrent_positions: 2
+      enabled: true
+      description: "BTC/ETH price markets and crypto events"
+
+    - name: "SoccerSniper"
+      categories: ["soccer", "football", "uefa", "champions-league", "premier-league"]
+      bankroll_allocation: 0.30
+      min_sniper_score: 62.0
+      scan_interval_seconds: 60
+      max_concurrent_positions: 3
+      enabled: true
+      description: "European soccer — reachingthesky & KeyTransporter archetype"
+
+    - name: "SportsSniper"
+      categories: ["sports", "nba", "nfl", "mlb", "tennis", "esports"]
+      bankroll_allocation: 0.20
+      min_sniper_score: 65.0
+      scan_interval_seconds: 90
+      max_concurrent_positions: 2
+      enabled: true
+      description: "North American sports and esports"
+
+    - name: "GeopoliticalSniper"
+      categories: ["politics", "world", "geopolitics", "elections"]
+      bankroll_allocation: 0.15
+      min_sniper_score: 70.0
+      scan_interval_seconds: 120
+      max_concurrent_positions: 1
+      enabled: true
+      description: "Geopolitical events — insider pattern detection"
+
+    - name: "TechSniper"
+      categories: ["tech", "science", "ai", "business"]
+      bankroll_allocation: 0.10
+      min_sniper_score: 68.0
+      scan_interval_seconds: 120
+      max_concurrent_positions: 1
+      enabled: true
+      description: "Tech and niche markets — 0xafEe archetype"
+
+# --- Notifications ---
+notifications:
+  telegram_bot_token: ""            # Set via .env: TELEGRAM_BOT_TOKEN
+  telegram_chat_id: ""              # Set via .env: TELEGRAM_CHAT_ID
+  discord_webhook_url: ""           # Set via .env: DISCORD_WEBHOOK_URL
+  desktop_notifications: true       # macOS/Linux desktop popups
+  min_level: "info"                 # Minimum level: info | success | warning | critical
